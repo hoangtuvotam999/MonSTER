@@ -1,0 +1,162 @@
+[
+  {
+    "id": "monster_bone_s",
+    "type": "material",
+    "name": "Xương Quái Nhỏ",
+    "tier": "A",
+    "price": 60,
+    "desc": "Xương nhỏ, trắng ngà.",
+    "lore": "Xương nhỏ, trắng ngà. Nguyên liệu cơ bản mọi bàn nghề.",
+    "rarity": "common"
+  },
+  {
+    "id": "herb",
+    "type": "material",
+    "name": "Thảo Dược Rừng",
+    "tier": "A",
+    "price": 40,
+    "desc": "Lá đắng.",
+    "lore": "Lá đắng. Giã với mật ong thành thuốc dã chiến.",
+    "rarity": "common"
+  },
+  {
+    "id": "jagras_scale",
+    "type": "material",
+    "name": "Vảy Jagras",
+    "tier": "A",
+    "price": 90,
+    "desc": "Vảy mềm, xanh nhạt.",
+    "lore": "Vảy mềm, xanh nhạt. Thợ da thuộc chúng thành giày êm.",
+    "rarity": "common",
+    "source_monster": "Jagras"
+  },
+  {
+    "id": "mernos_feather",
+    "type": "material",
+    "name": "Lông Mernos",
+    "tier": "A",
+    "price": 70,
+    "desc": "Lông nhẹ như không.",
+    "lore": "Lông nhẹ như không. Dùng làm ống thổi hoặc trang trí mũ.",
+    "rarity": "common",
+    "source_monster": "Mernos"
+  },
+  {
+    "id": "aptonoth_hide",
+    "type": "material",
+    "name": "Da Aptonoth",
+    "tier": "A",
+    "price": 80,
+    "desc": "Da dày, phổ biến nhất rừng cổ.",
+    "lore": "Da dày, phổ biến nhất rừng cổ. Mùi cỏ khô.",
+    "rarity": "common",
+    "source_monster": "Aptonoth"
+  },
+  {
+    "id": "kestodon_shell",
+    "type": "material",
+    "name": "Mai Kestodon",
+    "tier": "A",
+    "price": 110,
+    "desc": "Mai cứng, khi gõ nghe như gỗ lim.",
+    "lore": "Mai cứng, khi gõ nghe như gỗ lim.",
+    "rarity": "common",
+    "source_monster": "Kestodon"
+  },
+  {
+    "id": "shamos_fang",
+    "type": "material",
+    "name": "Nanh Shamos",
+    "tier": "A",
+    "price": 100,
+    "desc": "Nanh cong nhỏ.",
+    "lore": "Nanh cong nhỏ. Trẻ con làng đeo làm bùa — người lớn thì không.",
+    "rarity": "common",
+    "source_monster": "Shamos"
+  },
+  {
+    "id": "noios_wing",
+    "type": "material",
+    "name": "Cánh Noios",
+    "tier": "A",
+    "price": 160,
+    "desc": "Cánh màng sa mạc, xào lên có vị tanh — không ai ăn, nhưng bán được.",
+    "lore": "Cánh màng sa mạc, xào lên có vị tanh — không ai ăn, nhưng bán được.",
+    "rarity": "common",
+    "source_monster": "Noios"
+  },
+  {
+    "id": "apceros_plate",
+    "type": "material",
+    "name": "Giáp Apceros",
+    "tier": "A",
+    "price": 180,
+    "desc": "Tấm giáp lưng, nặng như đá tảng.",
+    "lore": "Tấm giáp lưng, nặng như đá tảng.",
+    "rarity": "common",
+    "source_monster": "Apceros"
+  },
+  {
+    "id": "raphinos_membrane",
+    "type": "material",
+    "name": "Màng Cánh Raphinos",
+    "tier": "A",
+    "price": 280,
+    "desc": "Màng mỏng óng ánh san hô.",
+    "lore": "Màng mỏng óng ánh san hô.",
+    "rarity": "common",
+    "source_monster": "Raphinos"
+  },
+  {
+    "id": "honey",
+    "type": "material",
+    "name": "Mật Ong Rừng",
+    "tier": "A",
+    "price": 70,
+    "desc": "Ngọt và bổ dưỡng.",
+    "lore": "Ngọt và bổ dưỡng. Lữ khách đổi mật lấy đường.",
+    "rarity": "common"
+  },
+  {
+    "id": "worn_coin",
+    "type": "material",
+    "name": "Đồng Xu Cũ",
+    "tier": "A",
+    "price": 100,
+    "desc": "Xu bạc oxi hóa.",
+    "lore": "Xu bạc oxi hóa. Vẫn tiêu được ở làng.",
+    "rarity": "common"
+  },
+  {
+    "id": "stamina_berry",
+    "type": "consumable",
+    "name": "Quả Hồi Sức",
+    "tier": "A",
+    "price": 120,
+    "desc": "Hồi 80 thể lực.",
+    "lore": "Quả đỏ mọc gần suối. Thợ săn nhét túi khi đi xa.",
+    "heal": 80,
+    "boostHP": 0,
+    "boostATK": 0,
+    "boostDEF": 0,
+    "boostSPD": 0,
+    "boostEXP": 0,
+    "boostKarma": 0,
+    "boostPoints": 0,
+    "rarity": "common"
+  },
+  {
+    "type": "material",
+    "id": "enhance_stone_a",
+    "name": "Đá Cường Hóa Thường",
+    "tier": "A",
+    "price": 200,
+    "desc": "Đá xám dùng cường hóa trang bị bậc A.",
+    "lore": "Nghiền từ quặng nông. Thợ rèn làng nào cũng có một bao.",
+    "rarity": "common",
+    "tags": [
+      "enhance_stone"
+    ],
+    "enhance_tier": "A"
+  }
+]

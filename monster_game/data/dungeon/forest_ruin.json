@@ -1,0 +1,139 @@
+{
+  "id": "forest_ruin",
+  "name": "Di Tích Rừng Cổ",
+  "description": "Lối đá rêu phong dẫn xuống hầm dưới Ancient Forest.",
+  "min_level": 1,
+  "map_ref": 0,
+  "stamina_cost": 80,
+  "rooms": [
+    {
+      "id": "gate",
+      "type": "event",
+      "title": "Cổng đổ nát",
+      "intro": "Hai bức tượng vỡ nhìn xuống. Có chỗ chui lọt.",
+      "actions": [
+        {
+          "id": "enter",
+          "label": "Chui vào"
+        },
+        {
+          "id": "search",
+          "label": "Lục quanh cổng"
+        },
+        {
+          "id": "leave",
+          "label": "Quay ra (bỏ run)"
+        }
+      ],
+      "outcomes": {
+        "enter": [
+          {
+            "chance": 1.0,
+            "kind": "continue",
+            "log": "Bạn cúi người chui qua — không khí ẩm và lạnh."
+          }
+        ],
+        "search": [
+          {
+            "chance": 0.7,
+            "kind": "loot",
+            "log": "Nhặt được đá cường hóa lẫn trong đổ nát.",
+            "drops": [
+              {
+                "item_id": "enhance_stone_a",
+                "min": 1,
+                "max": 2
+              }
+            ]
+          },
+          {
+            "chance": 0.3,
+            "kind": "trap",
+            "log": "Bẫy đá rơi! Bạn xây xẩm.",
+            "effects": {
+              "the_luc": -40
+            }
+          }
+        ],
+        "leave": [
+          {
+            "chance": 1.0,
+            "kind": "abort",
+            "log": "Bạn quyết định hôm nay chưa phải lúc."
+          }
+        ]
+      }
+    },
+    {
+      "id": "hall",
+      "type": "combat",
+      "title": "Hành lang vọng",
+      "monster_tier": "II",
+      "flavor": "Tiếng móng vuốt vang từ bóng tối."
+    },
+    {
+      "id": "cache",
+      "type": "treasure",
+      "title": "Kho nhỏ",
+      "drops": [
+        {
+          "item_id": "enhance_stone_a",
+          "chance": 0.8,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "worn_coin",
+          "chance": 0.5,
+          "min": 1,
+          "max": 3
+        },
+        {
+          "item_id": "scroll_soft",
+          "chance": 0.15,
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "gold": [
+        100,
+        300
+      ]
+    },
+    {
+      "id": "rest",
+      "type": "rest",
+      "title": "Phòng lửa nguội",
+      "heal_stamina": 100,
+      "log": "Bạn ngồi bên than hồng, thở đều."
+    },
+    {
+      "id": "ambush",
+      "type": "combat",
+      "title": "Phòng phục kích",
+      "monster_tier": "III",
+      "flavor": "Trần nhà sụp — quái nhảy xuống!"
+    },
+    {
+      "id": "boss",
+      "type": "boss",
+      "title": "Sảnh Thủ Lĩnh",
+      "monster_name": "Great Jagras",
+      "flavor": "Thủ lĩnh hang há miệng đầy mỡ và giận dữ.",
+      "bonus_drops": [
+        {
+          "item_id": "enhance_stone_b",
+          "chance": 0.5,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "scroll_protect",
+          "chance": 0.2,
+          "min": 1,
+          "max": 1
+        }
+      ]
+    }
+  ]
+}

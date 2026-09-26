@@ -150,19 +150,48 @@ def _hit_text(entry: dict) -> str:
 
 
 def _render_round(rnd: list[dict], attacker: _Side, defender: _Side, rng: random.Random) -> list[str]:
-    total = sum(e["damage"] for e in rnd)
-    hits = ", ".join(_hit_text(e) for e in rnd)
-    verb = rng.choice(attacker.verbs)
-    if len(rnd) == 1:
-        head = f"▶ {attacker.name} {verb}: {hits}"
-    else:
-        head = f"▶ {attacker.name} {verb} ×{len(rnd)}: {hits}  (tổng −{fmt(total)})"
-    lines = [head]
+    lines: list[str] = []
+    player_labels = ("player", "player1", "player2")
 
-    defender_hp = rnd[-1][defender.label]["HP"]
+    item_entries = [e for e in rnd if e.get("action") == "use_item" or e.get("skill") == "item"]
+    combat_hits = [e for e in rnd if e.get("action") != "use_item" and e.get("skill") != "item"]
+
+    for entry in item_entries:
+        if entry.get("flavor"):
+            lines.append(f"▶ {entry['flavor']}")
+        for ev in entry.get("events") or []:
+            if ev.get("log") and ev["log"] not in (entry.get("flavor") or ""):
+                lines.append(f"   {ev['log']}")
+        self_hp = entry[attacker.label]["HP"]
+        lines.append("   " + _hp_line(attacker.icon, attacker.name, self_hp, attacker.max_hp, 0))
+
+    if not combat_hits:
+        return lines
+
+    total = sum(e["damage"] for e in combat_hits)
+    hits = ", ".join(_hit_text(e) for e in combat_hits)
+    first = combat_hits[0]
+    if first.get("flavor") and first.get("attacker") not in player_labels:
+        verb = first["flavor"]
+    else:
+        verb = rng.choice(attacker.verbs)
+    action_name = first.get("action_name")
+    suffix = f" · {action_name}" if action_name and first.get("attacker") not in player_labels else ""
+
+    if len(combat_hits) == 1:
+        lines.append(f"▶ {attacker.name} {verb}{suffix}: {hits}")
+    else:
+        lines.append(f"▶ {attacker.name} {verb} ×{len(combat_hits)}: {hits}  (tổng −{fmt(total)})")
+
+    for entry in combat_hits:
+        for ev in entry.get("events") or []:
+            if ev.get("log"):
+                lines.append(f"   {ev['log']}")
+
+    defender_hp = combat_hits[-1][defender.label]["HP"]
     lines.append("   " + _hp_line(defender.icon, defender.name, defender_hp, defender.max_hp, 0))
 
-    frac = defender_hp / defender.max_hp
+    frac = defender_hp / defender.max_hp if defender.max_hp else 0
     for threshold, template in defender.hurt_lines:
         if frac < threshold and threshold not in defender.hurt_shown and defender_hp > 0:
             defender.hurt_shown.add(threshold)
@@ -262,28 +291,37 @@ def render_hunt(outcome: dict, max_rounds: int = 12, rng: Optional[random.Random
     lines.append("")
 
     turns = outcome["turns"]
-    if outcome["won"]:
+    if outcome.get("draw"):
+        lines.append(f"☠️ HÒA sau {turns} đòn — cả hai cùng gục (đồng quy / bùng nổ).")
+    elif outcome["won"]:
         lines.append(f"🏆 CHIẾN THẮNG sau {turns} đòn! {monster.name} đã gục ngã.")
     else:
         last = outcome["log"][-1]["monster"]["HP"] if outcome["log"] else monster.max_hp
         lines.append(f"💀 THẤT BẠI sau {turns} đòn... {monster.name} vẫn còn {fmt(last)} HP.")
     lines.append(f"⚔️ Gây {fmt(outcome['player_damage_dealt'])} · 🛡️ Nhận {fmt(outcome['player_damage_taken'])}")
 
-    if outcome["won"]:
+    if outcome["won"] or outcome.get("draw"):
         exp_bar = hp_bar(outcome["player_exp"], outcome["player_exp_needed"], 8)
         lines.append(f"✨ +{fmt(outcome['exp_gained'])} EXP → Lv.{outcome['player_level']} "
                      f"[{exp_bar}] {fmt(outcome['player_exp'])}/{fmt(outcome['player_exp_needed'])}")
         for kind, value in outcome.get("events", []):
             if kind == "level_up":
-                lines.append(f"🎉 LÊN CẤP {value}! (+{fmt(500 * value)} điểm kỹ năng)")
+                lines.append(f"🎉 LÊN CẤP {value}! (+{fmt(data_store.LEVEL_UP_POINTS + 5 * value)} điểm kỹ năng)")
             elif kind == "weapon_level_up":
                 lines.append(f"🗡️ {outcome['weapon_name']} lên cấp {value}!")
         lines.append(f"🎒 Chiến lợi phẩm: {monster.name} (bán được {fmt(outcome['monster_price'])} vàng)")
+        for drop in outcome.get("drops") or []:
+            lines.append(f"🎁 Nhặt được: {drop['name']} ×{drop.get('qty', 1)}")
 
     if outcome["weapon_broken"]:
         lines.append(f"🔧 {outcome['weapon_name']} đã HỎNG! Sửa tốn {fmt(outcome['repair_cost'])} vàng.")
     else:
         lines.append(f"🔧 Độ bền: {outcome['weapon_durability']}/100 · ⚡ Thể lực: {outcome['player_the_luc']}")
+
+    adv = outcome.get("adventure")
+    if adv:
+        lines.append("")
+        lines.append(render_adventure_prompt(adv))
     return "\n".join(lines)
 
 
@@ -311,9 +349,12 @@ def render_pvp(result: dict, max_rounds: int = 12, rng: Optional[random.Random] 
     lines.extend(_render_battle(result["log"], p1, p2, max_rounds, rng))
     lines.append("")
 
-    winner = p1 if result["winner_id"] == result["player1_id"] else p2
-    loser = p2 if winner is p1 else p1
-    lines.append(f"🏆 {winner.name} CHIẾN THẮNG sau {result['rounds']} đòn! {loser.name} đã bị hạ.")
+    if result.get("draw") or result.get("winner_id") is None:
+        lines.append(f"☠️ HÒA sau {result['rounds']} đòn — cả hai cùng kiệt sức!")
+    else:
+        winner = p1 if result["winner_id"] == result["player1_id"] else p2
+        loser = p2 if winner is p1 else p1
+        lines.append(f"🏆 {winner.name} CHIẾN THẮNG sau {result['rounds']} đòn! {loser.name} đã bị hạ.")
     lines.append(f"⚔️ Sát thương: {p1.name} {fmt(result['player1_damage'])} · "
                  f"{p2.name} {fmt(result['player2_damage'])}")
     return "\n".join(lines)
@@ -323,7 +364,8 @@ def render_pvp(result: dict, max_rounds: int = 12, rng: Optional[random.Random] 
 # Character status / bag / trophies
 # --------------------------------------------------------------------------
 
-ITEM_ICONS = {"weapon": "🗡️", "food": "🍖", "upgrade": "💎", "buff": "✨"}
+ITEM_ICONS = {"weapon": "🗡️", "food": "🍖", "upgrade": "💎", "buff": "✨",
+              "material": "🧱", "equipment": "🛡️", "consumable": "🧪"}
 CATEGORY_ICONS = {
     "Great Sword": "🗡️", "Lance": "🔱", "Sword": "⚔️",
     "Dual Blades": "🔪", "Heavy Bowgun": "💣", "Light Bowgun": "🔫",
@@ -362,7 +404,8 @@ def render_character(summary: Optional[dict]) -> str:
     if s["weapon_name"]:
         icon = CATEGORY_ICONS.get(s.get("weapon_category"), "🗡️")
         lvl = f" +{s['weapon_level']}" if s.get("weapon_level") else ""
-        lines.append(f"{icon} {s['weapon_name']}{lvl}")
+        enh = f" +{s['weapon_enhance']}" if s.get("weapon_enhance") else ""
+        lines.append(f"{icon} {s['weapon_name']}{enh}{lvl}")
         dur = s["weapon_durability"]
         lines.append(f"   🔧 Độ bền [{hp_bar(dur, data_store.MAX_DURABILITY, 10)}] {dur}/{data_store.MAX_DURABILITY}")
         lines.append(f"   ❤️ HP vũ khí [{hp_bar(s['weapon_hp'], s['weapon_max_hp'], 10)}] "
@@ -371,6 +414,23 @@ def render_character(summary: Optional[dict]) -> str:
             lines.append(f"   💰 Sửa chữa: {fmt(s['repair_cost'])} vàng")
     else:
         lines.append("🗡️ Chưa trang bị vũ khí!")
+
+    if s.get("dungeon_run"):
+        run = s["dungeon_run"]
+        lines.append(f"🏰 Đang trong dungeon: {run.get('dungeon_id')} "
+                     f"(phòng {run.get('room_index', 0) + 1}, cleared {run.get('rooms_cleared', 0)})")
+
+    gb = s.get("gear_bonus") or {}
+    if any(gb.get(k) for k in ("hp", "atk", "def", "spd")):
+        lines.append(
+            f"🛡️ Giáp/trang sức: HP {gb.get('hp', 0):+d} · ATK {gb.get('atk', 0):+d} · "
+            f"DEF {gb.get('def', 0):+d} · SPD {gb.get('spd', 0):+d}"
+        )
+    for st in gb.get("sets") or []:
+        lines.append(f"   🐉 Set {st['name']}: {st.get('desc', '')}")
+    tags = gb.get("tags") or []
+    if tags:
+        lines.append("   Build: " + ", ".join(tags))
     lines.append("")
 
     lines.append(f"🎒 Túi đồ: {s['bag_count']} món · "
@@ -429,37 +489,123 @@ def describe_item(item: dict) -> str:
     kind = item.get("type")
     icon = CATEGORY_ICONS.get(item.get("category"), ITEM_ICONS.get(kind, "📦"))
     name = item["name"]
+    enh = int(item.get("enhance_level") or 0)
+    if enh > 0:
+        name = f"{name} +{enh}"
+    qty = item.get("qty", 1)
+    qty_s = f" ×{qty}" if qty and qty > 1 else ""
     if kind == "weapon":
-        lvl = f" +{item['usage']}" if item.get("usage") else ""
+        lvl = f" Lv.{item['usage']}" if item.get("usage") else ""
         return f"{icon} {name}{lvl} — {_weapon_stats_line(item)}"
     if kind == "food":
-        return f"{icon} {name} — {_food_effects(item)}"
+        return f"{icon} {name}{qty_s} — {_food_effects(item)}"
     if kind == "upgrade":
-        return f"{icon} {name} — {_upgrade_effects(item)}"
-    return f"{icon} {name}"
+        return f"{icon} {name}{qty_s} — {_upgrade_effects(item)}"
+    if kind == "material":
+        desc = item.get("desc") or f"bán {fmt(item.get('price', 0))} vàng"
+        return f"{icon} {name}{qty_s} — {desc}"
+    if kind == "equipment":
+        bits = []
+        for k, label in (("hp", "HP"), ("atk", "ATK"), ("def", "DEF"), ("spd", "SPD")):
+            if item.get(k):
+                bits.append(f"{label} {item[k]:+d}")
+        tag = ",".join(item.get("tags") or [])
+        extra = f" [{tag}]" if tag else ""
+        return f"{icon} {name} ({item.get('slot', '?')}) — " + (", ".join(bits) or "—") + extra
+    if kind == "consumable":
+        return f"{icon} {name}{qty_s} — {item.get('desc') or item.get('subtype', '')}"
+    return f"{icon} {name}{qty_s}"
 
 
 def render_bag(character: Optional[dict]) -> str:
-    """Numbered bag listing (the numbers match `game.equip_or_consume`)."""
+    """Bag listing split by category (unlimited storage)."""
     if character is None:
         return FAILURE_MESSAGES["no_character"]
-    lines = [f"🎒 TÚI ĐỒ CỦA {character['name'].upper()}"]
+    lines = [f"🎒 TÚI ĐỒ CỦA {character['name'].upper()} (không giới hạn ô)"]
     w = character.get("weapon")
     if w:
-        lines.append(f"Đang trang bị: {describe_item(w)}")
-        lines.append(f"   🔧 {w['durability']}/{data_store.MAX_DURABILITY} · "
-                     f"❤️ {fmt(w['HP'])}/{fmt(data_store.weapon_max_hp(w))}")
+        lines.append(f"Đang trang bị vũ khí: {describe_item(w)}")
     else:
-        lines.append("Đang trang bị: — (chưa có vũ khí)")
+        lines.append("Đang trang bị vũ khí: —")
     lines.append("")
-    if not character["bag"]:
-        lines.append("Túi trống. Ghé cửa hàng để mua vũ khí, đồ ăn hoặc nguyên liệu nâng cấp.")
-    else:
-        for i, item in enumerate(character["bag"], start=1):
-            lines.append(f"{i}. {describe_item(item)}")
+
+    groups = [
+        ("weapon", "🗡️ VŨ KHÍ"),
+        ("equipment", "🛡️ TRANG BỊ"),
+        ("consumable", "🧪 TIÊU HAO"),
+        ("food", "🍖 ĐỒ ĂN / THUỐC"),
+        ("material", "🧱 NGUYÊN LIỆU"),
+        ("upgrade", "💎 NÂNG CẤP"),
+    ]
+    bag = character.get("bag") or []
+    # Map food-typed consumable drops under food; keep explicit consumable if any
+    indexed = list(enumerate(bag, start=1))
+    any_item = False
+    for kind, title in groups:
+        rows = [(i, it) for i, it in indexed if it.get("type") == kind]
+        if not rows:
+            continue
+        any_item = True
+        lines.append(title)
+        for i, it in rows:
+            lore = it.get("lore") or it.get("desc")
+            lines.append(f"  {i}. {describe_item(it)}")
+            if lore:
+                short = lore if len(lore) < 120 else lore[:117] + "…"
+                lines.append(f"     📖 {short}")
         lines.append("")
-        lines.append("Dùng số thứ tự để trang bị vũ khí hoặc sử dụng vật phẩm.")
+    # leftovers
+    known = {k for k, _ in groups}
+    other = [(i, it) for i, it in indexed if it.get("type") not in known]
+    if other:
+        any_item = True
+        lines.append("📦 KHÁC")
+        for i, it in other:
+            lines.append(f"  {i}. {describe_item(it)}")
+        lines.append("")
+    if not any_item and not w:
+        lines.append("Túi trống. Săn quái, mở rương hoặc ghé cửa hàng / bàn chế tạo.")
+    else:
+        lines.append("Dùng số thứ tự để trang bị / sử dụng / bỏ vào đai.")
+    return "\n".join(lines).rstrip()
+
+
+def render_craft_list(player_id: Optional[str] = None, balance: int = 0) -> str:
+    from . import craft as craft_mod
+    lines = ["🔨 BÀN CHẾ TẠO", ""]
+    recipes = craft_mod.list_recipes()
+    if not recipes:
+        lines.append("Chưa có công thức.")
+        return "\n".join(lines)
+    for i, r in enumerate(recipes, start=1):
+        check = craft_mod.can_craft(player_id, r["id"], balance) if player_id else {"ok": False, "missing": [], "cost": r.get("gold", 0)}
+        flag = " ✅" if check.get("ok") else " 🔒"
+        lines.append(f"{i}. [{r.get('tier','?')}] {r['name']} — 💰 {fmt(r.get('gold', 0))}{flag}")
+        ings = []
+        for req in r.get("ingredients") or []:
+            drop = data_store.get_drop(req["item_id"])
+            ings.append(f"{(drop or {}).get('name', req['item_id'])} ×{req['qty']}")
+        lines.append("   Cần: " + ", ".join(ings))
+        if r.get("lore"):
+            lines.append(f"   📖 {r['lore']}")
+        result = data_store.get_equipment_by_id(r["result_id"])
+        if result:
+            lines.append(f"   → {result['name']}")
+    lines.append("")
+    lines.append("Gọi craft.craft(uid, recipe_id, balance) hoặc game.craft_item(...).")
     return "\n".join(lines)
+
+
+def render_craft_result(result) -> str:
+    if result.ok:
+        lore = (result.item or {}).get("lore") or (result.recipe or {}).get("lore") or ""
+        lines = [f"🔨 {result.message} (−{fmt(result.cost)} vàng)"]
+        if result.item:
+            lines.append(describe_item(result.item))
+        if lore:
+            lines.append(f"📖 {lore}")
+        return "\n".join(lines)
+    return f"❌ {result.message}."
 
 
 def render_trophies(character: Optional[dict]) -> str:
@@ -494,6 +640,9 @@ def render_shop_menu() -> str:
         lines.append(f"{key}. {CATEGORY_ICONS.get(name, '🗡️')} {name}")
     lines.append(f"{SHOP_FOOD_KEY}. 🍖 Đồ ăn & thuốc")
     lines.append(f"{SHOP_UPGRADE_KEY}. 💎 Nguyên liệu nâng cấp vũ khí")
+    lines.append("9. 🛡️ Trang bị (giáp / trang sức)")
+    lines.append("10. 🧪 Vật phẩm tiêu hao (đai 5 ô)")
+    lines.append("11. 🔨 Bàn chế tạo (craft)")
     lines.append("")
     lines.append("Chọn một mục để xem danh sách.")
     return "\n".join(lines)
@@ -531,7 +680,7 @@ def render_weapon_list(category: str, character: Optional[dict] = None, balance:
 
 def render_food_list(balance: Optional[int] = None) -> str:
     lines = ["🍖 ĐỒ ĂN & THUỐC", ""]
-    for i, item in enumerate(shop.FOOD_ITEMS, start=1):
+    for i, item in enumerate(data_store.get_food_items(), start=1):
         flag = " 🔒" if balance is not None and balance < item["price"] else ""
         lines.append(f"{i}. {item['name']} — 💰 {fmt(item['price'])}{flag}")
         lines.append(f"   {_food_effects(item)}")
@@ -540,7 +689,7 @@ def render_food_list(balance: Optional[int] = None) -> str:
 
 def render_upgrade_list(balance: Optional[int] = None) -> str:
     lines = ["💎 NGUYÊN LIỆU NÂNG CẤP", ""]
-    for i, item in enumerate(shop.UPGRADE_MATERIALS, start=1):
+    for i, item in enumerate(data_store.get_upgrade_materials(), start=1):
         flag = " 🔒" if balance is not None and balance < item["price"] else ""
         lines.append(f"{i}. {item['name']} — 💰 {fmt(item['price'])}{flag}")
         lines.append(f"   {_upgrade_effects(item)}")
@@ -571,10 +720,10 @@ def render_repair(result: dict) -> str:
     return messages.get(result.get("reason"), "❌ Không thể sửa vũ khí lúc này.")
 
 
-def render_sale(count: int, total: int) -> str:
+def render_sale(count: int, total: int, label: str = "chiến lợi phẩm") -> str:
     if count == 0:
-        return "❌ Không có chiến lợi phẩm nào được bán."
-    return f"💰 Đã bán {count} chiến lợi phẩm, thu về {fmt(total)} vàng!"
+        return f"❌ Không có {label} nào được bán."
+    return f"💰 Đã bán {count} {label}, thu về {fmt(total)} vàng!"
 
 
 # --------------------------------------------------------------------------
@@ -619,3 +768,250 @@ def render_rooms(rooms: list[dict], name_of: Callable[[str], str] = lambda pid: 
         lines.append(f"{room['stt']}. {room['title']} — {players}{ready}")
         lines.append(f"   {STATUS_LABELS.get(room['status'], '')}")
     return "\n".join(lines)
+
+
+# --------------------------------------------------------------------------
+# Adventure events & journey log
+# --------------------------------------------------------------------------
+
+def render_adventure_prompt(adventure: Optional[dict]) -> str:
+    """Show a pending map event and its actions (text choices)."""
+    if not adventure:
+        return "✨ Không có sự kiện phiêu lưu nào đang chờ."
+    lines = [
+        "════════ HÀNH TRÌNH ════════",
+        f"✨ {adventure.get('title', 'Sự kiện')}",
+        adventure.get("intro") or "",
+        "",
+        "Bạn có thể:",
+    ]
+    for action in adventure.get("actions") or []:
+        lines.append(f"  [{action['id']}] {action['label']}")
+    lines.append("Chọn một hành động để tiếp tục.")
+    return "\n".join(lines)
+
+
+def render_adventure_result(result: dict) -> str:
+    if not result.get("ok"):
+        reasons = {
+            "no_character": FAILURE_MESSAGES["no_character"],
+            "no_event": "✨ Không có sự kiện nào đang chờ xử lý.",
+            "invalid_action": "❌ Hành động không hợp lệ. "
+                              + ("Chọn: " + ", ".join(result.get("actions") or [])
+                                 if result.get("actions") else ""),
+        }
+        return reasons.get(result.get("reason"), "❌ Không thể xử lý sự kiện.")
+    return "\n".join(result.get("lines") or [result.get("log") or ""])
+
+
+def render_journey(entries: list[dict], title: str = "NHẬT KÝ HÀNH TRÌNH") -> str:
+    """Render character history as a chronological adventure log."""
+    lines = [f"📜 {title}", ""]
+    if not entries:
+        lines.append("Chưa có gì được ghi lại. Hãy đi săn!")
+        return "\n".join(lines)
+    for i, entry in enumerate(entries, start=1):
+        kind = entry.get("kind", "?")
+        marker = {
+            "hunt": "⚔️",
+            "adventure_start": "✨",
+            "adventure": "🧭",
+        }.get(kind, "•")
+        header = entry.get("title") or entry.get("monster") or kind
+        loc = entry.get("location") or ""
+        lines.append(f"{marker} #{i} {header}" + (f" · {loc}" if loc else ""))
+        for ln in entry.get("lines") or []:
+            lines.append(f"   {ln}")
+        lines.append("")
+    return "\n".join(lines).rstrip()
+
+
+def render_materials(character: Optional[dict]) -> str:
+    if character is None:
+        return FAILURE_MESSAGES["no_character"]
+    mats = [it for it in character["bag"] if it.get("type") == "material"]
+    lines = [f"🧱 NGUYÊN LIỆU CỦA {character['name'].upper()} ({len(mats)} loại)"]
+    if not mats:
+        lines.append("Chưa có. Săn quái hoặc mở rương để nhặt nguyên liệu.")
+        return "\n".join(lines)
+    total = 0
+    for i, it in enumerate(mats, start=1):
+        qty = it.get("qty", 1)
+        value = it.get("price", 0) * qty
+        total += value
+        lines.append(f"{i}. {it['name']} ×{qty} — 💰 {fmt(value)}")
+    lines.append("")
+    lines.append(f"Tổng giá trị: {fmt(total)} vàng (bán bằng sell_materials)")
+    return "\n".join(lines)
+
+
+def render_equipment(character: Optional[dict]) -> str:
+    """Paper-doll view of all armor / jewelry slots."""
+    from . import equipment as eq
+    if character is None:
+        return FAILURE_MESSAGES["no_character"]
+    eq.ensure_loadout(character)
+    e = character["equipment"]
+    lines = [f"🛡️ TRANG BỊ CỦA {character['name'].upper()}", ""]
+    for slot in eq.SINGLE_SLOTS:
+        label = eq.SLOT_LABELS[slot]
+        item = e.get(slot)
+        lines.append(f"{label}: {describe_item(item) if item else '—'}")
+    for key, label in (("gloves", "Găng tay"), ("rings", "Nhẫn"), ("bracelets", "Vòng tay")):
+        slots = e.get(key) or []
+        for i, item in enumerate(slots):
+            lines.append(f"{label} #{i+1}: {describe_item(item) if item else '—'}")
+    bonus = eq.equipment_bonuses(character)
+    lines.append("")
+    lines.append(
+        f"Tổng bonus: HP {bonus['hp']:+d} · ATK {bonus['atk']:+d} · "
+        f"DEF {bonus['def']:+d} · SPD {bonus['spd']:+d}"
+    )
+    for st in bonus.get("sets") or []:
+        lines.append(f"Set {st['name']}: {st.get('desc', '')}")
+    return "\n".join(lines)
+
+
+def render_belt(character: Optional[dict]) -> str:
+    """5-slot consumable belt."""
+    from . import equipment as eq
+    if character is None:
+        return FAILURE_MESSAGES["no_character"]
+    eq.ensure_loadout(character)
+    lines = [f"🧪 ĐAI VẬT PHẨM (5 ô) — {character['name']}", ""]
+    for i, item in enumerate(character["consumables"], start=1):
+        if item:
+            lines.append(f"{i}. {describe_item(item)}")
+        else:
+            lines.append(f"{i}. — trống")
+    lines.append("")
+    lines.append("Giữa trận: bình máu/buff tự dùng khi đủ điều kiện; "
+                 "bùa Đồng Quy / Lưỡi Hư Không / Giọt Lệ Phượng kích hoạt theo tỉ lệ.")
+    return "\n".join(lines)
+
+
+def render_equipment_shop(slot: Optional[str] = None, balance: Optional[int] = None) -> str:
+    items = data_store.get_equipment(slot)
+    title = f"🛡️ CỬA HÀNG TRANG BỊ" + (f" — {slot}" if slot else "")
+    lines = [title, ""]
+    if not items:
+        lines.append("Chưa có trang bị.")
+        return "\n".join(lines)
+    for i, it in enumerate(items, start=1):
+        flag = " 🔒" if balance is not None and balance < it["price"] else ""
+        lines.append(f"{i}. {it['name']} ({it['slot']}) — 💰 {fmt(it['price'])}{flag}")
+        lines.append(f"   {describe_item(it)}")
+    return "\n".join(lines)
+
+
+def render_consumable_shop(balance: Optional[int] = None) -> str:
+    lines = ["🧪 VẬT PHẨM TIÊU HAO (đai / túi)", ""]
+    for i, it in enumerate(data_store.get_consumables(), start=1):
+        flag = " 🔒" if balance is not None and balance < it["price"] else ""
+        lines.append(f"{i}. {it['name']} — 💰 {fmt(it['price'])}{flag}")
+        lines.append(f"   {it.get('desc', '')}")
+    return "\n".join(lines)
+
+
+def render_enhance_quote(quote: dict) -> str:
+    if not quote.get("ok"):
+        return f"🔨 {quote.get('reason', 'Không thể báo giá')}"
+    lines = [
+        f"🔨 THỢ RÈN — {quote.get('display', '?')}",
+        f"   Hiện tại +{quote.get('current', 0)} → +{quote['next_level']}",
+        f"   Tỉ lệ thành công: {quote['rate'] * 100:.0f}%",
+        f"   Vàng: {fmt(quote['gold'])}",
+    ]
+    need = list(quote.get("stones") or []) + list(quote.get("materials") or [])
+    for req in need:
+        drop = data_store.get_drop(req["item_id"]) or data_store.get_consumable(req["item_id"])
+        lines.append(f"   · {(drop or {}).get('name', req['item_id'])} ×{req['qty']}")
+    lines.append("   (Thất bại → về +1 trừ khi dùng bùa bảo hiểm)")
+    return "\n".join(lines)
+
+
+def render_enhance_result(result: dict) -> str:
+    if not result.get("ok"):
+        return f"🔨 {result.get('message') or result.get('reason', 'Thất bại')}"
+    icon = "✅" if result.get("success") else "💥"
+    lines = [f"{icon} {result.get('message', '')}"]
+    if result.get("gold_cost"):
+        lines.append(f"   −{fmt(result['gold_cost'])} vàng")
+    return "\n".join(lines)
+
+
+def render_dungeon_list(dungeons: Optional[list] = None) -> str:
+    from . import game as game_mod
+    dungeons = dungeons if dungeons is not None else game_mod.list_dungeons()
+    lines = ["🏰 DANH SÁCH DUNGEON", ""]
+    if not dungeons:
+        lines.append("Chưa có dungeon.")
+        return "\n".join(lines)
+    for d in dungeons:
+        n = len(d.get("rooms") or [])
+        lines.append(f"· {d['id']} — {d['name']} (Lv.{d.get('min_level', 1)}+ · {n} phòng · "
+                     f"⚡ {d.get('stamina_cost', 0)})")
+        if d.get("description"):
+            lines.append(f"  {d['description']}")
+    return "\n".join(lines)
+
+
+def render_dungeon_result(result: dict) -> str:
+    if not result.get("ok"):
+        reason = result.get("message") or result.get("reason", "lỗi")
+        return f"🏰 {reason}"
+
+    kind = result.get("kind")
+    lines = []
+
+    if kind == "await_choice":
+        ev = result.get("event") or {}
+        lines.append(f"🏰 {result.get('dungeon', 'Dungeon')} — phòng {result.get('room_index', 0) + 1}")
+        lines.append(f"✨ {ev.get('title', 'Sự kiện')}")
+        if ev.get("intro"):
+            lines.append(ev["intro"])
+        for a in ev.get("actions") or []:
+            lines.append(f"  · {a['id']}: {a.get('label', a['id'])}")
+        return "\n".join(lines)
+
+    if kind == "combat":
+        # reuse hunt-ish summary
+        title = result.get("title") or result.get("monster_name")
+        lines.append(f"🏰 {result.get('dungeon', 'Dungeon')} — {title}")
+        if result.get("flavor"):
+            lines.append(result["flavor"])
+        won = result.get("won") or result.get("draw")
+        lines.append("🏆 Thắng!" if won else "💀 Thua!")
+        if result.get("monster_name"):
+            lines.append(f"👹 {result['monster_name']} ({result.get('monster_tier', '?')})")
+        if result.get("exp_gained"):
+            lines.append(f"✨ +{fmt(result['exp_gained'])} EXP")
+        for drop in result.get("drops") or []:
+            lines.append(f"🎁 {drop['name']} ×{drop.get('qty', 1)}")
+        if result.get("dungeon_failed"):
+            lines.append(result.get("message") or "Bị đá khỏi dungeon.")
+    elif kind in ("treasure", "rest", "event_result", "abort"):
+        lines.append(f"🏰 {result.get('title') or result.get('kind')}")
+        if result.get("log"):
+            lines.append(str(result["log"]))
+        for drop in result.get("drops") or []:
+            lines.append(f"🎁 {drop['name']} ×{drop.get('qty', 1)}")
+        if result.get("gold_delta"):
+            lines.append(f"💰 {result['gold_delta']:+d} vàng")
+        if result.get("heal_stamina"):
+            lines.append(f"⚡ +{result['heal_stamina']} thể lực")
+    else:
+        lines.append(result.get("message") or str(result.get("kind", "ok")))
+
+    if result.get("progress"):
+        lines.append(f"📍 Tiến độ: {result['progress']}")
+    if result.get("next_room"):
+        nr = result["next_room"]
+        lines.append(f"➡️ Tiếp: {nr.get('title', nr.get('id'))} ({nr.get('type')})")
+    if result.get("dungeon_complete"):
+        fin = result.get("completion") or {}
+        lines.append(fin.get("message") or "🏰 Hoàn thành!")
+        for drop in fin.get("bonus_drops") or []:
+            lines.append(f"🎁 Thưởng: {drop['name']} ×{drop.get('qty', 1)}")
+    return "\n".join(lines)
+

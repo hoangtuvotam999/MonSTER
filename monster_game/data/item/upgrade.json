@@ -1,0 +1,98 @@
+[
+  {
+    "type": "upgrade",
+    "id": "mithril",
+    "name": "Mithril",
+    "usage": 0,
+    "price": 20000,
+    "boostHPweapon": 2000,
+    "boostATKweapon": 200,
+    "boostDEFweapon": 200,
+    "boostSPDweapon": 10,
+    "image": "https://i.imgur.com/Cvg8eHC.png"
+  },
+  {
+    "type": "upgrade",
+    "id": "orichalcum",
+    "name": "Orichalcum",
+    "usage": 0,
+    "price": 50000,
+    "boostHPweapon": 4000,
+    "boostATKweapon": 400,
+    "boostDEFweapon": 400,
+    "boostSPDweapon": 20,
+    "image": "https://i.imgur.com/Sz0A2hp.png"
+  },
+  {
+    "type": "upgrade",
+    "id": "adamantium",
+    "name": "Adamantium",
+    "usage": 0,
+    "price": 120000,
+    "boostHPweapon": 8000,
+    "boostATKweapon": 800,
+    "boostDEFweapon": 800,
+    "boostSPDweapon": 40,
+    "image": "https://i.imgur.com/SnObhnz.png"
+  },
+  {
+    "type": "upgrade",
+    "id": "scarite",
+    "name": "Scarite",
+    "usage": 0,
+    "price": 260000,
+    "boostHPweapon": 16000,
+    "boostATKweapon": 1600,
+    "boostDEFweapon": 1600,
+    "boostSPDweapon": 80,
+    "image": "https://i.imgur.com/iIMwZEy.jpg"
+  },
+  {
+    "type": "upgrade",
+    "id": "dragonite",
+    "name": "Dragonite",
+    "usage": 0,
+    "price": 420000,
+    "boostHPweapon": 32000,
+    "boostATKweapon": 3200,
+    "boostDEFweapon": 3200,
+    "boostSPDweapon": 160,
+    "image": "https://i.imgur.com/mKzBHAK.jpg"
+  },
+  {
+    "type": "upgrade",
+    "id": "lunarite",
+    "name": "Lunarite",
+    "usage": 0,
+    "price": 840000,
+    "boostHPweapon": 64000,
+    "boostATKweapon": 6400,
+    "boostDEFweapon": 6400,
+    "boostSPDweapon": 320,
+    "image": "https://i.imgur.com/40qcjeG.jpg"
+  },
+  {
+    "type": "upgrade",
+    "id": "kriztonite",
+    "name": "Kriztonite",
+    "usage": 0,
+    "price": 1580000,
+    "boostHPweapon": 128000,
+    "boostATKweapon": 12800,
+    "boostDEFweapon": 12800,
+    "boostSPDweapon": 640,
+    "image": "https://i.imgur.com/awGbMAP.jpg"
+  },
+  {
+    "type": "upgrade",
+    "id": "damascusium",
+    "name": "Damascusium Crytalite",
+    "usage": 0,
+    "price": 4560000,
+    "boostHPweapon": 256000,
+    "boostATKweapon": 25600,
+    "boostDEFweapon": 25600,
+    "boostSPDweapon": 1280,
+    "image": "https://i.imgur.com/a0T8AZf.jpg"
+  }
+]

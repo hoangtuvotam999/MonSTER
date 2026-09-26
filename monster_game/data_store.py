@@ -1,10 +1,15 @@
 """
 Persistence layer — port of the original getData.js / setData.js pair.
 
-The original JS code kept everything in flat JSON files and rewrote the
-whole file on every mutation (`fs.writeFileSync`). We keep that same
-simple (if not very scalable) approach here for fidelity, wrapped behind
-a small API so it's easy to swap out for a real database later.
+Catalog data is split so authors can add a map or item tier without
+touching a monolith:
+
+    data/map/*.json
+    data/item/weapon/tier_*.json
+    data/item/drop/tier_*.json
+    data/item/food.json
+    data/item/upgrade.json
+    data/users.json          (runtime saves)
 """
 from __future__ import annotations
 
@@ -14,28 +19,46 @@ from typing import Any, Optional
 
 DATA_DIR = Path(__file__).parent / "data"
 USERS_FILE = DATA_DIR / "users.json"
-ITEMS_FILE = DATA_DIR / "items.json"
-MONSTERS_FILE = DATA_DIR / "monsters.json"
+MAP_DIR = DATA_DIR / "map"
+DUNGEON_DIR = DATA_DIR / "dungeon"
+ITEM_DIR = DATA_DIR / "item"
+WEAPON_DIR = ITEM_DIR / "weapon"
+DROP_DIR = ITEM_DIR / "drop"
+EQUIP_DIR = ITEM_DIR / "equipment"
+CONSUMABLE_DIR = ITEM_DIR / "consumable"
+FOOD_FILE = ITEM_DIR / "food.json"
+UPGRADE_FILE = ITEM_DIR / "upgrade.json"
+
+# Legacy flat files (still read as fallback if the modular tree is empty)
+LEGACY_ITEMS_FILE = DATA_DIR / "items.json"
+LEGACY_MONSTERS_FILE = DATA_DIR / "monsters.json"
 
 NOT_FOUND = 404
 FORBIDDEN = 403
 OK = True
 
 MAX_DURABILITY = 100
+MAX_HISTORY = 80
+
+# In-process caches (cleared via reload_catalogs())
+_maps_cache: Optional[list[dict]] = None
+_dungeons_cache: Optional[list[dict]] = None
+_weapons_cache: Optional[list[dict]] = None
+_drops_cache: Optional[list[dict]] = None
+_drops_by_id: Optional[dict[str, dict]] = None
+_food_cache: Optional[list[dict]] = None
+_upgrade_cache: Optional[list[dict]] = None
+_equipment_cache: Optional[list[dict]] = None
+_equipment_sets: Optional[dict] = None
+_consumable_cache: Optional[list[dict]] = None
+_consumable_by_id: Optional[dict[str, dict]] = None
 
 
 def exp_needed_for(level: int) -> int:
-    """EXP a character needs to go from `level` to `level + 1`.
-
-    Single source of truth: the original computed this in two places with
-    two different roundings (`500 * round(1.2 ** n)` for display vs.
-    `500 * 1.2 ** n` for the actual level-up check), so the status screen
-    could show a threshold the player had already passed."""
     return round(500 * 1.2 ** (level - 1))
 
 
 def weapon_exp_needed_for(usage: int) -> int:
-    """EXP a weapon needs to go from usage-level `usage` to `usage + 1`."""
     return round(500 * 1.2 ** usage)
 
 
@@ -52,8 +75,262 @@ def _save(path: Path, data: Any) -> None:
         json.dump(data, f, ensure_ascii=False, indent=4)
 
 
+def _load_json_dir(directory: Path) -> list[dict]:
+    """Load every *.json file in a directory (sorted by name).
+    Files may contain a list or a single object."""
+    if not directory.exists():
+        return []
+    items: list[dict] = []
+    for path in sorted(directory.glob("*.json")):
+        payload = _load(path)
+        if isinstance(payload, list):
+            items.extend(payload)
+        elif isinstance(payload, dict):
+            items.append(payload)
+    return items
+
+
+def reload_catalogs() -> None:
+    """Drop in-memory catalogs so the next read re-scans the data/ tree."""
+    global _maps_cache, _dungeons_cache, _weapons_cache, _drops_cache, _drops_by_id
+    global _food_cache, _upgrade_cache
+    global _equipment_cache, _equipment_sets, _consumable_cache, _consumable_by_id
+    _maps_cache = _dungeons_cache = _weapons_cache = _drops_cache = None
+    _drops_by_id = _food_cache = _upgrade_cache = None
+    _equipment_cache = _equipment_sets = None
+    _consumable_cache = _consumable_by_id = None
+    try:
+        import monster_game.blacksmith as bs
+        bs._cfg_cache = None
+    except Exception:
+        pass
+
+
+# Points granted on level-up (balance: was 500*level — far too high)
+LEVEL_UP_POINTS = 40
+# Karma: only rise on wins; losses don't feed the spiral
+KARMA_ON_WIN = 1
+KARMA_ON_LOSS = 0
+
+
 # --------------------------------------------------------------------------
-# Reads (port of getData.js)
+# Catalog reads
+# --------------------------------------------------------------------------
+
+def list_locations() -> list[dict]:
+    global _maps_cache
+    if _maps_cache is None:
+        maps = _load_json_dir(MAP_DIR)
+        if not maps and LEGACY_MONSTERS_FILE.exists():
+            maps = _load(LEGACY_MONSTERS_FILE)
+        _maps_cache = sorted(maps, key=lambda m: m.get("ID", 0))
+    return _maps_cache
+
+
+def list_dungeons() -> list[dict]:
+    global _dungeons_cache
+    if _dungeons_cache is None:
+        _dungeons_cache = _load_json_dir(DUNGEON_DIR)
+    return _dungeons_cache
+
+
+def get_dungeon(dungeon_id: str) -> Optional[dict]:
+    return next((d for d in list_dungeons() if d.get("id") == dungeon_id), None)
+
+
+def find_location(location_id) -> Optional[dict]:
+    return next((loc for loc in list_locations() if str(loc["ID"]) == str(location_id)), None)
+
+
+def get_monsters(location_id) -> Optional[list[dict]]:
+    loc = find_location(location_id)
+    return loc["creature"] if loc else None
+
+
+def get_min_level(location_id) -> Optional[int]:
+    loc = find_location(location_id)
+    return loc["minLevel"] if loc else None
+
+
+def get_max_level(location_id) -> Optional[int]:
+    loc = find_location(location_id)
+    return loc["maxLevel"] if loc else None
+
+
+def get_location_level(location_id) -> Optional[int]:
+    loc = find_location(location_id)
+    return loc["level"] if loc else None
+
+
+def get_weapons() -> list[dict]:
+    global _weapons_cache
+    if _weapons_cache is None:
+        weapons = _load_json_dir(WEAPON_DIR)
+        if not weapons and LEGACY_ITEMS_FILE.exists():
+            weapons = [i for i in _load(LEGACY_ITEMS_FILE) if i.get("type") == "weapon"]
+        _weapons_cache = weapons
+    return _weapons_cache
+
+
+def get_items(item_id: Optional[int] = None):
+    """Weapon catalog (compat with old get_items)."""
+    items = get_weapons()
+    if item_id is not None:
+        return next((i for i in items if i.get("id") == item_id), None)
+    return items
+
+
+def get_food_items() -> list[dict]:
+    global _food_cache
+    if _food_cache is None:
+        _food_cache = _load(FOOD_FILE) if FOOD_FILE.exists() else []
+    return _food_cache
+
+
+def get_upgrade_materials() -> list[dict]:
+    global _upgrade_cache
+    if _upgrade_cache is None:
+        _upgrade_cache = _load(UPGRADE_FILE) if UPGRADE_FILE.exists() else []
+    return _upgrade_cache
+
+
+def get_drops() -> list[dict]:
+    global _drops_cache, _drops_by_id
+    if _drops_cache is None:
+        _drops_cache = _load_json_dir(DROP_DIR)
+        _drops_by_id = {d["id"]: d for d in _drops_cache if "id" in d}
+    return _drops_cache
+
+
+def get_drop(drop_id: str) -> Optional[dict]:
+    get_drops()
+    assert _drops_by_id is not None
+    return _drops_by_id.get(drop_id)
+
+
+def get_equipment(slot: Optional[str] = None) -> list[dict]:
+    global _equipment_cache
+    if _equipment_cache is None:
+        items = []
+        if EQUIP_DIR.exists():
+            for path in sorted(EQUIP_DIR.glob("*.json")):
+                if path.name == "sets.json":
+                    continue
+                payload = _load(path)
+                if isinstance(payload, list):
+                    items.extend(payload)
+        _equipment_cache = items
+    if slot is None:
+        return _equipment_cache
+    return [i for i in _equipment_cache if i.get("slot") == slot]
+
+
+def get_equipment_sets() -> dict:
+    global _equipment_sets
+    if _equipment_sets is None:
+        path = EQUIP_DIR / "sets.json"
+        _equipment_sets = _load(path) if path.exists() else {}
+    return _equipment_sets
+
+
+def get_equipment_by_id(item_id: str) -> Optional[dict]:
+    return next((i for i in get_equipment() if i.get("id") == item_id), None)
+
+
+def get_consumables() -> list[dict]:
+    global _consumable_cache, _consumable_by_id
+    if _consumable_cache is None:
+        _consumable_cache = _load_json_dir(CONSUMABLE_DIR)
+        _consumable_by_id = {c["id"]: c for c in _consumable_cache if "id" in c}
+    return _consumable_cache
+
+
+def get_consumable(item_id: str) -> Optional[dict]:
+    get_consumables()
+    assert _consumable_by_id is not None
+    return _consumable_by_id.get(item_id)
+
+
+def instantiate_drop(drop_id: str, qty: int = 1) -> Optional[dict]:
+    """Build a bag-ready item from drop id OR equipment id."""
+    template = get_drop(drop_id)
+    if template is None:
+        # Boss tables may reference equipment ids directly
+        template = get_equipment_by_id(drop_id)
+        if template is None:
+            return None
+        item = dict(template)
+        item.setdefault("type", "equipment")
+        return item
+    item = dict(template)
+    if item.get("type") == "consumable":
+        item["type"] = "food"
+    item["qty"] = max(1, int(qty))
+    return item
+
+
+def get_craft_recipes() -> list[dict]:
+    path = ITEM_DIR / "craft" / "recipes.json"
+    if not path.exists():
+        return []
+    data = _load(path)
+    return data if isinstance(data, list) else []
+
+
+def get_craft_recipe(recipe_id: str) -> Optional[dict]:
+    return next((r for r in get_craft_recipes() if r.get("id") == recipe_id), None)
+
+
+def count_bag_item(user: dict, item_id: str) -> int:
+    total = 0
+    for it in user.get("bag") or []:
+        if it.get("id") == item_id:
+            total += int(it.get("qty", 1))
+    return total
+
+
+def consume_bag_items(user: dict, requirements: list[dict]) -> bool:
+    """Remove qty of items by id from bag. Returns False if not enough."""
+    # verify
+    for req in requirements:
+        if count_bag_item(user, req["item_id"]) < int(req["qty"]):
+            return False
+    for req in requirements:
+        need = int(req["qty"])
+        bag = user["bag"]
+        i = 0
+        while need > 0 and i < len(bag):
+            it = bag[i]
+            if it.get("id") != req["item_id"]:
+                i += 1
+                continue
+            have = int(it.get("qty", 1))
+            if have > need:
+                it["qty"] = have - need
+                need = 0
+            else:
+                need -= have
+                bag.pop(i)
+                continue
+            i += 1
+    return True
+
+
+def _stack_into_bag(user: dict, item: dict) -> None:
+    """Internal: stack item into an already-loaded user dict (no disk IO)."""
+    kind = item.get("type")
+    if kind in ("material", "food", "upgrade", "consumable") and item.get("id"):
+        for existing in user["bag"]:
+            if existing.get("type") == kind and existing.get("id") == item.get("id"):
+                existing["qty"] = existing.get("qty", 1) + item.get("qty", 1)
+                return
+    entry = dict(item)
+    entry.setdefault("qty", 1)
+    user["bag"].append(entry)
+
+
+# --------------------------------------------------------------------------
+# Users
 # --------------------------------------------------------------------------
 
 def load_users() -> list[dict]:
@@ -61,59 +338,10 @@ def load_users() -> list[dict]:
 
 
 def get_user(user_id: str) -> Optional[dict]:
-    """Port of getData.getDataUser."""
     return next((u for u in load_users() if u["id"] == user_id), None)
 
 
-def get_items(item_id: Optional[int] = None):
-    """Port of getData.getItems. Returns the whole catalog, or one item."""
-    items = _load(ITEMS_FILE)
-    if item_id is not None:
-        return next((i for i in items if i["id"] == item_id), None)
-    return items
-
-
-def find_location(location_id) -> Optional[dict]:
-    return next((loc for loc in _load(MONSTERS_FILE) if str(loc["ID"]) == str(location_id)), None)
-
-
-_find_location = find_location
-
-
-def get_monsters(location_id) -> Optional[list[dict]]:
-    """Port of getData.getMonster (renamed: it returns a *list* of monsters)."""
-    loc = _find_location(location_id)
-    return loc["creature"] if loc else None
-
-
-def get_min_level(location_id) -> Optional[int]:
-    loc = _find_location(location_id)
-    return loc["minLevel"] if loc else None
-
-
-def get_max_level(location_id) -> Optional[int]:
-    loc = _find_location(location_id)
-    return loc["maxLevel"] if loc else None
-
-
-def get_location_level(location_id) -> Optional[int]:
-    loc = _find_location(location_id)
-    return loc["level"] if loc else None
-
-
-def list_locations() -> list[dict]:
-    return _load(MONSTERS_FILE)
-
-
-# --------------------------------------------------------------------------
-# Writes (port of setData.js). Every function loads the full user list,
-# mutates the matching entry in place, and persists — exactly like the
-# original fs.writeFileSync-per-call approach.
-# --------------------------------------------------------------------------
-
 def _mutate_user(user_id: str, mutator):
-    """Load users, find the one with `user_id`, call mutator(user) on it,
-    persist, and return whatever mutator returned (or NOT_FOUND)."""
     users = load_users()
     user = next((u for u in users if u["id"] == user_id), None)
     if user is None:
@@ -138,34 +366,42 @@ def _owns_weapon(user: dict, item: dict) -> bool:
 
 
 def buy_item(player_id: str, item: Optional[dict]):
-    """Port of setData.buyItem.
-
-    FIXED vs. the original: the duplicate check only compared against the
-    *equipped* weapon, so a player could buy the same weapon over and over
-    as long as it sat unequipped in the bag. Weapons are now unique across
-    the equipped slot and the bag; consumables (food/upgrades) can always
-    be stacked."""
     if item is None:
         return NOT_FOUND
 
     def do(user):
         if item.get("type") == "weapon" and _owns_weapon(user, item):
             return FORBIDDEN
-        user["bag"].append(dict(item))
+        entry = dict(item)
+        if entry.get("type") in ("weapon", "equipment"):
+            entry.setdefault("enhance_level", 0)
+        if entry.get("type") in ("material", "food", "upgrade", "consumable"):
+            entry.setdefault("qty", 1)
+            _stack_into_bag(user, entry)
+        else:
+            user["bag"].append(entry)
+        return OK
+
+    return _mutate_user(player_id, do)
+
+
+def add_to_bag(player_id: str, item: dict, stack: bool = True):
+    """Add an item to the bag. Materials/food with the same id stack by qty."""
+
+    def do(user):
+        if stack:
+            _stack_into_bag(user, item)
+        else:
+            entry = dict(item)
+            entry.setdefault("qty", 1)
+            user["bag"].append(entry)
         return OK
 
     return _mutate_user(player_id, do)
 
 
 def set_item(player_id: str, bag_index: int):
-    """Port of setData.setItem — equip the weapon, or consume the food /
-    upgrade material, sitting at 0-based `bag_index` in the player's bag.
-
-    FIXED vs. the original, which took the item *object* and then removed
-    the first bag entry with the same *name*: with two identical items in
-    the bag that could delete the wrong copy, and when equipping a new
-    weapon the previously equipped one simply vanished. Now the exact slot
-    is consumed, and the old weapon is returned to the bag on swap."""
+    """Equip a weapon, or consume food / apply upgrade at 0-based bag index."""
 
     def do(user):
         bag = user["bag"]
@@ -185,6 +421,7 @@ def set_item(player_id: str, bag_index: int):
         elif kind == "buff":
             user["buffs"] = data
         elif kind == "food":
+            qty = data.get("qty", 1)
             user["the_luc"] = user.get("the_luc", 0) + data.get("heal", 0)
             user["hp"] += data.get("boostHP", 0)
             user["atk"] += data.get("boostATK", 0)
@@ -193,6 +430,19 @@ def set_item(player_id: str, bag_index: int):
             user["exp"] += data.get("boostEXP", 0)
             user["karma"] = max(0, user["karma"] + data.get("boostKarma", 0))
             user["points"] += data.get("boostPoints", 0)
+            if qty > 1:
+                data["qty"] = qty - 1
+                return OK
+        elif kind == "consumable":
+            # Out-of-combat use: stamina potions & flat heals only
+            if data.get("subtype") == "stamina":
+                user["the_luc"] = user.get("the_luc", 0) + int(data.get("heal_stamina", 0))
+            qty = data.get("qty", 1)
+            if qty > 1:
+                data["qty"] = qty - 1
+                return OK
+        elif kind == "equipment":
+            return FORBIDDEN  # use equipment.equip_from_bag
         elif kind == "upgrade":
             w = user.get("weapon")
             if w is None:
@@ -203,6 +453,12 @@ def set_item(player_id: str, bag_index: int):
             w["DEF"] += data.get("boostDEFweapon", 0)
             w["SPD"] += data.get("boostSPDweapon", 0)
             w["usage"] = w.get("usage", 0) + data.get("usage", 0)
+            qty = data.get("qty", 1)
+            if qty > 1:
+                data["qty"] = qty - 1
+                return OK
+        elif kind == "material":
+            return FORBIDDEN  # materials are sold / crafted, not "used"
         else:
             return FORBIDDEN
 
@@ -254,8 +510,6 @@ def _increase_stat(stat: str):
     return increase
 
 
-# FIXED vs. the original: these refused to add to a stat that was exactly 0
-# (`if (user.hp == 0) return 403`), which made no sense for a stat *increase*.
 increase_hp = _increase_stat("hp")
 increase_def = _increase_stat("def")
 increase_atk = _increase_stat("atk")
@@ -263,10 +517,6 @@ increase_spd = _increase_stat("spd")
 
 
 def spend_points(player_id: str, stat: str, points: int, per_point: int):
-    """Atomically convert `points` skill points into `points * per_point` of
-    `stat`. The original did this as two separate writes (increase stat,
-    then decrease points), so a failure in between could hand out free
-    stats. Returns the new stat value, or FORBIDDEN."""
     if stat not in ("hp", "atk", "def", "spd") or points <= 0:
         return FORBIDDEN
 
@@ -289,38 +539,10 @@ def set_location(player_id: str, location_id: str):
 
 
 def set_exp(player_id: str, exp: float):
-    """Port of setData.setExp — grants EXP to the character and its equipped
-    weapon, handling level-ups for both. Returns a list of events describing
-    what happened so the caller can decide how to notify the player.
-
-    FIXED vs. the original two bugs:
-    1. The original's "levels gained" formula `floor(x/N + 1 - x/N)` always
-       evaluates to exactly 1, so a huge EXP reward (e.g. from a very strong
-       monster) could only ever advance one level per call, silently
-       discarding the rest of the overshoot as if it were leftover EXP.
-       Fixed here with a loop that keeps leveling up — recomputing the
-       (level-dependent) threshold each time — until the remaining EXP is
-       no longer enough for the next level, exactly like a standard RPG
-       leveling curve.
-    2. The weapon's level-up formula reused the *character's* EXP
-       requirement (`expNeeded`) instead of the weapon's own
-       (`expWeaponNeed`) when computing how many usage-levels to grant.
-       Fixed here by using `weapon_exp_needed` consistently, in its own
-       loop, independent of the character's level curve.
-    3. It bailed out with 404 when the player had no weapon, so a hunter
-       whose weapon was destroyed by the very fight they just *won* got no
-       EXP at all. Character EXP is now always granted; weapon EXP only
-       when there is a weapon to receive it.
-    4. `if (exp <= 0) the_luc = 0` zeroed the player's stamina whenever
-       their total EXP happened to be 0 — dropped.
-    """
-
     def do(user):
         user["exp"] += exp
         events = []
 
-        # Character leveling: loop so a big EXP reward can grant several
-        # levels at once, each time recomputing the threshold at the new level.
         while user["exp"] >= exp_needed_for(user["level"]):
             user["exp"] -= exp_needed_for(user["level"])
             user["level"] += 1
@@ -328,7 +550,7 @@ def set_exp(player_id: str, exp: float):
             user["def"] += 2 * user["level"]
             user["hp"] += 5 * user["level"]
             user["spd"] += 1 * user["level"]
-            user["points"] += 500 * user["level"]
+            user["points"] += LEVEL_UP_POINTS + 5 * user["level"]
             events.append(("level_up", user["level"]))
 
         weapon = user.get("weapon")
@@ -338,15 +560,12 @@ def set_exp(player_id: str, exp: float):
         weapon.setdefault("usage", 0)
         weapon["exp"] = weapon.get("exp", 0) + exp
 
-        # Weapon leveling: same loop pattern, using the weapon's own
-        # (usage-dependent) EXP requirement instead of the character's.
         while weapon["exp"] >= weapon_exp_needed_for(weapon["usage"]):
             weapon["exp"] -= weapon_exp_needed_for(weapon["usage"])
             weapon["usage"] += 1
             weapon["ATK"] += round(weapon["ATK"] * 0.01)
             weapon["DEF"] += round(weapon["DEF"] * 0.01)
             weapon["SPD"] += round(weapon["SPD"] * 0.01)
-            # Grow the *max* HP (the current HP is the depleted health pool).
             hp_gain = round(weapon_max_hp(weapon) * 0.01)
             weapon["maxHP"] = weapon_max_hp(weapon) + hp_gain
             weapon["HP"] += hp_gain
@@ -366,32 +585,10 @@ def add_monster(player_id: str, monster: dict):
 
 
 def weapon_max_hp(weapon: dict) -> int:
-    """The HP the weapon is repaired back to. Older saves have no `maxHP`,
-    so fall back to the current HP (they'll pick the field up on the next
-    equip/upgrade/repair)."""
     return weapon.get("maxHP", weapon["HP"])
 
 
 def decrease_health_weapon(player_id: str, remaining_hp_stat: float):
-    """Port of setData.decreaseHealthWeapon — derives the weapon's new HP
-    bonus from the player's HP left over after a fight. HP does not
-    regenerate between hunts: the weapon's HP *is* the hunter's persistent
-    health pool, refilled by repairing (see repair_weapon) or upgrading.
-
-    FIXED vs. the original:
-    - The JS version computed `weapon.HP = remaining_hp - user.hp`, which
-      silently ignored the weapon's `hpBonus` multiplier. Since the actual
-      HP stat used in combat is `(user.hp + weapon.HP) * hpBonus`
-      (see combat.build_combat_stats), reversing that correctly requires
-      dividing out `hpBonus` first. Identical for hpBonus == 1.
-    - Losing a fight (or dropping to 0 weapon HP) used to *delete* the
-      weapon — for a fresh character that meant a ~17% chance per hunt of
-      being left with nothing to fight with. Now the weapon is only
-      *broken* (HP and durability zeroed) and can be repaired.
-
-    Returns True if the weapon broke, False if it is still usable.
-    """
-
     def do(user):
         w = user.get("weapon")
         if w is None:
@@ -410,9 +607,6 @@ def decrease_health_weapon(player_id: str, remaining_hp_stat: float):
 
 
 def repair_weapon(player_id: str):
-    """Restore the equipped weapon to full durability and full (max) HP.
-    Returns the repaired weapon dict, or FORBIDDEN if none is equipped."""
-
     def do(user):
         w = user.get("weapon")
         if w is None:
@@ -425,19 +619,54 @@ def repair_weapon(player_id: str):
     return _mutate_user(player_id, do)
 
 
-def karma_up(player_id: str):
+def karma_up(player_id: str, amount: int = 1):
     def do(user):
-        user["karma"] = max(0, user["karma"] + 1)
+        user["karma"] = max(0, user["karma"] + int(amount))
         return user["karma"]
 
     return _mutate_user(player_id, do)
 
 
-def sell_monsters(player_id: str, indices: Optional[list[int]] = None):
-    """Sell monsters from the trophy bag. `indices` is 1-based, matching the
-    original's user-facing numbering; pass None to sell everything.
-    Returns (count_sold, total_money)."""
+def apply_effects(player_id: str, effects: dict):
+    """Apply adventure/stat side-effects. Gold is returned to the caller
+    (wallet is external); stamina/karma mutate the character."""
 
+    def do(user):
+        if "the_luc" in effects:
+            user["the_luc"] = max(0, user.get("the_luc", 0) + int(effects["the_luc"]))
+        if "karma" in effects:
+            user["karma"] = max(0, user.get("karma", 0) + int(effects["karma"]))
+        if "exp" in effects:
+            user["exp"] = user.get("exp", 0) + float(effects["exp"])
+        return {
+            "the_luc": user.get("the_luc", 0),
+            "karma": user.get("karma", 0),
+            "gold_delta": int(effects.get("gold", 0)),
+        }
+
+    return _mutate_user(player_id, do)
+
+
+def set_pending_event(player_id: str, event: Optional[dict]):
+    def do(user):
+        user["pending_event"] = event
+        return OK
+
+    return _mutate_user(player_id, do)
+
+
+def append_history(player_id: str, entry: dict):
+    def do(user):
+        history = user.setdefault("history", [])
+        history.append(entry)
+        if len(history) > MAX_HISTORY:
+            del history[:-MAX_HISTORY]
+        return OK
+
+    return _mutate_user(player_id, do)
+
+
+def sell_monsters(player_id: str, indices: Optional[list[int]] = None):
     def do(user):
         monsters = user["monster"]
         if indices is None:
@@ -451,6 +680,35 @@ def sell_monsters(player_id: str, indices: Optional[list[int]] = None):
                 total += monsters[i - 1]["price"]
                 monsters.pop(i - 1)
                 count += 1
+        return count, total
+
+    return _mutate_user(player_id, do)
+
+
+def sell_materials(player_id: str, indices_1based: Optional[list[int]] = None):
+    """Sell material (and optionally other non-weapon) bag entries.
+    indices refer to positions among material items only when filtering,
+    OR pass absolute bag indices via sell_bag_slots."""
+
+    def do(user):
+        bag = user["bag"]
+        material_slots = [i for i, it in enumerate(bag) if it.get("type") == "material"]
+        if not material_slots:
+            return 0, 0
+        if indices_1based is None:
+            targets = list(material_slots)
+        else:
+            targets = []
+            for n in indices_1based:
+                if 1 <= n <= len(material_slots):
+                    targets.append(material_slots[n - 1])
+        count, total = 0, 0
+        for slot in sorted(set(targets), reverse=True):
+            it = bag[slot]
+            qty = it.get("qty", 1)
+            total += it.get("price", 0) * qty
+            count += qty
+            bag.pop(slot)
         return count, total
 
     return _mutate_user(player_id, do)

@@ -1,0 +1,955 @@
+{
+  "ID": 2,
+  "slug": "map3_coral_highlands",
+  "name": "Coral Highlands",
+  "description": "Cao nguyên san hô lơ lửng giữa trời, thợ săn kỳ cựu mới nên tới.",
+  "level": 12,
+  "minLevel": 10,
+  "maxLevel": 20,
+  "event_chance": 0.48,
+  "creature": [
+    {
+      "Name": "Raphinos",
+      "Tier": "I",
+      "HP": 16000,
+      "ATK": 1600,
+      "DEF": 500,
+      "SPD": 4000,
+      "ATKbonus": 1,
+      "DEFbonus": 1,
+      "SPDbonus": 1,
+      "ArmorPiercing": 1,
+      "exp": 400,
+      "price": 2000,
+      "drops": [
+        {
+          "item_id": "raphinos_membrane",
+          "chance": 0.7,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "monster_bone_s",
+          "chance": 0.45,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "herb",
+          "chance": 0.35,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "stamina_berry",
+          "chance": 0.1,
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "actions": [
+        {
+          "id": "dive",
+          "name": "Lao xuống",
+          "weight": 35,
+          "mult": 1.3,
+          "flavor": "lao vút từ trên cao"
+        },
+        {
+          "id": "wing",
+          "name": "Vỗ cánh",
+          "weight": 25,
+          "mult": 0.9,
+          "flavor": "vỗ cánh tạo gió lốc"
+        },
+        {
+          "id": "peck",
+          "name": "Mổ liên tiếp",
+          "weight": 25,
+          "mult": 1.05,
+          "flavor": "mổ liên hoàn"
+        },
+        {
+          "id": "sky_rage",
+          "name": "Cuồng phong",
+          "weight": 15,
+          "mult": 1.5,
+          "flavor": "xoáy xuống như bão",
+          "when": "hp_below_35"
+        }
+      ],
+      "lore": "Thú bay cao nguyên san hô. Đẹp và dễ chết nếu bạn cần nguyên liệu.",
+      "desc": "Thú bay cao nguyên san hô."
+    },
+    {
+      "Name": "Shamos",
+      "Tier": "I",
+      "HP": 20000,
+      "ATK": 1400,
+      "DEF": 700,
+      "SPD": 2500,
+      "ATKbonus": 1,
+      "DEFbonus": 1,
+      "SPDbonus": 1,
+      "ArmorPiercing": 1,
+      "exp": 380,
+      "price": 1900,
+      "drops": [
+        {
+          "item_id": "shamos_fang",
+          "chance": 0.7,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "monster_bone_s",
+          "chance": 0.45,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "herb",
+          "chance": 0.35,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "stamina_berry",
+          "chance": 0.1,
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "actions": [
+        {
+          "id": "bite",
+          "name": "Cắn xé",
+          "weight": 45,
+          "mult": 1.0,
+          "flavor": "lao tới cắn"
+        },
+        {
+          "id": "claw",
+          "name": "Vuốt sắc",
+          "weight": 30,
+          "mult": 1.1,
+          "flavor": "vung móng cào"
+        },
+        {
+          "id": "pounce",
+          "name": "Nhảy bổ",
+          "weight": 20,
+          "mult": 1.25,
+          "flavor": "bật nhảy đè xuống"
+        },
+        {
+          "id": "flee_snap",
+          "name": "Cắn rồi lùi",
+          "weight": 5,
+          "mult": 0.7,
+          "flavor": "níu đớp một cái rồi thụt lại"
+        }
+      ],
+      "lore": "Thú hang đêm. Đôi mắt phát sáng khi bị đèn soi.",
+      "desc": "Thú hang đêm."
+    },
+    {
+      "Name": "Tzitzi-Ya-Ku",
+      "Tier": "II",
+      "HP": 30000,
+      "ATK": 2200,
+      "DEF": 1000,
+      "SPD": 3500,
+      "ATKbonus": 1,
+      "DEFbonus": 1,
+      "SPDbonus": 1.1,
+      "ArmorPiercing": 1,
+      "exp": 800,
+      "price": 4500,
+      "drops": [
+        {
+          "item_id": "tzitzi_photophore",
+          "chance": 0.7,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "monster_bone_s",
+          "chance": 0.45,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "herb",
+          "chance": 0.35,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "stamina_berry",
+          "chance": 0.1,
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "actions": [
+        {
+          "id": "bite",
+          "name": "Cắn xé",
+          "weight": 45,
+          "mult": 1.0,
+          "flavor": "lao tới cắn"
+        },
+        {
+          "id": "claw",
+          "name": "Vuốt sắc",
+          "weight": 30,
+          "mult": 1.1,
+          "flavor": "vung móng cào"
+        },
+        {
+          "id": "pounce",
+          "name": "Nhảy bổ",
+          "weight": 20,
+          "mult": 1.25,
+          "flavor": "bật nhảy đè xuống"
+        },
+        {
+          "id": "flee_snap",
+          "name": "Cắn rồi lùi",
+          "weight": 5,
+          "mult": 0.7,
+          "flavor": "níu đớp một cái rồi thụt lại"
+        }
+      ],
+      "lore": "Thợ flash. Làm mù mắt rồi mới đánh — dungeon humor kiểu tàn nhẫn.",
+      "desc": "Thợ flash."
+    },
+    {
+      "Name": "Paolumu",
+      "Tier": "III",
+      "HP": 50000,
+      "ATK": 2600,
+      "DEF": 1500,
+      "SPD": 3000,
+      "ATKbonus": 1,
+      "DEFbonus": 1.1,
+      "SPDbonus": 1,
+      "ArmorPiercing": 1,
+      "exp": 1600,
+      "price": 10000,
+      "drops": [
+        {
+          "item_id": "paolumu_pelt",
+          "chance": 0.7,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "monster_bone_m",
+          "chance": 0.45,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "iron_ore",
+          "chance": 0.35,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "field_ration",
+          "chance": 0.1,
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "actions": [
+        {
+          "id": "dive",
+          "name": "Lao xuống",
+          "weight": 35,
+          "mult": 1.3,
+          "flavor": "lao vút từ trên cao"
+        },
+        {
+          "id": "wing",
+          "name": "Vỗ cánh",
+          "weight": 25,
+          "mult": 0.9,
+          "flavor": "vỗ cánh tạo gió lốc"
+        },
+        {
+          "id": "peck",
+          "name": "Mổ liên tiếp",
+          "weight": 25,
+          "mult": 1.05,
+          "flavor": "mổ liên hoàn"
+        },
+        {
+          "id": "sky_rage",
+          "name": "Cuồng phong",
+          "weight": 15,
+          "mult": 1.5,
+          "flavor": "xoáy xuống như bão",
+          "when": "hp_below_35"
+        }
+      ],
+      "lore": "Bay phồng. Bụng đầy khí, đòn đuôi quật như bao cát.",
+      "desc": "Bay phồng."
+    },
+    {
+      "Name": "Legiana",
+      "Tier": "IV",
+      "HP": 75000,
+      "ATK": 3500,
+      "DEF": 1800,
+      "SPD": 5000,
+      "ATKbonus": 1.1,
+      "DEFbonus": 1,
+      "SPDbonus": 1.1,
+      "ArmorPiercing": 0.9,
+      "exp": 3000,
+      "price": 20000,
+      "drops": [
+        {
+          "item_id": "legiana_claw",
+          "chance": 0.7,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "monster_bone_m",
+          "chance": 0.45,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "iron_ore",
+          "chance": 0.35,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "field_ration",
+          "chance": 0.1,
+          "min": 1,
+          "max": 1
+        },
+        {
+          "item_id": "boots_wind",
+          "chance": 0.18,
+          "min": 1,
+          "max": 1,
+          "kind": "equipment"
+        }
+      ],
+      "actions": [
+        {
+          "id": "dive",
+          "name": "Lao xuống",
+          "weight": 35,
+          "mult": 1.3,
+          "flavor": "lao vút từ trên cao"
+        },
+        {
+          "id": "wing",
+          "name": "Vỗ cánh",
+          "weight": 25,
+          "mult": 0.9,
+          "flavor": "vỗ cánh tạo gió lốc"
+        },
+        {
+          "id": "peck",
+          "name": "Mổ liên tiếp",
+          "weight": 25,
+          "mult": 1.05,
+          "flavor": "mổ liên hoàn"
+        },
+        {
+          "id": "sky_rage",
+          "name": "Cuồng phong",
+          "weight": 15,
+          "mult": 1.5,
+          "flavor": "xoáy xuống như bão",
+          "when": "hp_below_35"
+        }
+      ],
+      "lore": "Chúa tể gió lạnh. Móng để lại sương giá trên khiên.",
+      "desc": "Chúa tể gió lạnh."
+    },
+    {
+      "Name": "Odogaron",
+      "Tier": "V",
+      "HP": 90000,
+      "ATK": 4500,
+      "DEF": 2000,
+      "SPD": 6000,
+      "ATKbonus": 1.2,
+      "DEFbonus": 1,
+      "SPDbonus": 1.2,
+      "ArmorPiercing": 0.85,
+      "exp": 4500,
+      "price": 30000,
+      "drops": [
+        {
+          "item_id": "odogaron_sinew",
+          "chance": 0.7,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "monster_bone_l",
+          "chance": 0.45,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "carbolite",
+          "chance": 0.35,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "mega_potion_leaf",
+          "chance": 0.1,
+          "min": 1,
+          "max": 1
+        },
+        {
+          "item_id": "pants_shadow",
+          "chance": 0.18,
+          "min": 1,
+          "max": 1,
+          "kind": "equipment"
+        }
+      ],
+      "actions": [
+        {
+          "id": "slam",
+          "name": "Húc mạnh",
+          "weight": 35,
+          "mult": 1.15,
+          "flavor": "húc thẳng"
+        },
+        {
+          "id": "tail",
+          "name": "Quật đuôi",
+          "weight": 25,
+          "mult": 1.2,
+          "flavor": "quật đuôi quét"
+        },
+        {
+          "id": "roar",
+          "name": "Gầm vang",
+          "weight": 15,
+          "mult": 0.6,
+          "flavor": "gầm lên rung đất",
+          "effect": "mana_drain"
+        },
+        {
+          "id": "thrash",
+          "name": "Lồng lộn",
+          "weight": 15,
+          "mult": 1.4,
+          "flavor": "lồng lộn tấn công",
+          "when": "hp_below_40"
+        },
+        {
+          "id": "stomp",
+          "name": "Dậm chân",
+          "weight": 10,
+          "mult": 1.3,
+          "flavor": "dậm chân làm nứt đất"
+        }
+      ],
+      "lore": "Sói máu hang động. Theo dấu máu — kể cả máu của chính nó.",
+      "desc": "Sói máu hang động."
+    },
+    {
+      "Name": "Kirin",
+      "Tier": "X",
+      "HP": 160000,
+      "ATK": 7000,
+      "DEF": 3500,
+      "SPD": 8000,
+      "ATKbonus": 1.2,
+      "DEFbonus": 1.1,
+      "SPDbonus": 1,
+      "ArmorPiercing": 0.75,
+      "exp": 10000,
+      "price": 90000,
+      "drops": [
+        {
+          "item_id": "kirin_mane",
+          "chance": 0.7,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "monster_bone_l",
+          "chance": 0.45,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "carbolite",
+          "chance": 0.35,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "mega_potion_leaf",
+          "chance": 0.1,
+          "min": 1,
+          "max": 1
+        },
+        {
+          "item_id": "brac_mana",
+          "chance": 0.18,
+          "min": 1,
+          "max": 1,
+          "kind": "equipment"
+        }
+      ],
+      "actions": [
+        {
+          "id": "nova",
+          "name": "Bùng nổ nguyên tố",
+          "weight": 25,
+          "mult": 1.45,
+          "flavor": "bùng nổ năng lượng cổ đại"
+        },
+        {
+          "id": "crush",
+          "name": "Đập nghiền",
+          "weight": 25,
+          "mult": 1.35,
+          "flavor": "giáng một đòn nghiền nát"
+        },
+        {
+          "id": "curse",
+          "name": "Lời nguyền",
+          "weight": 20,
+          "mult": 0.8,
+          "flavor": "thì thầm lời nguyền",
+          "effect": "curse"
+        },
+        {
+          "id": "apocalypse",
+          "name": "Thần nộ",
+          "weight": 15,
+          "mult": 1.8,
+          "flavor": "giáng thần nộ",
+          "when": "hp_below_30"
+        },
+        {
+          "id": "drain",
+          "name": "Hút sinh lực",
+          "weight": 15,
+          "mult": 1.0,
+          "flavor": "hút sinh lực",
+          "effect": "lifesteal"
+        },
+        {
+          "id": "last_stand",
+          "name": "Hồi quang cuối",
+          "weight": 12,
+          "mult": 1.7,
+          "flavor": "tập trung toàn lực phản kháng",
+          "when": "hp_below_20"
+        }
+      ],
+      "lore": "Elder sấm. Không lớn, nhưng mỗi bước là một lời nguyền điện.",
+      "desc": "Elder sấm."
+    },
+    {
+      "Name": "Vaal Hazak",
+      "Tier": "XX",
+      "HP": 350000,
+      "ATK": 12000,
+      "DEF": 6000,
+      "SPD": 6000,
+      "ATKbonus": 1.3,
+      "DEFbonus": 1.2,
+      "SPDbonus": 1,
+      "ArmorPiercing": 0.6,
+      "exp": 25000,
+      "price": 300000,
+      "drops": [
+        {
+          "item_id": "vaal_effluvium",
+          "chance": 0.7,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "elder_dragon_bone",
+          "chance": 0.35,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "nova_crystal",
+          "chance": 0.35,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "blessed_charm",
+          "chance": 0.1,
+          "min": 1,
+          "max": 1
+        },
+        {
+          "item_id": "cloak_assassin",
+          "chance": 0.18,
+          "min": 1,
+          "max": 1,
+          "kind": "equipment"
+        }
+      ],
+      "actions": [
+        {
+          "id": "nova",
+          "name": "Bùng nổ nguyên tố",
+          "weight": 25,
+          "mult": 1.45,
+          "flavor": "bùng nổ năng lượng cổ đại"
+        },
+        {
+          "id": "crush",
+          "name": "Đập nghiền",
+          "weight": 25,
+          "mult": 1.35,
+          "flavor": "giáng một đòn nghiền nát"
+        },
+        {
+          "id": "curse",
+          "name": "Lời nguyền",
+          "weight": 20,
+          "mult": 0.8,
+          "flavor": "thì thầm lời nguyền",
+          "effect": "curse"
+        },
+        {
+          "id": "apocalypse",
+          "name": "Thần nộ",
+          "weight": 15,
+          "mult": 1.8,
+          "flavor": "giáng thần nộ",
+          "when": "hp_below_30"
+        },
+        {
+          "id": "drain",
+          "name": "Hút sinh lực",
+          "weight": 15,
+          "mult": 1.0,
+          "flavor": "hút sinh lực",
+          "effect": "lifesteal"
+        },
+        {
+          "id": "last_stand",
+          "name": "Hồi quang cuối",
+          "weight": 12,
+          "mult": 1.7,
+          "flavor": "tập trung toàn lực phản kháng",
+          "when": "hp_below_20"
+        }
+      ],
+      "lore": "Elder khí độc. Nơi nó đi, sự sống thối rữa.",
+      "desc": "Elder khí độc."
+    }
+  ],
+  "events": [
+    {
+      "id": "old_chest",
+      "weight": 40,
+      "title": "Rương gỗ cũ",
+      "intro": "Rương san hô lấp lánh dưới ánh sáng kỳ ảo.",
+      "actions": [
+        {
+          "id": "open",
+          "label": "Mở rương"
+        },
+        {
+          "id": "inspect",
+          "label": "Quan sát kỹ"
+        },
+        {
+          "id": "leave",
+          "label": "Bỏ đi, tiếp tục hành trình"
+        }
+      ],
+      "outcomes": {
+        "open": [
+          {
+            "chance": 0.7,
+            "kind": "mimic",
+            "log": "Rương há miệng — đó là Mimic! Nó lao tới cắn bạn.",
+            "effects": {
+              "the_luc": -60,
+              "karma": 2
+            },
+            "combat_hint": "Bạn chống trả loạn đả rồi chạy thoát, người đầy thương tích."
+          },
+          {
+            "chance": 0.3,
+            "kind": "loot",
+            "log": "Nắp rương kêu răng rắc — bên trong lấp lánh vật phẩm!",
+            "effects": {
+              "gold": 600
+            },
+            "drops": [
+              {
+                "item_id": "ancient_coin",
+                "min": 1,
+                "max": 2
+              },
+              {
+                "item_id": "wyvern_gem_shard",
+                "min": 1,
+                "max": 1
+              }
+            ]
+          }
+        ],
+        "inspect": [
+          {
+            "chance": 0.55,
+            "kind": "safe_loot",
+            "log": "Bạn phát hiện nước bọt nhớt quanh nắp — chắc chắn là Mimic. Bạn lấy vài thứ rơi quanh đó rồi chuồn.",
+            "drops": [
+              {
+                "item_id": "monster_bone_s",
+                "min": 1,
+                "max": 2
+              }
+            ]
+          },
+          {
+            "chance": 0.45,
+            "kind": "nothing",
+            "log": "Nhìn mãi cũng chỉ là rương cũ. Có lẽ nên mở thử... nhưng bạn bỏ đi."
+          }
+        ],
+        "leave": [
+          {
+            "chance": 1.0,
+            "kind": "leave",
+            "log": "Bạn không mạo hiểm. Bước chân tiếp tục vọng trên lối mòn."
+          }
+        ]
+      }
+    },
+    {
+      "id": "healing_spring",
+      "weight": 25,
+      "title": "Suối nước ấm",
+      "intro": "Hơi nước bốc lên từ một vũng suối ẩn sau tảng đá.",
+      "actions": [
+        {
+          "id": "bathe",
+          "label": "Ngâm mình nghỉ ngơi"
+        },
+        {
+          "id": "drink",
+          "label": "Uống một ngụm"
+        },
+        {
+          "id": "fill",
+          "label": "Lấy nước vào bình rồi đi"
+        }
+      ],
+      "outcomes": {
+        "bathe": [
+          {
+            "chance": 0.8,
+            "kind": "rest",
+            "log": "Cơ thể ấm lại. Thể lực phục hồi rõ rệt.",
+            "effects": {
+              "the_luc": 120
+            }
+          },
+          {
+            "chance": 0.2,
+            "kind": "ambush",
+            "log": "Đang thảnh thơi thì có thú nhỏ lao tới — bạn hoảng hồn nhảy ra, mất hơi!",
+            "effects": {
+              "the_luc": -30
+            }
+          }
+        ],
+        "drink": [
+          {
+            "chance": 0.7,
+            "kind": "buff",
+            "log": "Nước ngọt thanh. Bạn cảm thấy nhẹ nhàng hơn.",
+            "effects": {
+              "the_luc": 60
+            }
+          },
+          {
+            "chance": 0.3,
+            "kind": "sick",
+            "log": "Ước gì đừng uống... bụng quặn. Karma +1 vì xui xẻo?",
+            "effects": {
+              "the_luc": -20,
+              "karma": 1
+            }
+          }
+        ],
+        "fill": [
+          {
+            "chance": 1.0,
+            "kind": "loot",
+            "log": "Bạn đựng nước vào bình — coi như có thêm thảo dược lỏng.",
+            "drops": [
+              {
+                "item_id": "herb",
+                "min": 1,
+                "max": 2
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "lost_traveler",
+      "weight": 20,
+      "title": "Lữ khách lạc đường",
+      "intro": "Một người đi rừng vẫy gọi bạn, vẻ mặt lo lắng.",
+      "actions": [
+        {
+          "id": "help",
+          "label": "Chỉ đường / hộ tống một đoạn"
+        },
+        {
+          "id": "trade",
+          "label": "Mặc cả đổi đồ"
+        },
+        {
+          "id": "ignore",
+          "label": "Phớt lờ, đi tiếp"
+        }
+      ],
+      "outcomes": {
+        "help": [
+          {
+            "chance": 0.75,
+            "kind": "reward",
+            "log": "Lữ khách cảm ơn rối rít và thù lao bằng vài món.",
+            "effects": {
+              "gold": 150,
+              "karma": -1
+            },
+            "drops": [
+              {
+                "item_id": "honey",
+                "min": 1,
+                "max": 2
+              }
+            ]
+          },
+          {
+            "chance": 0.25,
+            "kind": "trap",
+            "log": "Đó là cướp cải trang! Chúng lấy mất ít đồ rồi chạy.",
+            "effects": {
+              "the_luc": -25,
+              "karma": 1
+            }
+          }
+        ],
+        "trade": [
+          {
+            "chance": 1.0,
+            "kind": "trade",
+            "log": "Hai bên nhanh chóng đổi chác. Bạn được thêm nguyên liệu.",
+            "drops": [
+              {
+                "item_id": "monster_bone_s",
+                "min": 1,
+                "max": 3
+              }
+            ]
+          }
+        ],
+        "ignore": [
+          {
+            "chance": 1.0,
+            "kind": "leave",
+            "log": "Bạn đi tiếp. Tiếng gọi phía sau dần tắt trong gió."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ruined_camp",
+      "weight": 15,
+      "title": "Trại thợ săn bỏ hoang",
+      "intro": "Lều rách và bếp lửa nguội — ai đó đã rời đi vội vàng.",
+      "actions": [
+        {
+          "id": "search",
+          "label": "Lục soát kỹ"
+        },
+        {
+          "id": "rest",
+          "label": "Nghỉ ngắn tại chỗ"
+        },
+        {
+          "id": "leave",
+          "label": "Rời đi ngay"
+        }
+      ],
+      "outcomes": {
+        "search": [
+          {
+            "chance": 0.6,
+            "kind": "loot",
+            "log": "Dưới lớp lá mục bạn tìm thấy túi nguyên liệu.",
+            "drops": [
+              {
+                "item_id": "iron_ore",
+                "min": 1,
+                "max": 2
+              },
+              {
+                "item_id": "monster_bone_m",
+                "min": 1,
+                "max": 1
+              }
+            ]
+          },
+          {
+            "chance": 0.4,
+            "kind": "trap",
+            "log": "Bẫy dây siết cổ chân! Bạn mất thời gian gỡ ra.",
+            "effects": {
+              "the_luc": -35
+            }
+          }
+        ],
+        "rest": [
+          {
+            "chance": 1.0,
+            "kind": "rest",
+            "log": "Bạn chợp mắt đôi phút. Thể lực hồi nhẹ.",
+            "effects": {
+              "the_luc": 50
+            }
+          }
+        ],
+        "leave": [
+          {
+            "chance": 1.0,
+            "kind": "leave",
+            "log": "Không khí kỳ lạ. Bạn chọn không nán lại."
+          }
+        ]
+      }
+    }
+  ]
+}

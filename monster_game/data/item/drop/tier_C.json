@@ -1,0 +1,183 @@
+[
+  {
+    "id": "monster_bone_l",
+    "type": "material",
+    "name": "Xương Quái Lớn",
+    "tier": "C",
+    "price": 500,
+    "desc": "Xương lớn nặng trịch.",
+    "lore": "Xương lớn nặng trịch. Hai người khiêng mới khỏi.",
+    "rarity": "epic"
+  },
+  {
+    "id": "carbolite",
+    "type": "material",
+    "name": "Carbolite",
+    "tier": "C",
+    "price": 650,
+    "desc": "Khoáng cứng, phát sáng yếu dưới ánh đuốc.",
+    "lore": "Khoáng cứng, phát sáng yếu dưới ánh đuốc.",
+    "rarity": "epic"
+  },
+  {
+    "id": "anja_fang",
+    "type": "material",
+    "name": "Nanh Anjanath",
+    "tier": "C",
+    "price": 900,
+    "desc": "Nanh đỏ sậm, còn nóng mãi sau khi rời miệng thú.",
+    "lore": "Nanh đỏ sậm, còn nóng mãi sau khi rời miệng thú.",
+    "rarity": "epic",
+    "source_monster": "Anjanath"
+  },
+  {
+    "id": "rathalos_scale",
+    "type": "material",
+    "name": "Vảy Rathalos",
+    "tier": "C",
+    "price": 1800,
+    "desc": "Vảy vua trời.",
+    "lore": "Vảy vua trời. Ánh đỏ dưới nắng như than hồng.",
+    "rarity": "epic",
+    "source_monster": "Rathalos"
+  },
+  {
+    "id": "rathian_spike",
+    "type": "material",
+    "name": "Gai Rathian",
+    "tier": "C",
+    "price": 1100,
+    "desc": "Gai độc trên đuôi nữ hoàng.",
+    "lore": "Gai độc trên đuôi nữ hoàng. Cầm bằng kìm.",
+    "rarity": "epic",
+    "source_monster": "Rathian"
+  },
+  {
+    "id": "diablos_ridge",
+    "type": "material",
+    "name": "Sừng Diablos",
+    "tier": "C",
+    "price": 2200,
+    "desc": "Sừng xoắn của kẻ đào hang.",
+    "lore": "Sừng xoắn của kẻ đào hang. Một nhát húc san phẳng xe chở quặng.",
+    "rarity": "epic",
+    "source_monster": "Diablos"
+  },
+  {
+    "id": "legiana_claw",
+    "type": "material",
+    "name": "Móng Legiana",
+    "tier": "C",
+    "price": 1400,
+    "desc": "Móng băng giá.",
+    "lore": "Móng băng giá. Để trong túi vẫn lạnh.",
+    "rarity": "epic",
+    "source_monster": "Legiana"
+  },
+  {
+    "id": "odogaron_sinew",
+    "type": "material",
+    "name": "Gân Odogaron",
+    "tier": "C",
+    "price": 1600,
+    "desc": "Gân đỏ, dai như dây thừng máu.",
+    "lore": "Gân đỏ, dai như dây thừng máu.",
+    "rarity": "epic",
+    "source_monster": "Odogaron"
+  },
+  {
+    "id": "dodogama_sac",
+    "type": "material",
+    "name": "Túi Đá Dodogama",
+    "tier": "C",
+    "price": 900,
+    "desc": "Túi chứa đá nổ.",
+    "lore": "Túi chứa đá nổ. Xách nhẹ thôi.",
+    "rarity": "epic",
+    "source_monster": "Dodogama"
+  },
+  {
+    "id": "uragaan_ruby",
+    "type": "material",
+    "name": "Ngọc Uragaan",
+    "tier": "C",
+    "price": 1800,
+    "desc": "Viên ngọc trong lớp giáp.",
+    "lore": "Viên ngọc trong lớp giáp. Nóng và đẹp.",
+    "rarity": "epic",
+    "source_monster": "Uragaan"
+  },
+  {
+    "id": "lavasioth_shard",
+    "type": "material",
+    "name": "Mảnh Nham Thạch Lavasioth",
+    "tier": "C",
+    "price": 2000,
+    "desc": "Mảnh dung nham nguội.",
+    "lore": "Mảnh dung nham nguội. Vẫn ấm.",
+    "rarity": "epic",
+    "source_monster": "Lavasioth"
+  },
+  {
+    "id": "wyvern_gem_shard",
+    "type": "material",
+    "name": "Mảnh Ngọc Wyvern",
+    "tier": "C",
+    "price": 900,
+    "desc": "Mảnh ngọc từ wyvern trưởng thành.",
+    "lore": "Mảnh ngọc từ wyvern trưởng thành.",
+    "rarity": "epic"
+  },
+  {
+    "id": "firecell_stone",
+    "type": "material",
+    "name": "Đá Lửa",
+    "tier": "C",
+    "price": 700,
+    "desc": "Đá nóng bỏng, nguyên liệu cao cấp.",
+    "lore": "Đá nóng bỏng, nguyên liệu cao cấp.",
+    "rarity": "epic"
+  },
+  {
+    "id": "ancient_coin",
+    "type": "material",
+    "name": "Xu Cổ",
+    "tier": "C",
+    "price": 800,
+    "desc": "Tiền tệ thời xa xưa.",
+    "lore": "Tiền tệ thời xa xưa.",
+    "rarity": "epic"
+  },
+  {
+    "id": "mega_potion_leaf",
+    "type": "consumable",
+    "name": "Lá Siêu Thuốc",
+    "tier": "C",
+    "price": 600,
+    "desc": "Hồi 300 thể lực +5 HP.",
+    "lore": "Lá hiếm trên vách san hô. Đắng đến khóc.",
+    "heal": 300,
+    "boostHP": 5,
+    "boostATK": 0,
+    "boostDEF": 0,
+    "boostSPD": 0,
+    "boostEXP": 0,
+    "boostKarma": 0,
+    "boostPoints": 0,
+    "rarity": "epic"
+  },
+  {
+    "type": "material",
+    "id": "enhance_stone_c",
+    "name": "Đá Cường Hóa Sử Thi",
+    "tier": "C",
+    "price": 2500,
+    "desc": "Đá tím cho trang bị bậc C.",
+    "lore": "Lấy từ tim núi lửa nguội. Nóng nhẹ trong tay.",
+    "rarity": "epic",
+    "tags": [
+      "enhance_stone"
+    ],
+    "enhance_tier": "C"
+  }
+]

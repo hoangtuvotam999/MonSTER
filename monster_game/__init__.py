@@ -1,22 +1,42 @@
 """
 monster_game
 ============
-Pure game-logic port of a "Monster Hunter" style JS Messenger-bot plugin.
+Pure game-logic port of a "Monster Hunter" style chat-bot plugin.
 
-This package intentionally contains NO messaging/bot-framework code
-(no api.sendMessage, no Users/Currencies plugin, no handleReply queues).
+This package intentionally contains NO messaging/bot-framework code.
 It only implements the game rules: characters, weapons, combat math,
-leveling, the shop, and PvP rooms. Wire it up to whatever chat platform
-or UI you like.
+leveling, the shop, drops, map adventure events, blacksmith enhance,
+dungeon rooms, and PvP rooms.
 
 Layout:
-    game.py        high-level API (characters, hunting, PvP rooms)
+    game.py        high-level API (characters, hunting, PvP, adventure)
     combat.py      turn-based battle engine
-    shop.py        weapon / food / upgrade catalogs and purchase flow
-    data_store.py  JSON persistence (data/users.json, items.json, monsters.json)
-    render.py      turn fight outcomes into chat-ready text (any platform)
+    adventure.py   post-hunt text events + drop grants
+    blacksmith.py  enhance +N with stones / protect scrolls
+    dungeon.py     multi-room expeditions
+    shop.py        weapon / food / upgrade purchase flow
+    craft.py       crafting recipes
+    equipment.py   gear slots + set bonuses
+    data_store.py  JSON persistence + modular catalog loader
+    render.py      chat-ready text (hunt / adventure / journey log)
     demo.py        `python -m monster_game.demo`
-"""
-from . import combat, data_store, game, render, shop
 
-__all__ = ["combat", "data_store", "game", "render", "shop"]
+Data (author new content here):
+    data/map/mapN_*.json
+    data/dungeon/*.json
+    data/item/weapon/tier_{A,B,C}.json
+    data/item/drop/tier_{A,B,C,D}.json
+    data/item/food.json
+    data/item/upgrade.json
+    data/item/blacksmith.json
+    data/item/consumable/*.json
+"""
+from . import (
+    adventure, blacksmith, combat, craft, data_store, dungeon,
+    equipment, game, render, shop,
+)
+
+__all__ = [
+    "adventure", "blacksmith", "combat", "craft", "data_store", "dungeon",
+    "equipment", "game", "render", "shop",
+]

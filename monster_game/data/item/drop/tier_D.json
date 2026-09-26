@@ -1,0 +1,140 @@
+[
+  {
+    "id": "elder_dragon_bone",
+    "type": "material",
+    "name": "Xương Elder Dragon",
+    "tier": "D",
+    "price": 2500,
+    "desc": "Xương không thuộc về thế giới thường.",
+    "lore": "Xương không thuộc về thế giới thường. Chạm vào thấy ù tai.",
+    "rarity": "legendary"
+  },
+  {
+    "id": "nova_crystal",
+    "type": "material",
+    "name": "Tinh Thể Nova",
+    "tier": "D",
+    "price": 4000,
+    "desc": "Tinh thể kết từ năng lượng cổ đại.",
+    "lore": "Tinh thể kết từ năng lượng cổ đại.",
+    "rarity": "legendary"
+  },
+  {
+    "id": "b_diablos_carapace",
+    "type": "material",
+    "name": "Giáp Black Diablos",
+    "tier": "D",
+    "price": 4500,
+    "desc": "Giáp đen bóng, hấp thụ nắng sa mạc.",
+    "lore": "Giáp đen bóng, hấp thụ nắng sa mạc.",
+    "rarity": "legendary",
+    "source_monster": "Black Diablos"
+  },
+  {
+    "id": "kirin_mane",
+    "type": "material",
+    "name": "Bờm Kirin",
+    "tier": "D",
+    "price": 3500,
+    "desc": "Bờm tĩnh điện.",
+    "lore": "Bờm tĩnh điện. Tóc bạn sẽ dựng nếu đứng gần.",
+    "rarity": "legendary",
+    "source_monster": "Kirin"
+  },
+  {
+    "id": "vaal_effluvium",
+    "type": "material",
+    "name": "Tinh Chất Vaal",
+    "tier": "D",
+    "price": 5000,
+    "desc": "Khí độc cô đặc.",
+    "lore": "Khí độc cô đặc. Chỉ chứa trong bình chì.",
+    "rarity": "legendary",
+    "source_monster": "Vaal Hazak"
+  },
+  {
+    "id": "azure_scale",
+    "type": "material",
+    "name": "Vảy Azure Rathalos",
+    "tier": "D",
+    "price": 3200,
+    "desc": "Vảy xanh thẳm của Rathalos biến dị.",
+    "lore": "Vảy xanh thẳm của Rathalos biến dị.",
+    "rarity": "legendary",
+    "source_monster": "Azure Rathalos"
+  },
+  {
+    "id": "teostra_powder",
+    "type": "material",
+    "name": "Bụi Lửa Teostra",
+    "tier": "D",
+    "price": 6000,
+    "desc": "Bụi phát nổ khi ma sát.",
+    "lore": "Bụi phát nổ khi ma sát. Viết lore bằng máu và tro.",
+    "rarity": "legendary",
+    "source_monster": "Teostra"
+  },
+  {
+    "id": "nergi_spike",
+    "type": "material",
+    "name": "Gai Nergigante",
+    "tier": "D",
+    "price": 9000,
+    "desc": "Gai đen tái sinh.",
+    "lore": "Gai đen tái sinh. Cắt đứt rồi hôm sau nó lại mọc — trên quái, không phải trong túi bạn.",
+    "rarity": "legendary",
+    "source_monster": "Nergigante"
+  },
+  {
+    "id": "elder_blood",
+    "type": "material",
+    "name": "Máu Elder",
+    "tier": "D",
+    "price": 3200,
+    "desc": "Giọt máu đặc biệt, đặc và tối.",
+    "lore": "Giọt máu đặc biệt, đặc và tối.",
+    "rarity": "legendary"
+  },
+  {
+    "id": "dragonite_ore",
+    "type": "material",
+    "name": "Quặng Dragonite",
+    "tier": "D",
+    "price": 2800,
+    "desc": "Quặng huyền thoại gần hang Elder.",
+    "lore": "Quặng huyền thoại gần hang Elder.",
+    "rarity": "legendary"
+  },
+  {
+    "id": "blessed_charm",
+    "type": "consumable",
+    "name": "Bùa Ban Phước",
+    "tier": "D",
+    "price": 3500,
+    "desc": "Giảm 5 karma.",
+    "lore": "Bùa gỗ khắc lời cầu. Không cứu mạng — chỉ cứu lương tâm.",
+    "heal": 0,
+    "boostHP": 0,
+    "boostATK": 0,
+    "boostDEF": 0,
+    "boostSPD": 0,
+    "boostEXP": 0,
+    "boostKarma": -5,
+    "boostPoints": 0,
+    "rarity": "legendary"
+  },
+  {
+    "type": "material",
+    "id": "enhance_stone_d",
+    "name": "Đá Cường Hóa Huyền Thoại",
+    "tier": "D",
+    "price": 8000,
+    "desc": "Đá vàng cho trang bị bậc D / Elder.",
+    "lore": "Mảnh vỡ từ tinh thể Nova. Thợ rèn già sợ cầm lâu.",
+    "rarity": "legendary",
+    "tags": [
+      "enhance_stone"
+    ],
+    "enhance_tier": "D"
+  }
+]

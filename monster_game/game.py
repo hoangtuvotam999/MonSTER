@@ -20,7 +20,7 @@ import random
 import time
 from typing import Optional
 
-from . import combat, data_store
+from . import adventure, combat, data_store, equipment as equip_mod
 
 STARTING_WEAPON_ID = 10
 
@@ -58,10 +58,14 @@ def power_basic(character: dict) -> float:
 
 
 def power_total(character: dict) -> float:
-    """Combat power including the equipped weapon's stats."""
-    w = character["weapon"]
-    return ((character["hp"] + w["HP"]) + 4 * (character["atk"] + w["ATK"])
-             + 3 * (character["def"] + w["DEF"]) + 5 * (character["spd"] + w["SPD"]))
+    """Combat power including weapon + equipment."""
+    equip_mod.ensure_loadout(character)
+    w = character["weapon"] or {"HP": 0, "ATK": 0, "DEF": 0, "SPD": 0}
+    gear = equip_mod.equipment_bonuses(character)
+    return ((character["hp"] + w.get("HP", 0) + gear["hp"])
+            + 4 * (character["atk"] + w.get("ATK", 0) + gear["atk"])
+            + 3 * (character["def"] + w.get("DEF", 0) + gear["def"])
+            + 5 * (character["spd"] + w.get("SPD", 0) + gear["spd"]))
 
 
 # --------------------------------------------------------------------------
@@ -73,6 +77,15 @@ def create_character(player_id: str, name: str):
     if data_store.get_user(player_id) is not None:
         return None
     starting_weapon = data_store.get_items(STARTING_WEAPON_ID) or DEFAULT_STARTING_WEAPON
+    # Starter kit: cloth gear + small potion on belt
+    starter_helm = data_store.get_equipment_by_id("helm_leather")
+    starter_potion = data_store.get_consumable("potion_s")
+    bag = [dict(starting_weapon)]
+    if starter_helm:
+        bag.append(dict(starter_helm))
+    belt = equip_mod.empty_belt()
+    if starter_potion:
+        belt[0] = {**dict(starter_potion), "qty": 2}
     data = {
         "id": player_id,
         "name": name,
@@ -86,12 +99,19 @@ def create_character(player_id: str, name: str):
         "karma": 0,
         "points": 0,
         "weapon": None,
+        "equipment": equip_mod.empty_equipment(),
+        "consumables": belt,
         "locationID": None,
-        "bag": [dict(starting_weapon)],
+        "bag": bag,
         "monster": [],
         "history": [],
+        "pending_event": None,
+        "dungeon_run": None,
         "created": int(time.time() * 1000),
     }
+    # Starter items start at +0 enhance
+    for it in bag:
+        it.setdefault("enhance_level", 0)
     return data_store.create_character(data)
 
 
@@ -146,6 +166,8 @@ def character_summary(player_id: str) -> Optional[dict]:
     c = get_character(player_id)
     if c is None:
         return None
+    equip_mod.ensure_loadout(c)
+    gear = equip_mod.equipment_bonuses(c)
     exp_needed = data_store.exp_needed_for(c["level"])
     location = data_store.find_location(c["locationID"]) if c["locationID"] is not None else None
     return {
@@ -159,15 +181,22 @@ def character_summary(player_id: str) -> Optional[dict]:
             "hp": c["weapon"]["HP"], "atk": c["weapon"]["ATK"],
             "def": c["weapon"]["DEF"], "spd": c["weapon"]["SPD"],
         } if c["weapon"] else None,
+        "gear_bonus": {
+            "hp": gear["hp"], "atk": gear["atk"], "def": gear["def"], "spd": gear["spd"],
+            "sets": gear["sets"], "tags": sorted(set(gear["tags"])),
+        },
+        "equipment": c["equipment"],
+        "consumables": c["consumables"],
         "points": c["points"],
         "power_basic": power_basic(c),
-        "power_total": power_total(c) if c["weapon"] else 0,
+        "power_total": power_total(c) if c["weapon"] else power_basic(c) + gear["hp"] + 4*gear["atk"] + 3*gear["def"] + 5*gear["spd"],
         "the_luc": c["the_luc"],
         "karma": c["karma"],
         "karma_message": karma_message(c["karma"]),
         "weapon_name": c["weapon"]["name"] if c["weapon"] else None,
         "weapon_category": c["weapon"].get("category") if c["weapon"] else None,
         "weapon_level": c["weapon"].get("usage", 0) if c["weapon"] else None,
+        "weapon_enhance": int(c["weapon"].get("enhance_level") or 0) if c["weapon"] else None,
         "weapon_durability": c["weapon"]["durability"] if c["weapon"] else None,
         "weapon_hp": c["weapon"]["HP"] if c["weapon"] else None,
         "weapon_max_hp": data_store.weapon_max_hp(c["weapon"]) if c["weapon"] else None,
@@ -178,6 +207,7 @@ def character_summary(player_id: str) -> Optional[dict]:
         "bag_status_icon": bag_status_icon(len(c["monster"])),
         "location_id": c["locationID"],
         "location_name": location["name"] if location else None,
+        "dungeon_run": c.get("dungeon_run"),
     }
 
 
@@ -186,18 +216,108 @@ def character_summary(player_id: str) -> Optional[dict]:
 # --------------------------------------------------------------------------
 
 def equip_or_consume(player_id: str, bag_index_1based: int):
-    """Port of setItem(): equip a weapon, or consume food/upgrade material
-    at the given 1-based bag index. Returns the item consumed, or None."""
+    """Equip a weapon / equipment, or consume food at the given 1-based bag index.
+    Equipment items are routed to `equip_gear`."""
     c = get_character(player_id)
     if c is None:
         return None
     if not (1 <= bag_index_1based <= len(c["bag"])):
         return None
     item = c["bag"][bag_index_1based - 1]
+    if item.get("type") == "equipment":
+        return equip_gear(player_id, bag_index_1based)
     result = data_store.set_item(player_id, bag_index_1based - 1)
     if result is not data_store.OK:
         return None
     return item
+
+
+def equip_gear(player_id: str, bag_index_1based: int, multi_slot_index: Optional[int] = None):
+    """Equip armor/jewelry from bag. multi_slot_index selects glove/ring/bracelet slot 0|1."""
+    result = equip_mod.equip_from_bag(player_id, bag_index_1based - 1, multi_slot_index)
+    if result in (data_store.NOT_FOUND, data_store.FORBIDDEN):
+        return None
+    return result
+
+
+def unequip_gear(player_id: str, slot_key: str):
+    """Unequip by 'helmet' or 'gloves:0' / 'rings:1' / 'bracelets:0'."""
+    result = equip_mod.unequip(player_id, slot_key)
+    if result in (data_store.NOT_FOUND, data_store.FORBIDDEN):
+        return None
+    return result
+
+
+def set_belt(player_id: str, belt_slot_1based: int, bag_index_1based: Optional[int]):
+    """Put bag consumable into belt slot 1..5, or clear if bag_index is None."""
+    bag_idx = None if bag_index_1based is None else bag_index_1based - 1
+    result = equip_mod.set_belt_slot(player_id, belt_slot_1based - 1, bag_idx)
+    if result in (data_store.NOT_FOUND, data_store.FORBIDDEN):
+        return None
+    return result
+
+
+def craft_item(player_id: str, recipe_id: str, balance: int):
+    """Craft from data/item/craft/recipes.json. Returns craft.CraftResult."""
+    from . import craft as craft_mod
+    return craft_mod.craft(player_id, recipe_id, balance)
+
+
+def list_crafts(tier: Optional[str] = None):
+    from . import craft as craft_mod
+    return craft_mod.list_recipes(tier)
+
+
+def enhance_quote(player_id: str, where: str = "weapon", bag_index_1based: Optional[int] = None) -> dict:
+    """Preview cost/rate for the next enhance attempt."""
+    from . import blacksmith as bs
+    user = data_store.get_user(player_id)
+    if user is None:
+        return {"ok": False, "reason": "no_character"}
+    idx = (bag_index_1based - 1) if bag_index_1based else None
+    item, _ = bs._find_enhance_target(user, where, idx)
+    if item is None:
+        return {"ok": False, "reason": "no_item"}
+    quote = bs.cost_for(item)
+    quote["ok"] = True
+    quote["display"] = bs.display_name(item)
+    quote["current"] = bs.enhance_level(item)
+    return quote
+
+
+def enhance_item(player_id: str, where: str = "weapon", bag_index_1based: Optional[int] = None,
+                 balance: int = 0, protect_bag_index_1based: Optional[int] = None,
+                 rng=None) -> dict:
+    """Blacksmith enhance. Caller deducts gold_cost when result['ok']."""
+    from . import blacksmith as bs
+    return bs.enhance(
+        player_id,
+        where=where,
+        bag_index_0=(bag_index_1based - 1) if bag_index_1based else None,
+        balance=balance,
+        protect_bag_index_0=(protect_bag_index_1based - 1) if protect_bag_index_1based else None,
+        rng=rng,
+    )
+
+
+def list_dungeons() -> list[dict]:
+    from . import dungeon as dg
+    return dg.list_dungeons()
+
+
+def start_dungeon(player_id: str, dungeon_id: str) -> dict:
+    from . import dungeon as dg
+    return dg.start_dungeon(player_id, dungeon_id)
+
+
+def advance_dungeon(player_id: str, action_id: Optional[str] = None, rng=None) -> dict:
+    from . import dungeon as dg
+    return dg.advance_dungeon(player_id, action_id=action_id, rng=rng)
+
+
+def abandon_dungeon(player_id: str) -> dict:
+    from . import dungeon as dg
+    return dg.abandon_dungeon(player_id)
 
 
 POINT_MULTIPLIERS = {"hp": 5, "def": 2, "atk": 2, "spd": 1}
@@ -370,25 +490,31 @@ def encounter_and_fight(player_id: str) -> dict:
         "ATK": monster_atk * monster_template["ATKbonus"],
         "DEF": monster_def * monster_template["DEFbonus"],
         "SPD": monster_spd * monster_template["SPDbonus"],
-        # FIXED vs. the original: it did `Math.round(monster.ArmorPiercing)`,
-        # which collapses any fractional armor-piercing value (e.g. 0.7,
-        # meaning "30% mitigated") down to a bare 0 or 1 (meaning "fully
-        # mitigated" or "fully ignored"). That made a monster's DEF either
-        # matter 100% or 0%, discarding any nuance the catalog data intended.
-        # The player's own weapon AP is used unrounded elsewhere
-        # (combat.build_combat_stats), so monsters now match that for
-        # consistency.
         "AP": monster_template["ArmorPiercing"],
         "Mana": 1,
+        "maxHP": monster_hp,
     }
-    # `_run_battle` mutates the dicts it is given; keep pristine copies for
-    # the renderer's HP bars / "who strikes first" line.
+    equip_mod.ensure_loadout(c)
+    belt_snapshot = [dict(x) if x else None for x in c["consumables"]]
     player_start = dict(player_stats)
     monster_start = dict(monster_stats)
-    result = combat.fight_monster(player_stats, monster_stats)
+    result = combat.fight_monster(
+        player_stats, monster_stats,
+        monster_actions=monster_template.get("actions") or [],
+        player_belt=belt_snapshot,
+        weapon_category=c["weapon"].get("category") or "",
+    )
+
+    def _save_belt(u):
+        equip_mod.ensure_loadout(u)
+        u["consumables"] = result.get("belt") if result.get("belt") is not None else belt_snapshot
+        return True
+    data_store._mutate_user(player_id, _save_belt)
 
     durability = data_store.decrease_durability(player_id)
-    data_store.karma_up(player_id)
+    # Karma only climbs on victories (balance vs. loss-spiral)
+    if result.get("winner") or result.get("draw"):
+        data_store.karma_up(player_id, data_store.KARMA_ON_WIN)
     weapon_broken = data_store.decrease_health_weapon(player_id, result["playerPow"]["HP"]) is True
     if weapon_broken:
         durability = 0
@@ -400,10 +526,15 @@ def encounter_and_fight(player_id: str) -> dict:
         else:
             dmg_taken += entry["damage"]
 
+    won = bool(result["winner"])
+    draw = bool(result.get("draw"))
+    reward_win = won or draw
+
     location = data_store.find_location(c["locationID"]) or {}
     outcome = {
         "ok": True,
-        "won": result["winner"],
+        "won": won,
+        "draw": draw,
         "player_name": c["name"],
         "weapon_name": c["weapon"]["name"],
         "weapon_category": c["weapon"].get("category"),
@@ -424,15 +555,57 @@ def encounter_and_fight(player_id: str) -> dict:
         "weapon_broken": weapon_broken,
         "exp_gained": 0,
         "events": [],
+        "drops": [],
+        "adventure": None,
+        "items_used": [
+            ev for entry in result["log"] for ev in (entry.get("events") or [])
+            if ev.get("kind") in ("use_item", "special")
+        ],
     }
 
-    if result["winner"]:
+    if reward_win:
         trophy = dict(monster_template)
         trophy["level"] = level
         data_store.add_monster(player_id, trophy)
-        level_events = data_store.set_exp(player_id, exp_reward)
-        outcome["exp_gained"] = exp_reward
+        exp_final = exp_reward if won else max(1, exp_reward // 2)
+        level_events = data_store.set_exp(player_id, exp_final)
+        outcome["exp_gained"] = exp_final
         outcome["events"] = level_events if isinstance(level_events, list) else []
+        outcome["drops"] = adventure.roll_monster_drops(player_id, monster_template)
+
+    result_word = "hòa (đồng quy)" if draw else ("thắng" if won else "thua")
+    hunt_lines = [
+        f"📍 {location.get('name', '')}",
+        f"{'☠️' if draw else ('🏆' if won else '💀')} {monster_template['Name']} "
+        f"Tier {tier} Lv.{level} — {result_word}",
+    ]
+    if outcome["exp_gained"]:
+        hunt_lines.append(f"✨ +{outcome['exp_gained']} EXP")
+    for drop in outcome["drops"]:
+        hunt_lines.append(f"🎁 {drop['name']} ×{drop.get('qty', 1)}")
+    for ev in outcome["items_used"]:
+        if ev.get("log"):
+            hunt_lines.append(ev["log"])
+    data_store.append_history(player_id, {
+        "ts": int(time.time() * 1000),
+        "kind": "hunt",
+        "location": location.get("name"),
+        "won": won,
+        "draw": draw,
+        "monster": monster_template["Name"],
+        "tier": tier,
+        "lines": hunt_lines,
+    })
+
+    pending = adventure.maybe_start_event(player_id, location)
+    if pending:
+        outcome["adventure"] = {
+            "id": pending["id"],
+            "title": pending["title"],
+            "intro": pending["intro"],
+            "actions": pending["actions"],
+            "location_name": pending.get("location_name"),
+        }
 
     after = get_character(player_id)
     outcome["player_level"] = after["level"]
@@ -441,6 +614,27 @@ def encounter_and_fight(player_id: str) -> dict:
     outcome["player_the_luc"] = after["the_luc"]
     outcome["repair_cost"] = repair_cost(after["weapon"]) if after["weapon"] else 0
     return outcome
+
+
+# --------------------------------------------------------------------------
+# Adventure helpers (thin wrappers around adventure.py)
+# --------------------------------------------------------------------------
+
+def get_pending_adventure(player_id: str):
+    return adventure.get_pending_event(player_id)
+
+
+def resolve_adventure(player_id: str, action_id: str):
+    """Choose an action on the pending map event (e.g. 'open' / 'leave')."""
+    return adventure.resolve_event(player_id, action_id)
+
+
+def journey_log(player_id: str, limit: int = 20) -> list[dict]:
+    c = get_character(player_id)
+    if c is None:
+        return []
+    history = c.get("history") or []
+    return history[-limit:]
 
 
 # --------------------------------------------------------------------------
@@ -569,14 +763,33 @@ def start_match(channel_id: str, player_id: str) -> Optional[dict]:
     p2_start = combat.build_combat_stats(char2)
     result = combat.fight_pvp(char1, char2)
 
+    def _persist(pid, belt_key):
+        belt = result.get(belt_key)
+        if belt is None:
+            return
+        def mut(u):
+            equip_mod.ensure_loadout(u)
+            u["consumables"] = belt
+            return True
+        data_store._mutate_user(pid, mut)
+    _persist(p1_id, "a_belt")
+    _persist(p2_id, "b_belt")
+
     dmg = {"player1": 0, "player2": 0}
     for entry in result["log"]:
         dmg[entry["attacker"]] += entry["damage"]
 
-    winner_id = p1_id if result["winner"] == "player1" else p2_id
+    draw = result["winner"] == "draw"
+    if draw:
+        winner_id = None
+        winner_name = None
+    else:
+        winner_id = p1_id if result["winner"] == "player1" else p2_id
+        winner_name = char1["name"] if winner_id == p1_id else char2["name"]
     outcome = {
         "winner_id": winner_id,
-        "winner_name": char1["name"] if winner_id == p1_id else char2["name"],
+        "winner_name": winner_name,
+        "draw": draw,
         "rounds": len(result["log"]),
         "room_title": room["title"],
         "player1_id": p1_id, "player2_id": p2_id,

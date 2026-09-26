@@ -1,0 +1,83 @@
+{
+  "max_enhance": 15,
+  "success_rate": {
+    "1": 1.0,
+    "2": 0.9,
+    "3": 0.8,
+    "4": 0.7,
+    "5": 0.55,
+    "6": 0.4,
+    "7": 0.28,
+    "8": 0.18,
+    "9": 0.12,
+    "10": 0.08,
+    "11": 0.06,
+    "12": 0.045,
+    "13": 0.03,
+    "14": 0.02,
+    "15": 0.015
+  },
+  "stat_bonus_per_level": {
+    "A": 0.04,
+    "B": 0.05,
+    "C": 0.06,
+    "D": 0.07
+  },
+  "stone_cost": {
+    "A": 1,
+    "B": 2,
+    "C": 3,
+    "D": 4
+  },
+  "gold_base": {
+    "A": 200,
+    "B": 600,
+    "C": 1500,
+    "D": 4000
+  },
+  "gold_per_level": {
+    "A": 100,
+    "B": 250,
+    "C": 600,
+    "D": 1500
+  },
+  "mat_extra": {
+    "A": [
+      {
+        "item_id": "monster_bone_s",
+        "qty": 1
+      }
+    ],
+    "B": [
+      {
+        "item_id": "monster_bone_m",
+        "qty": 1
+      },
+      {
+        "item_id": "iron_ore",
+        "qty": 1
+      }
+    ],
+    "C": [
+      {
+        "item_id": "monster_bone_l",
+        "qty": 1
+      },
+      {
+        "item_id": "carbolite",
+        "qty": 1
+      }
+    ],
+    "D": [
+      {
+        "item_id": "elder_dragon_bone",
+        "qty": 1
+      },
+      {
+        "item_id": "nova_crystal",
+        "qty": 1
+      }
+    ]
+  },
+  "fail_default_to": 1
+}

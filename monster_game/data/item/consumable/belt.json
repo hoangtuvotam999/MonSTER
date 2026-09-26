@@ -1,0 +1,182 @@
+[
+  {
+    "type": "consumable",
+    "id": "potion_s",
+    "name": "Bình Máu Nhỏ",
+    "subtype": "heal",
+    "tier": "A",
+    "price": 300,
+    "heal_hp_pct": 0.25,
+    "heal_hp_flat": 400,
+    "auto": {
+      "when": "hp_below",
+      "threshold": 0.45,
+      "priority": 10
+    },
+    "desc": "Hồi HP khi máu thấp giữa trận.",
+    "belt": true
+  },
+  {
+    "type": "consumable",
+    "id": "potion_m",
+    "name": "Bình Máu Vừa",
+    "subtype": "heal",
+    "tier": "B",
+    "price": 900,
+    "heal_hp_pct": 0.4,
+    "heal_hp_flat": 900,
+    "auto": {
+      "when": "hp_below",
+      "threshold": 0.4,
+      "priority": 20
+    },
+    "desc": "Hồi nhiều HP hơn.",
+    "belt": true
+  },
+  {
+    "type": "consumable",
+    "id": "potion_l",
+    "name": "Bình Máu Lớn",
+    "subtype": "heal",
+    "tier": "C",
+    "price": 2500,
+    "heal_hp_pct": 0.55,
+    "heal_hp_flat": 1800,
+    "auto": {
+      "when": "hp_below",
+      "threshold": 0.35,
+      "priority": 30
+    },
+    "desc": "Hồi mạnh, cứu nguy.",
+    "belt": true
+  },
+  {
+    "type": "consumable",
+    "id": "stamina_drink",
+    "name": "Thuốc Hồi Thể Lực",
+    "subtype": "stamina",
+    "tier": "A",
+    "price": 400,
+    "heal_stamina": 150,
+    "auto": {
+      "when": "stamina_below",
+      "threshold": 100,
+      "priority": 5
+    },
+    "desc": "Hồi thể lực (ngoài trận / giữa phiên săn).",
+    "belt": true
+  },
+  {
+    "type": "consumable",
+    "id": "adrenaline",
+    "name": "Adrenaline Shot",
+    "subtype": "buff",
+    "tier": "B",
+    "price": 1200,
+    "buff_atk": 1.15,
+    "buff_turns": 3,
+    "auto": {
+      "when": "hp_below",
+      "threshold": 0.5,
+      "priority": 8
+    },
+    "desc": "Tăng ATK 3 đòn kế.",
+    "belt": true
+  },
+  {
+    "type": "consumable",
+    "id": "iron_skin",
+    "name": "Da Sắt Tạm Thời",
+    "subtype": "buff",
+    "tier": "B",
+    "price": 1200,
+    "buff_def": 1.2,
+    "buff_turns": 3,
+    "auto": {
+      "when": "hp_below",
+      "threshold": 0.5,
+      "priority": 7
+    },
+    "desc": "Tăng DEF 3 đòn chịu đòn.",
+    "belt": true
+  },
+  {
+    "type": "consumable",
+    "id": "dong_quy",
+    "name": "Bùa Đồng Quy Vô Tận",
+    "subtype": "special",
+    "special": "mutual_doom",
+    "tier": "C",
+    "price": 8000,
+    "trigger": {
+      "when": "hp_below",
+      "threshold": 0.18,
+      "chance": 0.4
+    },
+    "effect": {
+      "player_hp_pct": 0.0,
+      "enemy_hp_pct": 0.0,
+      "damage_both_flat": 0
+    },
+    "desc": "Khi gần chết: tỉ lệ kéo quái xuống mồ cùng bạn.",
+    "belt": true
+  },
+  {
+    "type": "consumable",
+    "id": "void_slash",
+    "name": "Lưỡi Hư Không",
+    "subtype": "special",
+    "special": "mutual_burst",
+    "tier": "C",
+    "price": 6500,
+    "trigger": {
+      "when": "both_hp_below",
+      "threshold": 0.55,
+      "chance": 0.35
+    },
+    "effect": {
+      "damage_both_pct_max": 0.35,
+      "damage_both_flat": 500
+    },
+    "desc": "Gây sát thương lớn tức thì cho CẢ HAI phía.",
+    "belt": true
+  },
+  {
+    "type": "consumable",
+    "id": "phoenix_tear",
+    "name": "Giọt Lệ Phượng",
+    "subtype": "special",
+    "special": "revive",
+    "tier": "D",
+    "price": 20000,
+    "trigger": {
+      "when": "would_die",
+      "chance": 0.55
+    },
+    "effect": {
+      "heal_hp_pct": 0.35
+    },
+    "desc": "Khi đòn chí mạng ập tới: tỉ lệ sống lại với 35% HP.",
+    "belt": true
+  },
+  {
+    "type": "consumable",
+    "id": "smoke_bomb",
+    "name": "Bom Khói",
+    "subtype": "special",
+    "special": "escape_chip",
+    "tier": "B",
+    "price": 1500,
+    "trigger": {
+      "when": "hp_below",
+      "threshold": 0.2,
+      "chance": 0.25
+    },
+    "effect": {
+      "reduce_incoming_pct": 0.7,
+      "turns": 1
+    },
+    "desc": "Né đòn chết người — giảm sát thương nhận vào.",
+    "belt": true
+  }
+]

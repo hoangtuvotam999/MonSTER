@@ -1,0 +1,176 @@
+{
+  "id": "waste_tomb",
+  "name": "Lăng Mộ Cát",
+  "description": "Lăng nửa chìm nửa nổi giữa Wildspire.",
+  "min_level": 5,
+  "map_ref": 1,
+  "stamina_cost": 120,
+  "rooms": [
+    {
+      "id": "sand_gate",
+      "type": "event",
+      "title": "Cửa đá khắc rune",
+      "intro": "Rune nóng dưới nắng. Có vẻ cần đẩy hoặc phá.",
+      "actions": [
+        {
+          "id": "push",
+          "label": "Đẩy cửa"
+        },
+        {
+          "id": "break",
+          "label": "Phá khóa bằng vũ khí"
+        },
+        {
+          "id": "leave",
+          "label": "Bỏ cuộc"
+        }
+      ],
+      "outcomes": {
+        "push": [
+          {
+            "chance": 0.6,
+            "kind": "continue",
+            "log": "Cửa kêu răng rắc rồi mở."
+          },
+          {
+            "chance": 0.4,
+            "kind": "trap",
+            "log": "Cát đổ ập vào — mệt hơn.",
+            "effects": {
+              "the_luc": -50
+            },
+            "continue": true
+          }
+        ],
+        "break": [
+          {
+            "chance": 1.0,
+            "kind": "continue",
+            "log": "Khóa vỡ. Độ bền vũ khí kêu răng rắc.",
+            "effects": {
+              "weapon_durability": -10
+            }
+          }
+        ],
+        "leave": [
+          {
+            "chance": 1.0,
+            "kind": "abort",
+            "log": "Cát nóng đuổi bạn trở lại."
+          }
+        ]
+      }
+    },
+    {
+      "id": "scarab",
+      "type": "combat",
+      "title": "Hầm bọ cát",
+      "monster_tier": "III"
+    },
+    {
+      "id": "mirage",
+      "type": "event",
+      "title": "Ảo ảnh giếng nước",
+      "intro": "Bạn thấy giếng nước — quá đẹp để tin.",
+      "actions": [
+        {
+          "id": "drink",
+          "label": "Uống"
+        },
+        {
+          "id": "ignore",
+          "label": "Bỏ qua"
+        },
+        {
+          "id": "throw_stone",
+          "label": "Ném đá thử"
+        }
+      ],
+      "outcomes": {
+        "drink": [
+          {
+            "chance": 0.5,
+            "kind": "rest",
+            "log": "Nước thật! Hồi sức.",
+            "effects": {
+              "the_luc": 80
+            }
+          },
+          {
+            "chance": 0.5,
+            "kind": "trap",
+            "log": "Ảo ảnh — họng khô hơn.",
+            "effects": {
+              "the_luc": -40
+            }
+          }
+        ],
+        "ignore": [
+          {
+            "chance": 1.0,
+            "kind": "continue",
+            "log": "Bạn không tin những gì mắt thấy."
+          }
+        ],
+        "throw_stone": [
+          {
+            "chance": 1.0,
+            "kind": "loot",
+            "log": "Ảo ảnh vỡ — dưới cát có đá cường hóa.",
+            "drops": [
+              {
+                "item_id": "enhance_stone_b",
+                "min": 1,
+                "max": 1
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "chest",
+      "type": "treasure",
+      "title": "Quan tài cát",
+      "drops": [
+        {
+          "item_id": "enhance_stone_b",
+          "chance": 0.7,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "scroll_floor3",
+          "chance": 0.12,
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "gold": [
+        300,
+        800
+      ]
+    },
+    {
+      "id": "boss",
+      "type": "boss",
+      "title": "Sảnh Sừng",
+      "monster_name": "Barroth",
+      "flavor": "Bùn và sừng chắn lối ra.",
+      "bonus_drops": [
+        {
+          "item_id": "enhance_stone_c",
+          "chance": 0.35,
+          "min": 1,
+          "max": 1
+        },
+        {
+          "item_id": "scroll_protect",
+          "chance": 0.25,
+          "min": 1,
+          "max": 1
+        }
+      ]
+    }
+  ]
+}

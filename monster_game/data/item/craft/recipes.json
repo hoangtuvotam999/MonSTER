@@ -1,0 +1,200 @@
+[
+  {
+    "id": "craft_helm_leather",
+    "name": "Ghép Mũ Da Thợ Săn",
+    "tier": "A",
+    "result_id": "helm_leather",
+    "result_type": "equipment",
+    "ingredients": [
+      {
+        "item_id": "aptonoth_hide",
+        "qty": 2
+      },
+      {
+        "item_id": "herb",
+        "qty": 1
+      }
+    ],
+    "gold": 200,
+    "lore": "Da Aptonoth + thảo dược sát trùng — mũ đầu tiên của thợ săn."
+  },
+  {
+    "id": "craft_chest_cloth",
+    "name": "May Áo Vải Rừng",
+    "tier": "A",
+    "result_id": "chest_cloth",
+    "result_type": "equipment",
+    "ingredients": [
+      {
+        "item_id": "aptonoth_hide",
+        "qty": 2
+      },
+      {
+        "item_id": "jagras_scale",
+        "qty": 1
+      }
+    ],
+    "gold": 300,
+    "lore": "Vải da rừng may vội bên lửa trại."
+  },
+  {
+    "id": "craft_boots_hide",
+    "name": "Khâu Giày Da",
+    "tier": "A",
+    "result_id": "boots_hide",
+    "result_type": "equipment",
+    "ingredients": [
+      {
+        "item_id": "jagras_scale",
+        "qty": 2
+      },
+      {
+        "item_id": "monster_bone_s",
+        "qty": 1
+      }
+    ],
+    "gold": 150,
+    "lore": "Đế xương, thân vảy — đi êm trên lá mục."
+  },
+  {
+    "id": "craft_glove_leather",
+    "name": "Găng Da Thủ Công",
+    "tier": "A",
+    "result_id": "glove_leather",
+    "result_type": "equipment",
+    "ingredients": [
+      {
+        "item_id": "mernos_feather",
+        "qty": 1
+      },
+      {
+        "item_id": "aptonoth_hide",
+        "qty": 1
+      },
+      {
+        "item_id": "herb",
+        "qty": 1
+      }
+    ],
+    "gold": 120,
+    "lore": "Lông Mernos lót trong cho khỏi trầy."
+  },
+  {
+    "id": "craft_ring_power",
+    "name": "Đúc Nhẫn Sức Mạnh",
+    "tier": "A",
+    "result_id": "ring_power",
+    "result_type": "equipment",
+    "ingredients": [
+      {
+        "item_id": "kestodon_shell",
+        "qty": 1
+      },
+      {
+        "item_id": "shamos_fang",
+        "qty": 2
+      }
+    ],
+    "gold": 400,
+    "lore": "Nanh và mai nén lại thành nhẫn nóng."
+  },
+  {
+    "id": "craft_brac_bone",
+    "name": "Vòng Xương",
+    "tier": "A",
+    "result_id": "brac_bone",
+    "result_type": "equipment",
+    "ingredients": [
+      {
+        "item_id": "monster_bone_s",
+        "qty": 3
+      }
+    ],
+    "gold": 100,
+    "lore": "Ba khúc xương mài nhẵn, xâu thành vòng."
+  },
+  {
+    "id": "craft_pants_cloth",
+    "name": "Quần Vải",
+    "tier": "A",
+    "result_id": "pants_cloth",
+    "result_type": "equipment",
+    "ingredients": [
+      {
+        "item_id": "aptonoth_hide",
+        "qty": 2
+      },
+      {
+        "item_id": "honey",
+        "qty": 1
+      }
+    ],
+    "gold": 180,
+    "lore": "Mật ong làm mềm da khi may."
+  },
+  {
+    "id": "craft_cloak_traveler",
+    "name": "Áo Choàng Lữ Khách",
+    "tier": "A",
+    "result_id": "cloak_traveler",
+    "result_type": "equipment",
+    "ingredients": [
+      {
+        "item_id": "mernos_feather",
+        "qty": 2
+      },
+      {
+        "item_id": "aptonoth_hide",
+        "qty": 1
+      },
+      {
+        "item_id": "worn_coin",
+        "qty": 1
+      }
+    ],
+    "gold": 250,
+    "lore": "Choàng vá từ da và lông — túi giấu xu cũ."
+  },
+  {
+    "id": "craft_chest_plate",
+    "name": "Rèn Giáp Tấm",
+    "tier": "B",
+    "result_id": "chest_plate",
+    "result_type": "equipment",
+    "ingredients": [
+      {
+        "item_id": "iron_ore",
+        "qty": 3
+      },
+      {
+        "item_id": "monster_bone_m",
+        "qty": 2
+      },
+      {
+        "item_id": "g_jagras_mane",
+        "qty": 1
+      }
+    ],
+    "gold": 2000,
+    "lore": "Quặng và bờm Great Jagras — giáp nặng cho kẻ quyết sống."
+  },
+  {
+    "id": "craft_helm_iron",
+    "name": "Rèn Mũ Sắt",
+    "tier": "B",
+    "result_id": "helm_iron",
+    "result_type": "equipment",
+    "ingredients": [
+      {
+        "item_id": "iron_ore",
+        "qty": 2
+      },
+      {
+        "item_id": "kestodon_shell",
+        "qty": 2
+      }
+    ],
+    "gold": 1200,
+    "lore": "Mai Kestodon làm khuôn, quặng đổ vào."
+  }
+]

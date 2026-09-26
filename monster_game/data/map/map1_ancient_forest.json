@@ -1,0 +1,1181 @@
+{
+  "ID": 0,
+  "slug": "map1_ancient_forest",
+  "name": "Ancient Forest",
+  "description": "Khu rừng cổ đại, nơi thích hợp cho thợ săn mới vào nghề.",
+  "level": 1,
+  "minLevel": 1,
+  "maxLevel": 5,
+  "event_chance": 0.55,
+  "creature": [
+    {
+      "Name": "Jagras",
+      "Tier": "I",
+      "HP": 2500,
+      "ATK": 280,
+      "DEF": 80,
+      "SPD": 400,
+      "ATKbonus": 1,
+      "DEFbonus": 1,
+      "SPDbonus": 1,
+      "ArmorPiercing": 1,
+      "exp": 60,
+      "price": 300,
+      "drops": [
+        {
+          "item_id": "jagras_scale",
+          "chance": 0.7,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "monster_bone_s",
+          "chance": 0.45,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "herb",
+          "chance": 0.35,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "stamina_berry",
+          "chance": 0.1,
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "actions": [
+        {
+          "id": "bite",
+          "name": "Cắn xé",
+          "weight": 45,
+          "mult": 1.0,
+          "flavor": "lao tới cắn"
+        },
+        {
+          "id": "claw",
+          "name": "Vuốt sắc",
+          "weight": 30,
+          "mult": 1.1,
+          "flavor": "vung móng cào"
+        },
+        {
+          "id": "pounce",
+          "name": "Nhảy bổ",
+          "weight": 20,
+          "mult": 1.25,
+          "flavor": "bật nhảy đè xuống"
+        },
+        {
+          "id": "flee_snap",
+          "name": "Cắn rồi lùi",
+          "weight": 5,
+          "mult": 0.7,
+          "flavor": "níu đớp một cái rồi thụt lại"
+        }
+      ],
+      "lore": "Thú ăn xác nhỏ của Ancient Forest. Đi đàn, hèn khi gặp Great Jagras — thủ lĩnh của chúng.",
+      "desc": "Thú ăn xác nhỏ của Ancient Forest."
+    },
+    {
+      "Name": "Mernos",
+      "Tier": "I",
+      "HP": 1800,
+      "ATK": 250,
+      "DEF": 60,
+      "SPD": 700,
+      "ATKbonus": 1,
+      "DEFbonus": 1,
+      "SPDbonus": 1,
+      "ArmorPiercing": 1,
+      "exp": 55,
+      "price": 250,
+      "drops": [
+        {
+          "item_id": "mernos_feather",
+          "chance": 0.7,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "monster_bone_s",
+          "chance": 0.45,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "herb",
+          "chance": 0.35,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "stamina_berry",
+          "chance": 0.1,
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "actions": [
+        {
+          "id": "dive",
+          "name": "Lao xuống",
+          "weight": 35,
+          "mult": 1.3,
+          "flavor": "lao vút từ trên cao"
+        },
+        {
+          "id": "wing",
+          "name": "Vỗ cánh",
+          "weight": 25,
+          "mult": 0.9,
+          "flavor": "vỗ cánh tạo gió lốc"
+        },
+        {
+          "id": "peck",
+          "name": "Mổ liên tiếp",
+          "weight": 25,
+          "mult": 1.05,
+          "flavor": "mổ liên hoàn"
+        },
+        {
+          "id": "sky_rage",
+          "name": "Cuồng phong",
+          "weight": 15,
+          "mult": 1.5,
+          "flavor": "xoáy xuống như bão",
+          "when": "hp_below_35"
+        }
+      ],
+      "lore": "Chim đưa thư tự nhiên. Thợ săn lành nghề không giết bừa; nhưng bạn thì cần lông.",
+      "desc": "Chim đưa thư tự nhiên."
+    },
+    {
+      "Name": "Aptonoth",
+      "Tier": "I",
+      "HP": 3200,
+      "ATK": 200,
+      "DEF": 120,
+      "SPD": 300,
+      "ATKbonus": 1,
+      "DEFbonus": 1,
+      "SPDbonus": 1,
+      "ArmorPiercing": 1,
+      "exp": 50,
+      "price": 280,
+      "drops": [
+        {
+          "item_id": "aptonoth_hide",
+          "chance": 0.7,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "monster_bone_s",
+          "chance": 0.45,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "herb",
+          "chance": 0.35,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "stamina_berry",
+          "chance": 0.1,
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "actions": [
+        {
+          "id": "slam",
+          "name": "Húc mạnh",
+          "weight": 35,
+          "mult": 1.15,
+          "flavor": "húc thẳng"
+        },
+        {
+          "id": "tail",
+          "name": "Quật đuôi",
+          "weight": 25,
+          "mult": 1.2,
+          "flavor": "quật đuôi quét"
+        },
+        {
+          "id": "roar",
+          "name": "Gầm vang",
+          "weight": 15,
+          "mult": 0.6,
+          "flavor": "gầm lên rung đất",
+          "effect": "mana_drain"
+        },
+        {
+          "id": "thrash",
+          "name": "Lồng lộn",
+          "weight": 15,
+          "mult": 1.4,
+          "flavor": "lồng lộn tấn công",
+          "when": "hp_below_40"
+        },
+        {
+          "id": "stomp",
+          "name": "Dậm chân",
+          "weight": 10,
+          "mult": 1.3,
+          "flavor": "dậm chân làm nứt đất"
+        }
+      ],
+      "lore": "Động vật ăn cỏ hiền. Máu của chúng nuôi cả hệ sinh thái… và cả thợ săn đói.",
+      "desc": "Động vật ăn cỏ hiền."
+    },
+    {
+      "Name": "Kestodon",
+      "Tier": "II",
+      "HP": 4200,
+      "ATK": 360,
+      "DEF": 160,
+      "SPD": 500,
+      "ATKbonus": 1,
+      "DEFbonus": 1,
+      "SPDbonus": 1,
+      "ArmorPiercing": 1,
+      "exp": 120,
+      "price": 600,
+      "drops": [
+        {
+          "item_id": "kestodon_shell",
+          "chance": 0.7,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "monster_bone_s",
+          "chance": 0.45,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "herb",
+          "chance": 0.35,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "stamina_berry",
+          "chance": 0.1,
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "actions": [
+        {
+          "id": "slam",
+          "name": "Húc mạnh",
+          "weight": 35,
+          "mult": 1.15,
+          "flavor": "húc thẳng"
+        },
+        {
+          "id": "tail",
+          "name": "Quật đuôi",
+          "weight": 25,
+          "mult": 1.2,
+          "flavor": "quật đuôi quét"
+        },
+        {
+          "id": "roar",
+          "name": "Gầm vang",
+          "weight": 15,
+          "mult": 0.6,
+          "flavor": "gầm lên rung đất",
+          "effect": "mana_drain"
+        },
+        {
+          "id": "thrash",
+          "name": "Lồng lộn",
+          "weight": 15,
+          "mult": 1.4,
+          "flavor": "lồng lộn tấn công",
+          "when": "hp_below_40"
+        },
+        {
+          "id": "stomp",
+          "name": "Dậm chân",
+          "weight": 10,
+          "mult": 1.3,
+          "flavor": "dậm chân làm nứt đất"
+        }
+      ],
+      "lore": "Bò mai hung. Đực húc trước hỏi sau.",
+      "desc": "Bò mai hung."
+    },
+    {
+      "Name": "Shamos",
+      "Tier": "II",
+      "HP": 3600,
+      "ATK": 400,
+      "DEF": 120,
+      "SPD": 650,
+      "ATKbonus": 1,
+      "DEFbonus": 1,
+      "SPDbonus": 1,
+      "ArmorPiercing": 1,
+      "exp": 110,
+      "price": 550,
+      "drops": [
+        {
+          "item_id": "shamos_fang",
+          "chance": 0.7,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "monster_bone_s",
+          "chance": 0.45,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "herb",
+          "chance": 0.35,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "stamina_berry",
+          "chance": 0.1,
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "actions": [
+        {
+          "id": "bite",
+          "name": "Cắn xé",
+          "weight": 45,
+          "mult": 1.0,
+          "flavor": "lao tới cắn"
+        },
+        {
+          "id": "claw",
+          "name": "Vuốt sắc",
+          "weight": 30,
+          "mult": 1.1,
+          "flavor": "vung móng cào"
+        },
+        {
+          "id": "pounce",
+          "name": "Nhảy bổ",
+          "weight": 20,
+          "mult": 1.25,
+          "flavor": "bật nhảy đè xuống"
+        },
+        {
+          "id": "flee_snap",
+          "name": "Cắn rồi lùi",
+          "weight": 5,
+          "mult": 0.7,
+          "flavor": "níu đớp một cái rồi thụt lại"
+        }
+      ],
+      "lore": "Thú hang đêm. Đôi mắt phát sáng khi bị đèn soi.",
+      "desc": "Thú hang đêm."
+    },
+    {
+      "Name": "Great Jagras",
+      "Tier": "III",
+      "HP": 8000,
+      "ATK": 450,
+      "DEF": 220,
+      "SPD": 700,
+      "ATKbonus": 1,
+      "DEFbonus": 1,
+      "SPDbonus": 1,
+      "ArmorPiercing": 1,
+      "exp": 250,
+      "price": 1500,
+      "drops": [
+        {
+          "item_id": "g_jagras_mane",
+          "chance": 0.7,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "monster_bone_m",
+          "chance": 0.45,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "iron_ore",
+          "chance": 0.35,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "field_ration",
+          "chance": 0.1,
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "actions": [
+        {
+          "id": "slam",
+          "name": "Húc mạnh",
+          "weight": 35,
+          "mult": 1.15,
+          "flavor": "húc thẳng"
+        },
+        {
+          "id": "tail",
+          "name": "Quật đuôi",
+          "weight": 25,
+          "mult": 1.2,
+          "flavor": "quật đuôi quét"
+        },
+        {
+          "id": "roar",
+          "name": "Gầm vang",
+          "weight": 15,
+          "mult": 0.6,
+          "flavor": "gầm lên rung đất",
+          "effect": "mana_drain"
+        },
+        {
+          "id": "thrash",
+          "name": "Lồng lộn",
+          "weight": 15,
+          "mult": 1.4,
+          "flavor": "lồng lộn tấn công",
+          "when": "hp_below_40"
+        },
+        {
+          "id": "stomp",
+          "name": "Dậm chân",
+          "weight": 10,
+          "mult": 1.3,
+          "flavor": "dậm chân làm nứt đất"
+        }
+      ],
+      "lore": "Thủ lĩnh Jagras. Bụng phình sau bữa ăn — đó là lúc nó chậm và nguy hiểm theo cách khác.",
+      "desc": "Thủ lĩnh Jagras."
+    },
+    {
+      "Name": "Kulu-Ya-Ku",
+      "Tier": "III",
+      "HP": 7000,
+      "ATK": 480,
+      "DEF": 200,
+      "SPD": 900,
+      "ATKbonus": 1,
+      "DEFbonus": 1,
+      "SPDbonus": 1,
+      "ArmorPiercing": 1,
+      "exp": 260,
+      "price": 1600,
+      "drops": [
+        {
+          "item_id": "kulu_beak",
+          "chance": 0.7,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "monster_bone_m",
+          "chance": 0.45,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "iron_ore",
+          "chance": 0.35,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "field_ration",
+          "chance": 0.1,
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "actions": [
+        {
+          "id": "bite",
+          "name": "Cắn xé",
+          "weight": 45,
+          "mult": 1.0,
+          "flavor": "lao tới cắn"
+        },
+        {
+          "id": "claw",
+          "name": "Vuốt sắc",
+          "weight": 30,
+          "mult": 1.1,
+          "flavor": "vung móng cào"
+        },
+        {
+          "id": "pounce",
+          "name": "Nhảy bổ",
+          "weight": 20,
+          "mult": 1.25,
+          "flavor": "bật nhảy đè xuống"
+        },
+        {
+          "id": "flee_snap",
+          "name": "Cắn rồi lùi",
+          "weight": 5,
+          "mult": 0.7,
+          "flavor": "níu đớp một cái rồi thụt lại"
+        }
+      ],
+      "lore": "Khủng long biết dùng công cụ. Nó cầm đá như khiên; đừng cười.",
+      "desc": "Khủng long biết dùng công cụ."
+    },
+    {
+      "Name": "Pukei-Pukei",
+      "Tier": "IV",
+      "HP": 12000,
+      "ATK": 550,
+      "DEF": 300,
+      "SPD": 900,
+      "ATKbonus": 1,
+      "DEFbonus": 1,
+      "SPDbonus": 1,
+      "ArmorPiercing": 0.9,
+      "exp": 450,
+      "price": 3000,
+      "drops": [
+        {
+          "item_id": "pukei_sac",
+          "chance": 0.7,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "monster_bone_m",
+          "chance": 0.45,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "iron_ore",
+          "chance": 0.35,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "field_ration",
+          "chance": 0.1,
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "actions": [
+        {
+          "id": "slam",
+          "name": "Húc mạnh",
+          "weight": 35,
+          "mult": 1.15,
+          "flavor": "húc thẳng"
+        },
+        {
+          "id": "tail",
+          "name": "Quật đuôi",
+          "weight": 25,
+          "mult": 1.2,
+          "flavor": "quật đuôi quét"
+        },
+        {
+          "id": "roar",
+          "name": "Gầm vang",
+          "weight": 15,
+          "mult": 0.6,
+          "flavor": "gầm lên rung đất",
+          "effect": "mana_drain"
+        },
+        {
+          "id": "thrash",
+          "name": "Lồng lộn",
+          "weight": 15,
+          "mult": 1.4,
+          "flavor": "lồng lộn tấn công",
+          "when": "hp_below_40"
+        },
+        {
+          "id": "stomp",
+          "name": "Dậm chân",
+          "weight": 10,
+          "mult": 1.3,
+          "flavor": "dậm chân làm nứt đất"
+        }
+      ],
+      "lore": "Tắc kè độc. Phun dịch từ miệng và đuôi; rừng sẽ im cả tiếng ve.",
+      "desc": "Tắc kè độc."
+    },
+    {
+      "Name": "Tobi-Kadachi",
+      "Tier": "V",
+      "HP": 16000,
+      "ATK": 700,
+      "DEF": 350,
+      "SPD": 1400,
+      "ATKbonus": 1,
+      "DEFbonus": 1,
+      "SPDbonus": 1.1,
+      "ArmorPiercing": 0.9,
+      "exp": 700,
+      "price": 5000,
+      "drops": [
+        {
+          "item_id": "kadachi_whisker",
+          "chance": 0.7,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "monster_bone_l",
+          "chance": 0.45,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "carbolite",
+          "chance": 0.35,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "mega_potion_leaf",
+          "chance": 0.1,
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "actions": [
+        {
+          "id": "slam",
+          "name": "Húc mạnh",
+          "weight": 35,
+          "mult": 1.15,
+          "flavor": "húc thẳng"
+        },
+        {
+          "id": "tail",
+          "name": "Quật đuôi",
+          "weight": 25,
+          "mult": 1.2,
+          "flavor": "quật đuôi quét"
+        },
+        {
+          "id": "roar",
+          "name": "Gầm vang",
+          "weight": 15,
+          "mult": 0.6,
+          "flavor": "gầm lên rung đất",
+          "effect": "mana_drain"
+        },
+        {
+          "id": "thrash",
+          "name": "Lồng lộn",
+          "weight": 15,
+          "mult": 1.4,
+          "flavor": "lồng lộn tấn công",
+          "when": "hp_below_40"
+        },
+        {
+          "id": "stomp",
+          "name": "Dậm chân",
+          "weight": 10,
+          "mult": 1.3,
+          "flavor": "dậm chân làm nứt đất"
+        }
+      ],
+      "lore": "Thú điện trên cây. Lướt giữa cành như tia sét sống.",
+      "desc": "Thú điện trên cây."
+    },
+    {
+      "Name": "Anjanath",
+      "Tier": "X",
+      "HP": 30000,
+      "ATK": 1200,
+      "DEF": 500,
+      "SPD": 1200,
+      "ATKbonus": 1.1,
+      "DEFbonus": 1,
+      "SPDbonus": 1,
+      "ArmorPiercing": 0.8,
+      "exp": 1500,
+      "price": 15000,
+      "drops": [
+        {
+          "item_id": "anja_fang",
+          "chance": 0.7,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "monster_bone_l",
+          "chance": 0.45,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "carbolite",
+          "chance": 0.35,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "mega_potion_leaf",
+          "chance": 0.1,
+          "min": 1,
+          "max": 1
+        },
+        {
+          "item_id": "glove_rage",
+          "chance": 0.18,
+          "min": 1,
+          "max": 1,
+          "kind": "equipment"
+        }
+      ],
+      "actions": [
+        {
+          "id": "slam",
+          "name": "Húc mạnh",
+          "weight": 35,
+          "mult": 1.15,
+          "flavor": "húc thẳng"
+        },
+        {
+          "id": "tail",
+          "name": "Quật đuôi",
+          "weight": 25,
+          "mult": 1.2,
+          "flavor": "quật đuôi quét"
+        },
+        {
+          "id": "roar",
+          "name": "Gầm vang",
+          "weight": 15,
+          "mult": 0.6,
+          "flavor": "gầm lên rung đất",
+          "effect": "mana_drain"
+        },
+        {
+          "id": "thrash",
+          "name": "Lồng lộn",
+          "weight": 15,
+          "mult": 1.4,
+          "flavor": "lồng lộn tấn công",
+          "when": "hp_below_40"
+        },
+        {
+          "id": "stomp",
+          "name": "Dậm chân",
+          "weight": 10,
+          "mult": 1.3,
+          "flavor": "dậm chân làm nứt đất"
+        },
+        {
+          "id": "last_stand",
+          "name": "Hồi quang cuối",
+          "weight": 12,
+          "mult": 1.7,
+          "flavor": "tập trung toàn lực phản kháng",
+          "when": "hp_below_20"
+        }
+      ],
+      "lore": "Bạo chúa hơi thở lửa của Forest. Gầm một cái, đàn Aptonoth tán loạn.",
+      "desc": "Bạo chúa hơi thở lửa của Forest."
+    },
+    {
+      "Name": "Rathalos",
+      "Tier": "XX",
+      "HP": 60000,
+      "ATK": 2000,
+      "DEF": 800,
+      "SPD": 2000,
+      "ATKbonus": 1.2,
+      "DEFbonus": 1,
+      "SPDbonus": 1,
+      "ArmorPiercing": 0.7,
+      "exp": 4000,
+      "price": 50000,
+      "drops": [
+        {
+          "item_id": "rathalos_scale",
+          "chance": 0.7,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "elder_dragon_bone",
+          "chance": 0.35,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "nova_crystal",
+          "chance": 0.35,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "item_id": "blessed_charm",
+          "chance": 0.1,
+          "min": 1,
+          "max": 1
+        },
+        {
+          "item_id": "ring_dragon",
+          "chance": 0.18,
+          "min": 1,
+          "max": 1,
+          "kind": "equipment"
+        }
+      ],
+      "actions": [
+        {
+          "id": "dive",
+          "name": "Lao xuống",
+          "weight": 35,
+          "mult": 1.3,
+          "flavor": "lao vút từ trên cao"
+        },
+        {
+          "id": "wing",
+          "name": "Vỗ cánh",
+          "weight": 25,
+          "mult": 0.9,
+          "flavor": "vỗ cánh tạo gió lốc"
+        },
+        {
+          "id": "peck",
+          "name": "Mổ liên tiếp",
+          "weight": 25,
+          "mult": 1.05,
+          "flavor": "mổ liên hoàn"
+        },
+        {
+          "id": "sky_rage",
+          "name": "Cuồng phong",
+          "weight": 15,
+          "mult": 1.5,
+          "flavor": "xoáy xuống như bão",
+          "when": "hp_below_35"
+        },
+        {
+          "id": "last_stand",
+          "name": "Hồi quang cuối",
+          "weight": 12,
+          "mult": 1.7,
+          "flavor": "tập trung toàn lực phản kháng",
+          "when": "hp_below_20"
+        }
+      ],
+      "lore": "Vua trời. Bay, lửa, móng — ba thứ khiến thợ săn nhớ mãi trận đầu.",
+      "desc": "Vua trời."
+    }
+  ],
+  "events": [
+    {
+      "id": "old_chest",
+      "weight": 40,
+      "title": "Rương gỗ cũ",
+      "intro": "Giữa đường bạn thấy một chiếc rương phủ rêu, khóa đã han gỉ.",
+      "actions": [
+        {
+          "id": "open",
+          "label": "Mở rương"
+        },
+        {
+          "id": "inspect",
+          "label": "Quan sát kỹ"
+        },
+        {
+          "id": "leave",
+          "label": "Bỏ đi, tiếp tục hành trình"
+        }
+      ],
+      "outcomes": {
+        "open": [
+          {
+            "chance": 0.7,
+            "kind": "mimic",
+            "log": "Rương há miệng — đó là Mimic! Nó lao tới cắn bạn.",
+            "effects": {
+              "the_luc": -40,
+              "karma": 1
+            },
+            "combat_hint": "Bạn chống trả loạn đả rồi chạy thoát, người đầy thương tích."
+          },
+          {
+            "chance": 0.3,
+            "kind": "loot",
+            "log": "Nắp rương kêu răng rắc — bên trong lấp lánh vật phẩm!",
+            "effects": {
+              "gold": 200
+            },
+            "drops": [
+              {
+                "item_id": "worn_coin",
+                "min": 1,
+                "max": 2
+              },
+              {
+                "item_id": "herb",
+                "min": 1,
+                "max": 3
+              }
+            ]
+          }
+        ],
+        "inspect": [
+          {
+            "chance": 0.55,
+            "kind": "safe_loot",
+            "log": "Bạn phát hiện nước bọt nhớt quanh nắp — chắc chắn là Mimic. Bạn lấy vài thứ rơi quanh đó rồi chuồn.",
+            "drops": [
+              {
+                "item_id": "monster_bone_s",
+                "min": 1,
+                "max": 2
+              }
+            ]
+          },
+          {
+            "chance": 0.45,
+            "kind": "nothing",
+            "log": "Nhìn mãi cũng chỉ là rương cũ. Có lẽ nên mở thử... nhưng bạn bỏ đi."
+          }
+        ],
+        "leave": [
+          {
+            "chance": 1.0,
+            "kind": "leave",
+            "log": "Bạn không mạo hiểm. Bước chân tiếp tục vọng trên lối mòn."
+          }
+        ]
+      }
+    },
+    {
+      "id": "healing_spring",
+      "weight": 25,
+      "title": "Suối nước ấm",
+      "intro": "Hơi nước bốc lên từ một vũng suối ẩn sau tảng đá.",
+      "actions": [
+        {
+          "id": "bathe",
+          "label": "Ngâm mình nghỉ ngơi"
+        },
+        {
+          "id": "drink",
+          "label": "Uống một ngụm"
+        },
+        {
+          "id": "fill",
+          "label": "Lấy nước vào bình rồi đi"
+        }
+      ],
+      "outcomes": {
+        "bathe": [
+          {
+            "chance": 0.8,
+            "kind": "rest",
+            "log": "Cơ thể ấm lại. Thể lực phục hồi rõ rệt.",
+            "effects": {
+              "the_luc": 120
+            }
+          },
+          {
+            "chance": 0.2,
+            "kind": "ambush",
+            "log": "Đang thảnh thơi thì có thú nhỏ lao tới — bạn hoảng hồn nhảy ra, mất hơi!",
+            "effects": {
+              "the_luc": -30
+            }
+          }
+        ],
+        "drink": [
+          {
+            "chance": 0.7,
+            "kind": "buff",
+            "log": "Nước ngọt thanh. Bạn cảm thấy nhẹ nhàng hơn.",
+            "effects": {
+              "the_luc": 60
+            }
+          },
+          {
+            "chance": 0.3,
+            "kind": "sick",
+            "log": "Ước gì đừng uống... bụng quặn. Karma +1 vì xui xẻo?",
+            "effects": {
+              "the_luc": -20,
+              "karma": 1
+            }
+          }
+        ],
+        "fill": [
+          {
+            "chance": 1.0,
+            "kind": "loot",
+            "log": "Bạn đựng nước vào bình — coi như có thêm thảo dược lỏng.",
+            "drops": [
+              {
+                "item_id": "herb",
+                "min": 1,
+                "max": 2
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "lost_traveler",
+      "weight": 20,
+      "title": "Lữ khách lạc đường",
+      "intro": "Một người đi rừng vẫy gọi bạn, vẻ mặt lo lắng.",
+      "actions": [
+        {
+          "id": "help",
+          "label": "Chỉ đường / hộ tống một đoạn"
+        },
+        {
+          "id": "trade",
+          "label": "Mặc cả đổi đồ"
+        },
+        {
+          "id": "ignore",
+          "label": "Phớt lờ, đi tiếp"
+        }
+      ],
+      "outcomes": {
+        "help": [
+          {
+            "chance": 0.75,
+            "kind": "reward",
+            "log": "Lữ khách cảm ơn rối rít và thù lao bằng vài món.",
+            "effects": {
+              "gold": 150,
+              "karma": -1
+            },
+            "drops": [
+              {
+                "item_id": "honey",
+                "min": 1,
+                "max": 2
+              }
+            ]
+          },
+          {
+            "chance": 0.25,
+            "kind": "trap",
+            "log": "Đó là cướp cải trang! Chúng lấy mất ít đồ rồi chạy.",
+            "effects": {
+              "the_luc": -25,
+              "karma": 1
+            }
+          }
+        ],
+        "trade": [
+          {
+            "chance": 1.0,
+            "kind": "trade",
+            "log": "Hai bên nhanh chóng đổi chác. Bạn được thêm nguyên liệu.",
+            "drops": [
+              {
+                "item_id": "monster_bone_s",
+                "min": 1,
+                "max": 3
+              }
+            ]
+          }
+        ],
+        "ignore": [
+          {
+            "chance": 1.0,
+            "kind": "leave",
+            "log": "Bạn đi tiếp. Tiếng gọi phía sau dần tắt trong gió."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ruined_camp",
+      "weight": 15,
+      "title": "Trại thợ săn bỏ hoang",
+      "intro": "Lều rách và bếp lửa nguội — ai đó đã rời đi vội vàng.",
+      "actions": [
+        {
+          "id": "search",
+          "label": "Lục soát kỹ"
+        },
+        {
+          "id": "rest",
+          "label": "Nghỉ ngắn tại chỗ"
+        },
+        {
+          "id": "leave",
+          "label": "Rời đi ngay"
+        }
+      ],
+      "outcomes": {
+        "search": [
+          {
+            "chance": 0.6,
+            "kind": "loot",
+            "log": "Dưới lớp lá mục bạn tìm thấy túi nguyên liệu.",
+            "drops": [
+              {
+                "item_id": "iron_ore",
+                "min": 1,
+                "max": 2
+              },
+              {
+                "item_id": "monster_bone_m",
+                "min": 1,
+                "max": 1
+              }
+            ]
+          },
+          {
+            "chance": 0.4,
+            "kind": "trap",
+            "log": "Bẫy dây siết cổ chân! Bạn mất thời gian gỡ ra.",
+            "effects": {
+              "the_luc": -35
+            }
+          }
+        ],
+        "rest": [
+          {
+            "chance": 1.0,
+            "kind": "rest",
+            "log": "Bạn chợp mắt đôi phút. Thể lực hồi nhẹ.",
+            "effects": {
+              "the_luc": 50
+            }
+          }
+        ],
+        "leave": [
+          {
+            "chance": 1.0,
+            "kind": "leave",
+            "log": "Không khí kỳ lạ. Bạn chọn không nán lại."
+          }
+        ]
+      }
+    }
+  ]
+}

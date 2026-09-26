@@ -1,0 +1,13 @@
+{
+  "dragon_scale": {
+    "id": "dragon_scale",
+    "name": "Bộ Vảy Rồng",
+    "pieces": 3,
+    "bonus": {
+      "hp": 300,
+      "def": 100,
+      "atk": 50,
+      "desc": "3 món: da cứng như thép rồng."
+    }
+  }
+}

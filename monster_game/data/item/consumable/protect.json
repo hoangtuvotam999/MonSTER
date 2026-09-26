@@ -1,0 +1,75 @@
+[
+  {
+    "type": "consumable",
+    "id": "scroll_protect",
+    "name": "Bùa Bảo Hiểm Cường Hóa",
+    "subtype": "enhance_protect",
+    "tier": "B",
+    "price": 3000,
+    "belt": false,
+    "protect": {
+      "mode": "keep"
+    },
+    "desc": "Thất bại vẫn giữ nguyên cấp +.",
+    "lore": "Giấy vàng viết máu phượng. Đốt khi cường hóa."
+  },
+  {
+    "type": "consumable",
+    "id": "scroll_soft",
+    "name": "Bùa Giảm Cấp Nhẹ",
+    "subtype": "enhance_protect",
+    "tier": "B",
+    "price": 1500,
+    "belt": false,
+    "protect": {
+      "mode": "drop_one"
+    },
+    "desc": "Thất bại chỉ tụt 1 cấp (tối thiểu +1).",
+    "lore": "Bùa phổ thông của thợ rèn tập sự."
+  },
+  {
+    "type": "consumable",
+    "id": "scroll_floor3",
+    "name": "Bùa Sàn +3",
+    "subtype": "enhance_protect",
+    "tier": "C",
+    "price": 6000,
+    "belt": false,
+    "protect": {
+      "mode": "floor",
+      "floor": 3
+    },
+    "desc": "Thất bại không thấp hơn +3.",
+    "lore": "Khắc số 3 bằng mực Kirin."
+  },
+  {
+    "type": "consumable",
+    "id": "scroll_floor5",
+    "name": "Bùa Sàn +5",
+    "subtype": "enhance_protect",
+    "tier": "C",
+    "price": 12000,
+    "belt": false,
+    "protect": {
+      "mode": "floor",
+      "floor": 5
+    },
+    "desc": "Thất bại không thấp hơn +5.",
+    "lore": "Đắt — nhưng giữ được công sức mười lần đập búa."
+  },
+  {
+    "type": "consumable",
+    "id": "scroll_floor7",
+    "name": "Bùa Sàn +7",
+    "subtype": "enhance_protect",
+    "tier": "D",
+    "price": 30000,
+    "belt": false,
+    "protect": {
+      "mode": "floor",
+      "floor": 7
+    },
+    "desc": "Thất bại không thấp hơn +7.",
+    "lore": "Chỉ Elder Dragon Blood mới viết nổi bùa này."
+  }
+]
