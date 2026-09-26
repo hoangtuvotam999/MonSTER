@@ -3,14 +3,13 @@ Runnable demo showing the whole flow end-to-end:
 create two characters, equip weapons, roam a location, fight a monster,
 then run a PvP match between the two characters.
 
-Run with:  python -m monster_game.demo   (from the parent directory)
+Run with:  python -m monster_game.demo   (from the repository root)
 """
-from monster_game import game, shop
+from monster_game import data_store, game, shop
 
 
 def main():
     # --- Reset the sample save file for a clean demo run ---
-    from monster_game import data_store
     data_store._save(data_store.USERS_FILE, [])
 
     print("== Creating characters ==")
@@ -27,16 +26,26 @@ def main():
     result = shop.purchase_weapon("alice", "Great Sword", 1, balance=999999)
     print(result)
     if result.ok:
-        # bag now has [old iron sword removed on prior equip is fine; new weapon appended]
         c = game.get_character("alice")
         idx = next(i for i, it in enumerate(c["bag"]) if it["name"] == result.item["name"]) + 1
         game.equip_or_consume("alice", idx)
+        print("Alice's bag now holds:", [it["name"] for it in game.get_character("alice")["bag"]])
+    print()
+
+    print("== Locations ==")
+    for i, loc in enumerate(game.list_locations(), start=1):
+        print(f"  {i}. {loc['name']} (level {loc['level']}+, monsters lv {loc['minLevel']}-{loc['maxLevel']})")
     print()
 
     print("== Alice travels to Ancient Forest and hunts ==")
     game.set_location("alice", 1)
-    outcome = game.encounter_and_fight("alice")
-    print(outcome)
+    for _ in range(3):
+        outcome = game.encounter_and_fight("alice")
+        print(outcome)
+    print()
+
+    print("== Alice repairs her weapon ==")
+    print(game.repair_weapon("alice", balance=999999))
     print()
 
     print("== Alice and Bob's stats ==")
