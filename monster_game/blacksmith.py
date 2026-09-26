@@ -236,7 +236,10 @@ def enhance(player_id: str, where: str = "weapon", bag_index_0: Optional[int] = 
     luck_ids: list[str] = []
     for idx in luck_bag_indices_0 or []:
         if 0 <= idx < len(bag0) and bag0[idx].get("subtype") == "enhance_luck":
-            luck_ids.append(bag0[idx]["id"])
+            it = bag0[idx]
+            # expand stacks so qty>1 can fill the +36% cap
+            for _ in range(max(1, int(it.get("qty", 1)))):
+                luck_ids.append(it["id"])
     protect_id = None
     if protect_bag_index_0 is not None and 0 <= protect_bag_index_0 < len(bag0):
         if bag0[protect_bag_index_0].get("subtype") == "enhance_protect":
