@@ -1,0 +1,98 @@
+[
+    {
+        "type": "weapon", "id": 1, "name": "Buster Sword I", "category": "Great Sword",
+        "usage": 0, "exp": 0, "HP": 3500, "ATK": 320, "DEF": 150, "SPD": 1200, "durability": 100,
+        "dmgBonus": 1.2, "defBonus": 1, "hpBonus": 1, "spdBonus": 1, "ArmorPiercing": 1, "price": 1500
+    },
+    {
+        "type": "weapon", "id": 2, "name": "Jagras Blade II", "category": "Great Sword",
+        "usage": 0, "exp": 0, "HP": 7000, "ATK": 700, "DEF": 300, "SPD": 1400, "durability": 100,
+        "dmgBonus": 1.2, "defBonus": 1, "hpBonus": 1, "spdBonus": 1, "ArmorPiercing": 1, "price": 18000
+    },
+    {
+        "type": "weapon", "id": 3, "name": "Anja Blaze III", "category": "Great Sword",
+        "usage": 0, "exp": 0, "HP": 15000, "ATK": 1600, "DEF": 600, "SPD": 1600, "durability": 100,
+        "dmgBonus": 1.25, "defBonus": 1, "hpBonus": 1, "spdBonus": 1, "ArmorPiercing": 0.9, "price": 95000
+    },
+
+    {
+        "type": "weapon", "id": 4, "name": "Iron Lance I", "category": "Lance",
+        "usage": 0, "exp": 0, "HP": 4500, "ATK": 180, "DEF": 320, "SPD": 1500, "durability": 100,
+        "dmgBonus": 1, "defBonus": 1.2, "hpBonus": 1.1, "spdBonus": 1, "ArmorPiercing": 1, "price": 1500
+    },
+    {
+        "type": "weapon", "id": 5, "name": "Kestodon Gunlance II", "category": "Lance",
+        "usage": 0, "exp": 0, "HP": 9000, "ATK": 420, "DEF": 700, "SPD": 1700, "durability": 100,
+        "dmgBonus": 1, "defBonus": 1.2, "hpBonus": 1.1, "spdBonus": 1, "ArmorPiercing": 1, "price": 18000
+    },
+    {
+        "type": "weapon", "id": 6, "name": "Diablos Bulwark III", "category": "Lance",
+        "usage": 0, "exp": 0, "HP": 20000, "ATK": 950, "DEF": 1600, "SPD": 1900, "durability": 100,
+        "dmgBonus": 1, "defBonus": 1.3, "hpBonus": 1.15, "spdBonus": 1, "ArmorPiercing": 1, "price": 95000
+    },
+
+    {
+        "type": "weapon", "id": 10, "name": "Iron Sword I", "category": "Sword",
+        "usage": 0, "exp": 0, "HP": 4000, "ATK": 210, "DEF": 210, "SPD": 2000, "durability": 100,
+        "dmgBonus": 1, "defBonus": 1, "hpBonus": 1, "spdBonus": 1, "ArmorPiercing": 1, "price": 1000,
+        "image": "https://i.imgur.com/JB2JAEm.png"
+    },
+    {
+        "type": "weapon", "id": 11, "name": "Pukei Sword II", "category": "Sword",
+        "usage": 0, "exp": 0, "HP": 8000, "ATK": 480, "DEF": 480, "SPD": 2300, "durability": 100,
+        "dmgBonus": 1.05, "defBonus": 1.05, "hpBonus": 1, "spdBonus": 1, "ArmorPiercing": 1, "price": 15000
+    },
+    {
+        "type": "weapon", "id": 12, "name": "Rathalos Edge III", "category": "Sword",
+        "usage": 0, "exp": 0, "HP": 17000, "ATK": 1100, "DEF": 1100, "SPD": 2700, "durability": 100,
+        "dmgBonus": 1.1, "defBonus": 1.1, "hpBonus": 1.05, "spdBonus": 1.05, "ArmorPiercing": 1, "price": 80000
+    },
+
+    {
+        "type": "weapon", "id": 13, "name": "Matched Slicers I", "category": "Dual Blades",
+        "usage": 0, "exp": 0, "HP": 3000, "ATK": 240, "DEF": 120, "SPD": 3000, "durability": 100,
+        "dmgBonus": 1, "defBonus": 1, "hpBonus": 1, "spdBonus": 1.2, "ArmorPiercing": 1, "price": 1500
+    },
+    {
+        "type": "weapon", "id": 14, "name": "Kadachi Twinblades II", "category": "Dual Blades",
+        "usage": 0, "exp": 0, "HP": 6000, "ATK": 520, "DEF": 240, "SPD": 3600, "durability": 100,
+        "dmgBonus": 1, "defBonus": 1, "hpBonus": 1, "spdBonus": 1.25, "ArmorPiercing": 1, "price": 18000
+    },
+    {
+        "type": "weapon", "id": 15, "name": "Nergal Gouge III", "category": "Dual Blades",
+        "usage": 0, "exp": 0, "HP": 13000, "ATK": 1200, "DEF": 500, "SPD": 4400, "durability": 100,
+        "dmgBonus": 1.05, "defBonus": 1, "hpBonus": 1, "spdBonus": 1.3, "ArmorPiercing": 0.9, "price": 95000
+    },
+
+    {
+        "type": "weapon", "id": 16, "name": "Iron Assault I", "category": "Heavy Bowgun",
+        "usage": 0, "exp": 0, "HP": 3200, "ATK": 300, "DEF": 130, "SPD": 1000, "durability": 100,
+        "dmgBonus": 1.1, "defBonus": 1, "hpBonus": 1, "spdBonus": 1, "ArmorPiercing": 0.7, "price": 1500
+    },
+    {
+        "type": "weapon", "id": 17, "name": "Jagras Assault II", "category": "Heavy Bowgun",
+        "usage": 0, "exp": 0, "HP": 6500, "ATK": 650, "DEF": 260, "SPD": 1200, "durability": 100,
+        "dmgBonus": 1.1, "defBonus": 1, "hpBonus": 1, "spdBonus": 1, "ArmorPiercing": 0.65, "price": 18000
+    },
+    {
+        "type": "weapon", "id": 18, "name": "Magda Gemitus III", "category": "Heavy Bowgun",
+        "usage": 0, "exp": 0, "HP": 14000, "ATK": 1500, "DEF": 550, "SPD": 1400, "durability": 100,
+        "dmgBonus": 1.15, "defBonus": 1, "hpBonus": 1, "spdBonus": 1, "ArmorPiercing": 0.55, "price": 95000
+    },
+
+    {
+        "type": "weapon", "id": 19, "name": "Chain Blitz I", "category": "Light Bowgun",
+        "usage": 0, "exp": 0, "HP": 3000, "ATK": 230, "DEF": 130, "SPD": 2400, "durability": 100,
+        "dmgBonus": 1, "defBonus": 1, "hpBonus": 1, "spdBonus": 1.1, "ArmorPiercing": 0.85, "price": 1500
+    },
+    {
+        "type": "weapon", "id": 20, "name": "Kadachi Rifle II", "category": "Light Bowgun",
+        "usage": 0, "exp": 0, "HP": 6000, "ATK": 500, "DEF": 260, "SPD": 2900, "durability": 100,
+        "dmgBonus": 1, "defBonus": 1, "hpBonus": 1, "spdBonus": 1.15, "ArmorPiercing": 0.8, "price": 18000
+    },
+    {
+        "type": "weapon", "id": 21, "name": "Karma Shooter III", "category": "Light Bowgun",
+        "usage": 0, "exp": 0, "HP": 12500, "ATK": 1150, "DEF": 550, "SPD": 3600, "durability": 100,
+        "dmgBonus": 1.05, "defBonus": 1, "hpBonus": 1, "spdBonus": 1.2, "ArmorPiercing": 0.75, "price": 95000
+    }
+]
