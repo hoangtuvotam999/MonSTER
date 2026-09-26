@@ -3,9 +3,9 @@ Shop — port of the hard-coded catalogs and buy-flow in index.js
 (cases "1"-"9" of getItems()/buyItem()).
 
 Weapon catalogs (Great Sword, Lance, Sword'n Shield, Dual Blades, HBG, LBG)
-come from the item data file (data/items.json here — originally
-data/item.json, which was not included in the uploaded plugin, so a small
-sample catalog is provided; replace it with your real weapon list).
+come from the item data file data/items.json (three tiers per category;
+extend or replace it freely — every entry must carry `"category"` matching
+one of WEAPON_CATEGORIES' values).
 
 Food and upgrade-material catalogs were hard-coded directly in index.js,
 so they're reproduced verbatim below.
@@ -97,6 +97,8 @@ MAX_WEAPON_LEVEL = 256  # port of `if (dataUser.weapon.usage >= 256)` guard
 
 
 def weapons_by_category(category: str) -> list[dict]:
+    """`category` may be a display name ("Great Sword") or its shop key ("1")."""
+    category = WEAPON_CATEGORIES.get(str(category), category)
     items = data_store.get_items() or []
     return [i for i in items if i.get("category") == category]
 
@@ -112,48 +114,35 @@ class PurchaseResult:
         return f"PurchaseResult(ok={self.ok}, message={self.message!r}, cost={self.cost})"
 
 
-def purchase_weapon(player_id: str, category: str, index_1based: int, balance: int) -> PurchaseResult:
-    weapons = weapons_by_category(category)
-    if not (1 <= index_1based <= len(weapons)):
+def _purchase(player_id: str, catalog: list[dict], index_1based: int, balance: int) -> PurchaseResult:
+    if not (1 <= index_1based <= len(catalog)):
         return PurchaseResult(False, "Không tìm thấy vật phẩm")
-    item = weapons[index_1based - 1]
+    item = catalog[index_1based - 1]
     if balance < item["price"]:
         return PurchaseResult(False, "Không đủ tiền")
     result = data_store.buy_item(player_id, item)
     if result == data_store.NOT_FOUND:
-        return PurchaseResult(False, "Không tìm thấy vật phẩm")
+        return PurchaseResult(False, "Bạn chưa có nhân vật")
     if result == data_store.FORBIDDEN:
         return PurchaseResult(False, "Bạn đã sở hữu vật phẩm này từ trước")
     return PurchaseResult(True, f"Đã mua {item['name']}", item["price"], item)
 
 
+def purchase_weapon(player_id: str, category: str, index_1based: int, balance: int) -> PurchaseResult:
+    return _purchase(player_id, weapons_by_category(category), index_1based, balance)
+
+
 def purchase_food(player_id: str, index_1based: int, balance: int) -> PurchaseResult:
-    if not (1 <= index_1based <= len(FOOD_ITEMS)):
-        return PurchaseResult(False, "Không tìm thấy vật phẩm")
-    item = FOOD_ITEMS[index_1based - 1]
-    if balance < item["price"]:
-        return PurchaseResult(False, "Không đủ tiền")
-    result = data_store.buy_item(player_id, item)
-    if result == data_store.NOT_FOUND:
-        return PurchaseResult(False, "Không tìm thấy vật phẩm")
-    return PurchaseResult(True, f"Đã mua {item['name']}", item["price"], item)
+    return _purchase(player_id, FOOD_ITEMS, index_1based, balance)
 
 
 def purchase_upgrade_material(player_id: str, index_1based: int, balance: int) -> PurchaseResult:
     user = data_store.get_user(player_id)
     if user is None:
         return PurchaseResult(False, "Bạn chưa có nhân vật")
-    if user.get("weapon") and user["weapon"]["usage"] >= MAX_WEAPON_LEVEL:
+    if user.get("weapon") and user["weapon"].get("usage", 0) >= MAX_WEAPON_LEVEL:
         return PurchaseResult(False, "Vũ khí đã đạt cấp tối đa")
-    if not (1 <= index_1based <= len(UPGRADE_MATERIALS)):
-        return PurchaseResult(False, "Không tìm thấy vật phẩm")
-    item = UPGRADE_MATERIALS[index_1based - 1]
-    if balance < item["price"]:
-        return PurchaseResult(False, "Không đủ tiền")
-    result = data_store.buy_item(player_id, item)
-    if result == data_store.NOT_FOUND:
-        return PurchaseResult(False, "Không tìm thấy vật phẩm")
-    return PurchaseResult(True, f"Đã mua {item['name']}", item["price"], item)
+    return _purchase(player_id, UPGRADE_MATERIALS, index_1based, balance)
 
 
 def sell_monsters(player_id: str, indices_1based: Optional[list[int]] = None):

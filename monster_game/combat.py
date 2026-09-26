@@ -26,6 +26,9 @@ class CombatStats(TypedDict):
     Mana: float
 
 
+MAX_TURNS = 5000
+
+
 def _turns_for(speed: float, other_speed: float) -> int:
     if other_speed <= 0:
         return 1
@@ -33,8 +36,14 @@ def _turns_for(speed: float, other_speed: float) -> int:
 
 
 def _run_battle(a_stats: CombatStats, b_stats: CombatStats, a_label: str, b_label: str) -> dict:
+    """Runs the fight to completion. If neither side can finish the other
+    within MAX_TURNS (e.g. two tanks chipping 1 damage at a time), the side
+    with the larger share of its HP left wins, so callers never hang on
+    pathological stat combinations."""
     log = []
     turn = 0
+    a_start_hp = max(a_stats["HP"], 1)
+    b_start_hp = max(b_stats["HP"], 1)
     a_turns = _turns_for(a_stats["SPD"], b_stats["SPD"])
     b_turns = _turns_for(b_stats["SPD"], a_stats["SPD"])
     current = a_label if a_stats["SPD"] >= b_stats["SPD"] else b_label
@@ -54,7 +63,7 @@ def _run_battle(a_stats: CombatStats, b_stats: CombatStats, a_label: str, b_labe
         attacker_remainder = attacker["ATK"] - damage
         return round(damage), attacker_remainder
 
-    while a_stats["HP"] > 0 and b_stats["HP"] > 0:
+    while a_stats["HP"] > 0 and b_stats["HP"] > 0 and turn < MAX_TURNS:
         attacker = a_stats if current == a_label else b_stats
         defender = b_stats if current == a_label else a_stats
 
@@ -86,7 +95,12 @@ def _run_battle(a_stats: CombatStats, b_stats: CombatStats, a_label: str, b_labe
                 b_turns = 0
                 a_turns = max(1, _turns_for(a_stats["SPD"], b_stats["SPD"]))
 
-    winner = b_label if a_stats["HP"] <= 0 else a_label
+    if a_stats["HP"] <= 0:
+        winner = b_label
+    elif b_stats["HP"] <= 0:
+        winner = a_label
+    else:  # turn cap reached
+        winner = a_label if a_stats["HP"] / a_start_hp >= b_stats["HP"] / b_start_hp else b_label
     return {"winner": winner, "log": log, a_label: a_stats, b_label: b_stats}
 
 
@@ -106,12 +120,14 @@ def build_combat_stats(character: dict) -> CombatStats:
     exactly like the ad-hoc object literals built inline in index.js's
     match() and pvp.js's caller."""
     w = character["weapon"]
+    if w is None:
+        raise ValueError("character has no equipped weapon")
     return {
-        "HP": (character["hp"] + w["HP"]) * w["hpBonus"],
-        "ATK": (character["atk"] + w["ATK"]) * w["dmgBonus"],
-        "DEF": (character["def"] + w["DEF"]) * w["defBonus"],
-        "SPD": (character["spd"] + w["SPD"]) * w["spdBonus"],
-        "AP": w["ArmorPiercing"],
+        "HP": (character["hp"] + w["HP"]) * w.get("hpBonus", 1),
+        "ATK": (character["atk"] + w["ATK"]) * w.get("dmgBonus", 1),
+        "DEF": (character["def"] + w["DEF"]) * w.get("defBonus", 1),
+        "SPD": (character["spd"] + w["SPD"]) * w.get("spdBonus", 1),
+        "AP": w.get("ArmorPiercing", 1),
         "Mana": 1,
     }
 
