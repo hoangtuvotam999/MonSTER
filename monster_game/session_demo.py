@@ -71,15 +71,15 @@ def main() -> None:
             break
     print(render.render_character(game.character_summary(pid)))
 
-    _print("2) BẢNG GIÁ CƯỜNG HÓA (chi phí cố định theo tier)")
+    _print("2) BẢNG GIÁ CƯỜNG HÓA (cost tăng theo cấp +)")
     w = game.get_character(pid)["weapon"]
     print(f"Vũ khí: {w['name']} tier {w.get('tier')} · +{bs.enhance_level(w)}")
     for fake_lvl in (0, 3, 7, 12):
         w["enhance_level"] = fake_lvl
         q = bs.cost_for(w)
-        print(f"  +{fake_lvl}→+{q['next_level']}: rate {q['rate']*100:.0f}% · "
-              f"vàng {q['gold']} · đá×{q['stones'][0]['qty']} · mats={q['materials']}")
-    w["enhance_level"] = 0
+        print(f"  +{fake_lvl}→+{q['next_level']}: rate {q['rate']*100:.0f}% "
+              f"(+luck max {q['rate_with_max_luck']*100:.0f}%) · "
+              f"vàng {q['gold']} · đá×{q['stones'][0]['qty']}")
     data_store._mutate_user(pid, lambda u: u["weapon"].update(enhance_level=0) or True)
 
     _print("3) SĂN QUÁI (map 1) — 3 trận")
@@ -130,35 +130,51 @@ def main() -> None:
         if result.get("dungeon_complete") or result.get("dungeon_failed") or kind == "abort":
             break
 
-    _print("5) THỢ RÈN — đập thử nhiều lần (cost cố định)")
-    # stock mats from dungeon/hunts + top-up stones for demo
-    _grant(pid, "enhance_stone_a", 12)
-    _grant(pid, "monster_bone_s", 12)
-    _grant(pid, "scroll_soft", 2)
-    _grant(pid, "scroll_protect", 1)
-    print(f"Túi: đá A×{_bag_qty(pid,'enhance_stone_a')} · xương×{_bag_qty(pid,'monster_bone_s')} · "
-          f"bùa mềm×{_bag_qty(pid,'scroll_soft')} · bùa giữ×{_bag_qty(pid,'scroll_protect')}")
+    _print("5) THỢ RÈN — cost tăng cấp · ép may · bảo hộ %")
+    _grant(pid, "enhance_stone_a", 20)
+    _grant(pid, "monster_bone_s", 20)
+    _grant(pid, "scroll_keep_25", 1)
+    _grant(pid, "scroll_keep_50", 1)
+    _grant(pid, "scroll_keep_60", 1)
+    _grant(pid, "charm_luck_s", 3)
+    _grant(pid, "charm_luck_m", 2)
+    _grant(pid, "charm_luck_l", 1)
+    print(f"Túi: đá A×{_bag_qty(pid,'enhance_stone_a')} · xương×{_bag_qty(pid,'monster_bone_s')}")
     print(render.render_enhance_quote(game.enhance_quote(pid, "weapon")))
 
     spent_gold = 0
     attempts = []
-    for i in range(8):
+    for i in range(10):
         c = game.get_character(pid)
         if _bag_qty(pid, "enhance_stone_a") < 1 or _bag_qty(pid, "monster_bone_s") < 1:
             print("Hết nguyên liệu — dừng.")
             break
         cur = bs.enhance_level(c["weapon"])
-        # use soft scroll when going for +5+
+        quote = bs.cost_for(c["weapon"])
+        if _bag_qty(pid, "enhance_stone_a") < quote["stones"][0]["qty"]:
+            print("Không đủ đá cho cấp hiện tại — dừng.")
+            break
+        # protect: use 50% when +5+, else 25% when +3+
         prot = None
-        if cur >= 4:
+        want_prot = "scroll_keep_50" if cur >= 5 else ("scroll_keep_25" if cur >= 3 else None)
+        if want_prot:
+            prot = next((i for i, it in enumerate(c["bag"], 1) if it.get("id") == want_prot), None)
+        # luck: stack charms up to ~36% when rate < 50%
+        luck_idx = []
+        if quote["rate"] < 0.5:
+            need_luck = 0.36
             for bi, it in enumerate(c["bag"], 1):
-                if it.get("id") == "scroll_soft":
-                    prot = bi
+                if it.get("subtype") != "enhance_luck":
+                    continue
+                luck_idx.append(bi)
+                need_luck -= float(it.get("luck_bonus") or 0)
+                if need_luck <= 0:
                     break
-        before_cost = bs.cost_for(c["weapon"])["gold"]
+        before_cost = quote["gold"]
         r = game.enhance_item(
             pid, "weapon", balance=gold,
             protect_bag_index_1based=prot,
+            luck_bag_indices_1based=luck_idx or None,
             rng=random.Random(200 + i * 17),
         )
         if not r.get("ok"):
@@ -169,8 +185,10 @@ def main() -> None:
         attempts.append(r)
         icon = "✅" if r["success"] else "💥"
         print(f"  {icon} lần {i+1}: +{r['level_before']}→+{r['level_after']} "
-              f"(rate {r['rate']*100:.0f}%, cost {before_cost} vàng cố định)"
-              + (f" · {r['protect_used']}" if r.get("protect_used") else ""))
+              f"(base {r.get('rate_base', r['rate'])*100:.0f}% +luck {r.get('luck_bonus',0)*100:.0f}% "
+              f"= {r['rate']*100:.0f}%, cost {before_cost} vàng)"
+              + (f" · {r['protect_used']}" if r.get("protect_used") else "")
+              + (f" · may:{','.join(r.get('luck_used') or [])}" if r.get("luck_used") else ""))
 
     c = game.get_character(pid)
     w = c["weapon"]
@@ -185,14 +203,11 @@ def main() -> None:
 
     _print("7) ĐÁNH GIÁ NHANH")
     rates = bs.get_config()["success_rate"]
-    costs_same = all(
-        bs.cost_for({**w, "enhance_level": lv})["gold"] == bs.cost_for({**w, "enhance_level": 0})["gold"]
-        and bs.cost_for({**w, "enhance_level": lv})["stones"][0]["qty"]
-        == bs.cost_for({**w, "enhance_level": 0})["stones"][0]["qty"]
-        for lv in range(0, 10)
-    )
-    print(f"· Cost cố định theo tier A: {'OK' if costs_same else 'BUG'}")
-    print(f"· Rate giảm theo +N: +1={float(rates['1'])*100:.0f}% … +10={float(rates['10'])*100:.0f}% … +15={float(rates['15'])*100:.0f}%")
+    costs = [bs.cost_for({**w, "enhance_level": lv})["gold"] for lv in range(0, 6)]
+    cost_rising = all(costs[i] < costs[i + 1] for i in range(len(costs) - 1))
+    print(f"· Cost tăng theo cấp +: {'OK' if cost_rising else 'BUG'} ({costs})")
+    print(f"· Rate gốc giảm theo +N: +1={float(rates['1'])*100:.0f}% … +10={float(rates['10'])*100:.0f}%")
+    print(f"· Luck cap: +{bs.MAX_LUCK_BONUS*100:.0f}% · bảo hộ: 25%/50%/60% cấp gốc")
     print(f"· Số lần đập demo: {len(attempts)} · thành công {sum(1 for a in attempts if a['success'])}")
     print(f"· Peak + đạt trong phiên: +{max((a['level_after'] for a in attempts), default=0)}")
     print(f"· Hunter Lv.{c['level']} · karma {c['karma']} · túi {len(c['bag'])} ô")

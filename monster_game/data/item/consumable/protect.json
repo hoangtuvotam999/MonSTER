@@ -1,75 +1,44 @@
 [
   {
     "type": "consumable",
-    "id": "scroll_protect",
-    "name": "Bùa Bảo Hiểm Cường Hóa",
+    "id": "scroll_keep_25",
+    "name": "Bùa Bảo Hộ 25%",
+    "subtype": "enhance_protect",
+    "tier": "A",
+    "price": 1200,
+    "belt": false,
+    "protect": {
+      "keep_pct": 0.25
+    },
+    "desc": "Thất bại giữ lại 25% cấp gốc (tối thiểu +1).",
+    "lore": "Bùa giấy rẻ tiền — cứu vớt phần nhỏ công sức."
+  },
+  {
+    "type": "consumable",
+    "id": "scroll_keep_50",
+    "name": "Bùa Bảo Hộ 50%",
     "subtype": "enhance_protect",
     "tier": "B",
-    "price": 3000,
+    "price": 4000,
     "belt": false,
     "protect": {
-      "mode": "keep"
+      "keep_pct": 0.5
     },
-    "desc": "Thất bại vẫn giữ nguyên cấp +.",
-    "lore": "Giấy vàng viết máu phượng. Đốt khi cường hóa."
+    "desc": "Thất bại giữ lại 50% cấp gốc (tối thiểu +1).",
+    "lore": "Mực bạc từ vảy Rathian. Thợ rèn tin dùng."
   },
   {
     "type": "consumable",
-    "id": "scroll_soft",
-    "name": "Bùa Giảm Cấp Nhẹ",
-    "subtype": "enhance_protect",
-    "tier": "B",
-    "price": 1500,
-    "belt": false,
-    "protect": {
-      "mode": "drop_one"
-    },
-    "desc": "Thất bại chỉ tụt 1 cấp (tối thiểu +1).",
-    "lore": "Bùa phổ thông của thợ rèn tập sự."
-  },
-  {
-    "type": "consumable",
-    "id": "scroll_floor3",
-    "name": "Bùa Sàn +3",
+    "id": "scroll_keep_60",
+    "name": "Bùa Bảo Hộ 60%",
     "subtype": "enhance_protect",
     "tier": "C",
-    "price": 6000,
+    "price": 9000,
     "belt": false,
     "protect": {
-      "mode": "floor",
-      "floor": 3
+      "keep_pct": 0.6
     },
-    "desc": "Thất bại không thấp hơn +3.",
-    "lore": "Khắc số 3 bằng mực Kirin."
-  },
-  {
-    "type": "consumable",
-    "id": "scroll_floor5",
-    "name": "Bùa Sàn +5",
-    "subtype": "enhance_protect",
-    "tier": "C",
-    "price": 12000,
-    "belt": false,
-    "protect": {
-      "mode": "floor",
-      "floor": 5
-    },
-    "desc": "Thất bại không thấp hơn +5.",
-    "lore": "Đắt — nhưng giữ được công sức mười lần đập búa."
-  },
-  {
-    "type": "consumable",
-    "id": "scroll_floor7",
-    "name": "Bùa Sàn +7",
-    "subtype": "enhance_protect",
-    "tier": "D",
-    "price": 30000,
-    "belt": false,
-    "protect": {
-      "mode": "floor",
-      "floor": 7
-    },
-    "desc": "Thất bại không thấp hơn +7.",
-    "lore": "Chỉ Elder Dragon Blood mới viết nổi bùa này."
+    "desc": "Thất bại giữ lại 60% cấp gốc (tối thiểu +1).",
+    "lore": "Viết bằng máu Elder Dragon. Hiếm và đắt."
   }
 ]

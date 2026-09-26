@@ -922,14 +922,17 @@ def render_enhance_quote(quote: dict) -> str:
     lines = [
         f"🔨 THỢ RÈN — {quote.get('display', '?')}",
         f"   Hiện tại +{quote.get('current', 0)} → +{quote['next_level']}",
-        f"   Tỉ lệ thành công: {quote['rate'] * 100:.0f}%",
-        f"   Vàng: {fmt(quote['gold'])}",
+        f"   Tỉ lệ gốc: {quote['rate'] * 100:.0f}%"
+        + (f" · ép may tối đa → {quote['rate_with_max_luck'] * 100:.0f}%"
+           if quote.get("rate_with_max_luck") is not None else ""),
+        f"   Vàng: {fmt(quote['gold'])} (tăng theo cấp +)",
     ]
     need = list(quote.get("stones") or []) + list(quote.get("materials") or [])
     for req in need:
         drop = data_store.get_drop(req["item_id"]) or data_store.get_consumable(req["item_id"])
         lines.append(f"   · {(drop or {}).get('name', req['item_id'])} ×{req['qty']}")
-    lines.append("   (Chi phí cố định theo phẩm cấp · thất bại → +1 trừ khi có bùa)")
+    lines.append("   Bùa bảo hộ: giữ 25% / 50% / 60% cấp gốc khi vỡ")
+    lines.append("   Ép may: cộng dồn tối đa +36% tỉ lệ")
     return "\n".join(lines)
 
 

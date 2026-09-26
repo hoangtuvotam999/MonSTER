@@ -287,15 +287,22 @@ def enhance_quote(player_id: str, where: str = "weapon", bag_index_1based: Optio
 
 def enhance_item(player_id: str, where: str = "weapon", bag_index_1based: Optional[int] = None,
                  balance: int = 0, protect_bag_index_1based: Optional[int] = None,
+                 luck_bag_indices_1based: Optional[list[int]] = None,
                  rng=None) -> dict:
-    """Blacksmith enhance. Caller deducts gold_cost when result['ok']."""
+    """Blacksmith enhance. Caller deducts gold_cost when result['ok'].
+    luck_bag_indices_1based: bag slots of luck charms to consume (total luck capped +36%).
+    """
     from . import blacksmith as bs
+    luck0 = None
+    if luck_bag_indices_1based:
+        luck0 = [i - 1 for i in luck_bag_indices_1based if i]
     return bs.enhance(
         player_id,
         where=where,
         bag_index_0=(bag_index_1based - 1) if bag_index_1based else None,
         balance=balance,
         protect_bag_index_0=(protect_bag_index_1based - 1) if protect_bag_index_1based else None,
+        luck_bag_indices_0=luck0,
         rng=rng,
     )
 

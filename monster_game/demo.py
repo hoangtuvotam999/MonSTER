@@ -74,21 +74,22 @@ def main():
     print()
 
     print("== Blacksmith ==")
-    _grant("alice", "enhance_stone_a", 5)
-    _grant("alice", "monster_bone_s", 5)
-    _grant("alice", "scroll_soft", 1)
+    _grant("alice", "enhance_stone_a", 8)
+    _grant("alice", "monster_bone_s", 8)
+    _grant("alice", "scroll_keep_50", 1)
+    _grant("alice", "charm_luck_m", 2)
     print(render.render_enhance_quote(game.enhance_quote("alice", "weapon")))
-    # Forced success then failure with protect
     r1 = game.enhance_item("alice", "weapon", balance=999999, rng=random.Random(0))
     print(render.render_enhance_result(r1))
-    # Find soft scroll index
     c = game.get_character("alice")
     prot_idx = next((i for i, it in enumerate(c["bag"], 1)
-                     if it.get("subtype") == "enhance_protect"), None)
+                     if it.get("id") == "scroll_keep_50"), None)
+    luck_idx = [i for i, it in enumerate(c["bag"], 1) if it.get("subtype") == "enhance_luck"]
     r2 = game.enhance_item(
         "alice", "weapon", balance=999999,
         protect_bag_index_1based=prot_idx,
-        rng=random.Random(99),  # likely fail at higher rates later; force with seeded
+        luck_bag_indices_1based=luck_idx[:2],
+        rng=random.Random(99),
     )
     print(render.render_enhance_result(r2))
     print(render.render_character(game.character_summary("alice")))

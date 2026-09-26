@@ -252,19 +252,25 @@ def get_consumable(item_id: str) -> Optional[dict]:
 
 
 def instantiate_drop(drop_id: str, qty: int = 1) -> Optional[dict]:
-    """Build a bag-ready item from drop id OR equipment id."""
+    """Build a bag-ready item from drop id, equipment id, or consumable id."""
     template = get_drop(drop_id)
     if template is None:
-        # Boss tables may reference equipment ids directly
         template = get_equipment_by_id(drop_id)
+        if template is not None:
+            item = dict(template)
+            item.setdefault("type", "equipment")
+            item.setdefault("enhance_level", 0)
+            return item
+        template = get_consumable(drop_id)
         if template is None:
             return None
         item = dict(template)
-        item.setdefault("type", "equipment")
+        item["qty"] = max(1, int(qty))
         return item
     item = dict(template)
     if item.get("type") == "consumable":
-        item["type"] = "food"
+        # keep consumable type for protect/luck charms stored in drop tables
+        pass
     item["qty"] = max(1, int(qty))
     return item
 
