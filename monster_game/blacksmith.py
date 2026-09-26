@@ -47,17 +47,14 @@ def success_rate(target_level: int) -> float:
 
 
 def cost_for(item: dict) -> dict:
-    """What it takes to attempt +1 from current level."""
+    """Fixed resource cost per attempt — only depends on item tier, not +N."""
     cfg = get_config()
     tier = item_tier(item)
     cur = enhance_level(item)
     nxt = cur + 1
     stone_id = f"enhance_stone_{tier.lower()}"
     stones = int((cfg.get("stone_cost") or {}).get(tier, 1))
-    # more stones at higher +
-    stones = stones + max(0, cur // 3)
-    gold = int((cfg.get("gold_base") or {}).get(tier, 200))
-    gold += int((cfg.get("gold_per_level") or {}).get(tier, 100)) * nxt
+    gold = int((cfg.get("gold_cost") or cfg.get("gold_base") or {}).get(tier, 200))
     mats = list((cfg.get("mat_extra") or {}).get(tier) or [])
     return {
         "next_level": nxt,

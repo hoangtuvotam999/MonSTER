@@ -403,9 +403,12 @@ def render_character(summary: Optional[dict]) -> str:
 
     if s["weapon_name"]:
         icon = CATEGORY_ICONS.get(s.get("weapon_category"), "🗡️")
-        lvl = f" +{s['weapon_level']}" if s.get("weapon_level") else ""
-        enh = f" +{s['weapon_enhance']}" if s.get("weapon_enhance") else ""
-        lines.append(f"{icon} {s['weapon_name']}{enh}{lvl}")
+        bits = [s["weapon_name"]]
+        if s.get("weapon_enhance"):
+            bits.append(f"+{s['weapon_enhance']}")
+        if s.get("weapon_level"):
+            bits.append(f"Lv.{s['weapon_level']}")
+        lines.append(f"{icon} {' '.join(bits)}")
         dur = s["weapon_durability"]
         lines.append(f"   🔧 Độ bền [{hp_bar(dur, data_store.MAX_DURABILITY, 10)}] {dur}/{data_store.MAX_DURABILITY}")
         lines.append(f"   ❤️ HP vũ khí [{hp_bar(s['weapon_hp'], s['weapon_max_hp'], 10)}] "
@@ -926,7 +929,7 @@ def render_enhance_quote(quote: dict) -> str:
     for req in need:
         drop = data_store.get_drop(req["item_id"]) or data_store.get_consumable(req["item_id"])
         lines.append(f"   · {(drop or {}).get('name', req['item_id'])} ×{req['qty']}")
-    lines.append("   (Thất bại → về +1 trừ khi dùng bùa bảo hiểm)")
+    lines.append("   (Chi phí cố định theo phẩm cấp · thất bại → +1 trừ khi có bùa)")
     return "\n".join(lines)
 
 
