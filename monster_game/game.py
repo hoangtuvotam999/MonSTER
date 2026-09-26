@@ -147,6 +147,7 @@ def character_summary(player_id: str) -> Optional[dict]:
     if c is None:
         return None
     exp_needed = data_store.exp_needed_for(c["level"])
+    location = data_store.find_location(c["locationID"]) if c["locationID"] is not None else None
     return {
         "name": c["name"],
         "id": c["id"],
@@ -165,13 +166,18 @@ def character_summary(player_id: str) -> Optional[dict]:
         "karma": c["karma"],
         "karma_message": karma_message(c["karma"]),
         "weapon_name": c["weapon"]["name"] if c["weapon"] else None,
+        "weapon_category": c["weapon"].get("category") if c["weapon"] else None,
+        "weapon_level": c["weapon"].get("usage", 0) if c["weapon"] else None,
         "weapon_durability": c["weapon"]["durability"] if c["weapon"] else None,
+        "weapon_hp": c["weapon"]["HP"] if c["weapon"] else None,
         "weapon_max_hp": data_store.weapon_max_hp(c["weapon"]) if c["weapon"] else None,
         "repair_cost": repair_cost(c["weapon"]) if c["weapon"] else None,
         "bag_count": len(c["bag"]),
         "monster_count": len(c["monster"]),
+        "trophy_value": sum(m.get("price", 0) for m in c["monster"]),
         "bag_status_icon": bag_status_icon(len(c["monster"])),
         "location_id": c["locationID"],
+        "location_name": location["name"] if location else None,
     }
 
 
