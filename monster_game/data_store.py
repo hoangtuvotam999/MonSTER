@@ -21,6 +21,23 @@ NOT_FOUND = 404
 FORBIDDEN = 403
 OK = True
 
+MAX_DURABILITY = 100
+
+
+def exp_needed_for(level: int) -> int:
+    """EXP a character needs to go from `level` to `level + 1`.
+
+    Single source of truth: the original computed this in two places with
+    two different roundings (`500 * round(1.2 ** n)` for display vs.
+    `500 * 1.2 ** n` for the actual level-up check), so the status screen
+    could show a threshold the player had already passed."""
+    return round(500 * 1.2 ** (level - 1))
+
+
+def weapon_exp_needed_for(usage: int) -> int:
+    """EXP a weapon needs to go from usage-level `usage` to `usage + 1`."""
+    return round(500 * 1.2 ** usage)
+
 
 def _load(path: Path) -> Any:
     if not path.exists():
@@ -56,8 +73,11 @@ def get_items(item_id: Optional[int] = None):
     return items
 
 
-def _find_location(location_id) -> Optional[dict]:
+def find_location(location_id) -> Optional[dict]:
     return next((loc for loc in _load(MONSTERS_FILE) if str(loc["ID"]) == str(location_id)), None)
+
+
+_find_location = find_location
 
 
 def get_monsters(location_id) -> Optional[list[dict]]:
@@ -110,32 +130,58 @@ def create_character(data: dict) -> dict:
     return data
 
 
+def _owns_weapon(user: dict, item: dict) -> bool:
+    name = item.get("name")
+    if user.get("weapon") and user["weapon"].get("name") == name:
+        return True
+    return any(it.get("type") == "weapon" and it.get("name") == name for it in user["bag"])
+
+
 def buy_item(player_id: str, item: Optional[dict]):
-    """Port of setData.buyItem. NOTE: preserves the original's slightly odd
-    duplicate check, which only blocks buying a weapon whose *name* matches
-    the currently equipped weapon (not other items in the bag)."""
+    """Port of setData.buyItem.
+
+    FIXED vs. the original: the duplicate check only compared against the
+    *equipped* weapon, so a player could buy the same weapon over and over
+    as long as it sat unequipped in the bag. Weapons are now unique across
+    the equipped slot and the bag; consumables (food/upgrades) can always
+    be stacked."""
     if item is None:
         return NOT_FOUND
 
     def do(user):
-        if user.get("weapon") and item.get("name") == user["weapon"].get("name"):
+        if item.get("type") == "weapon" and _owns_weapon(user, item):
             return FORBIDDEN
-        user["bag"].append(item)
+        user["bag"].append(dict(item))
         return OK
 
     return _mutate_user(player_id, do)
 
 
-def set_item(player_id: str, data: dict):
-    """Port of setData.setItem — equip a weapon/buff, or consume food/upgrade."""
+def set_item(player_id: str, bag_index: int):
+    """Port of setData.setItem — equip the weapon, or consume the food /
+    upgrade material, sitting at 0-based `bag_index` in the player's bag.
+
+    FIXED vs. the original, which took the item *object* and then removed
+    the first bag entry with the same *name*: with two identical items in
+    the bag that could delete the wrong copy, and when equipping a new
+    weapon the previously equipped one simply vanished. Now the exact slot
+    is consumed, and the old weapon is returned to the bag on swap."""
 
     def do(user):
-        kind = data.get("type")
         bag = user["bag"]
-        idx = next((i for i, it in enumerate(bag) if it.get("name") == data.get("name")), None)
+        if not (0 <= bag_index < len(bag)):
+            return NOT_FOUND
+        data = bag[bag_index]
+        kind = data.get("type")
 
         if kind == "weapon":
+            old_weapon = user.get("weapon")
+            data.setdefault("maxHP", data["HP"])
             user["weapon"] = data
+            bag.pop(bag_index)
+            if old_weapon is not None:
+                bag.append(old_weapon)
+            return OK
         elif kind == "buff":
             user["buffs"] = data
         elif kind == "food":
@@ -145,21 +191,22 @@ def set_item(player_id: str, data: dict):
             user["def"] += data.get("boostDEF", 0)
             user["spd"] += data.get("boostSPD", 0)
             user["exp"] += data.get("boostEXP", 0)
-            user["karma"] += data.get("boostKarma", 0)
+            user["karma"] = max(0, user["karma"] + data.get("boostKarma", 0))
             user["points"] += data.get("boostPoints", 0)
         elif kind == "upgrade":
-            if user.get("weapon") is None:
+            w = user.get("weapon")
+            if w is None:
                 return FORBIDDEN
-            user["weapon"]["HP"] += data.get("boostHPweapon", 0)
-            user["weapon"]["ATK"] += data.get("boostATKweapon", 0)
-            user["weapon"]["DEF"] += data.get("boostDEFweapon", 0)
-            user["weapon"]["SPD"] += data.get("boostSPDweapon", 0)
-            user["weapon"]["usage"] += data.get("usage", 0)
+            w["maxHP"] = weapon_max_hp(w) + data.get("boostHPweapon", 0)
+            w["HP"] += data.get("boostHPweapon", 0)
+            w["ATK"] += data.get("boostATKweapon", 0)
+            w["DEF"] += data.get("boostDEFweapon", 0)
+            w["SPD"] += data.get("boostSPDweapon", 0)
+            w["usage"] = w.get("usage", 0) + data.get("usage", 0)
         else:
             return FORBIDDEN
 
-        if idx is not None:
-            bag.pop(idx)
+        bag.pop(bag_index)
         return OK
 
     return _mutate_user(player_id, do)
@@ -179,7 +226,7 @@ def increase_durability(player_id: str, amount: int):
     def do(user):
         if user.get("weapon") is None:
             return FORBIDDEN
-        user["weapon"]["durability"] = min(10000, user["weapon"]["durability"] + int(amount))
+        user["weapon"]["durability"] = min(MAX_DURABILITY, user["weapon"]["durability"] + int(amount))
         return user["weapon"]["durability"]
 
     return _mutate_user(player_id, do)
@@ -187,50 +234,48 @@ def increase_durability(player_id: str, amount: int):
 
 def decrease_points(player_id: str, points: int):
     def do(user):
-        if user["points"] == 0:
+        if user["points"] < points:
             return FORBIDDEN
-        user["points"] = max(0, user["points"] - int(points))
+        user["points"] -= int(points)
         return user["points"]
 
     return _mutate_user(player_id, do)
 
 
-def increase_hp(player_id: str, amount: int):
+def _increase_stat(stat: str):
+    def increase(player_id: str, amount: int):
+        def do(user):
+            user[stat] += int(amount)
+            return user[stat]
+
+        return _mutate_user(player_id, do)
+
+    increase.__name__ = f"increase_{stat}"
+    return increase
+
+
+# FIXED vs. the original: these refused to add to a stat that was exactly 0
+# (`if (user.hp == 0) return 403`), which made no sense for a stat *increase*.
+increase_hp = _increase_stat("hp")
+increase_def = _increase_stat("def")
+increase_atk = _increase_stat("atk")
+increase_spd = _increase_stat("spd")
+
+
+def spend_points(player_id: str, stat: str, points: int, per_point: int):
+    """Atomically convert `points` skill points into `points * per_point` of
+    `stat`. The original did this as two separate writes (increase stat,
+    then decrease points), so a failure in between could hand out free
+    stats. Returns the new stat value, or FORBIDDEN."""
+    if stat not in ("hp", "atk", "def", "spd") or points <= 0:
+        return FORBIDDEN
+
     def do(user):
-        if user["hp"] == 0:
+        if user["points"] < points:
             return FORBIDDEN
-        user["hp"] += int(amount)
-        return user["hp"]
-
-    return _mutate_user(player_id, do)
-
-
-def increase_def(player_id: str, amount: int):
-    def do(user):
-        if user["def"] == 0:
-            return FORBIDDEN
-        user["def"] += int(amount)
-        return user["def"]
-
-    return _mutate_user(player_id, do)
-
-
-def increase_atk(player_id: str, amount: int):
-    def do(user):
-        if user["atk"] == 0:
-            return FORBIDDEN
-        user["atk"] += int(amount)
-        return user["atk"]
-
-    return _mutate_user(player_id, do)
-
-
-def increase_spd(player_id: str, amount: int):
-    def do(user):
-        if user["spd"] == 0:
-            return FORBIDDEN
-        user["spd"] += int(amount)
-        return user["spd"]
+        user["points"] -= int(points)
+        user[stat] += int(points) * per_point
+        return user[stat]
 
     return _mutate_user(player_id, do)
 
@@ -262,27 +307,22 @@ def set_exp(player_id: str, exp: float):
        (`expWeaponNeed`) when computing how many usage-levels to grant.
        Fixed here by using `weapon_exp_needed` consistently, in its own
        loop, independent of the character's level curve.
+    3. It bailed out with 404 when the player had no weapon, so a hunter
+       whose weapon was destroyed by the very fight they just *won* got no
+       EXP at all. Character EXP is now always granted; weapon EXP only
+       when there is a weapon to receive it.
+    4. `if (exp <= 0) the_luc = 0` zeroed the player's stamina whenever
+       their total EXP happened to be 0 — dropped.
     """
 
     def do(user):
-        if user.get("weapon") is None:
-            return NOT_FOUND
         user["exp"] += exp
-        user["weapon"].setdefault("usage", 0)
-        user["weapon"]["exp"] = user["weapon"].get("exp", 0) + exp
-
         events = []
-
-        if user["exp"] <= 0:
-            user["the_luc"] = 0
 
         # Character leveling: loop so a big EXP reward can grant several
         # levels at once, each time recomputing the threshold at the new level.
-        while True:
-            exp_needed = 500 * (1.2 ** (user["level"] - 1))
-            if user["exp"] < exp_needed:
-                break
-            user["exp"] -= exp_needed
+        while user["exp"] >= exp_needed_for(user["level"]):
+            user["exp"] -= exp_needed_for(user["level"])
             user["level"] += 1
             user["atk"] += 2 * user["level"]
             user["def"] += 2 * user["level"]
@@ -291,19 +331,26 @@ def set_exp(player_id: str, exp: float):
             user["points"] += 500 * user["level"]
             events.append(("level_up", user["level"]))
 
+        weapon = user.get("weapon")
+        if weapon is None:
+            return events
+
+        weapon.setdefault("usage", 0)
+        weapon["exp"] = weapon.get("exp", 0) + exp
+
         # Weapon leveling: same loop pattern, using the weapon's own
         # (usage-dependent) EXP requirement instead of the character's.
-        while True:
-            weapon_exp_needed = 500 * (1.2 ** user["weapon"]["usage"])
-            if user["weapon"]["exp"] < weapon_exp_needed:
-                break
-            user["weapon"]["exp"] -= weapon_exp_needed
-            user["weapon"]["usage"] += 1
-            user["weapon"]["ATK"] += round(user["weapon"]["ATK"] * 0.01)
-            user["weapon"]["DEF"] += round(user["weapon"]["DEF"] * 0.01)
-            user["weapon"]["HP"] += round(user["weapon"]["HP"] * 0.01)
-            user["weapon"]["SPD"] += round(user["weapon"]["SPD"] * 0.01)
-            events.append(("weapon_level_up", user["weapon"]["usage"]))
+        while weapon["exp"] >= weapon_exp_needed_for(weapon["usage"]):
+            weapon["exp"] -= weapon_exp_needed_for(weapon["usage"])
+            weapon["usage"] += 1
+            weapon["ATK"] += round(weapon["ATK"] * 0.01)
+            weapon["DEF"] += round(weapon["DEF"] * 0.01)
+            weapon["SPD"] += round(weapon["SPD"] * 0.01)
+            # Grow the *max* HP (the current HP is the depleted health pool).
+            hp_gain = round(weapon_max_hp(weapon) * 0.01)
+            weapon["maxHP"] = weapon_max_hp(weapon) + hp_gain
+            weapon["HP"] += hp_gain
+            events.append(("weapon_level_up", weapon["usage"]))
 
         return events
 
@@ -318,37 +365,62 @@ def add_monster(player_id: str, monster: dict):
     return _mutate_user(player_id, do)
 
 
+def weapon_max_hp(weapon: dict) -> int:
+    """The HP the weapon is repaired back to. Older saves have no `maxHP`,
+    so fall back to the current HP (they'll pick the field up on the next
+    equip/upgrade/repair)."""
+    return weapon.get("maxHP", weapon["HP"])
+
+
 def decrease_health_weapon(player_id: str, remaining_hp_stat: float):
     """Port of setData.decreaseHealthWeapon — derives the weapon's new HP
-    bonus from the player's HP left over after a fight (this is how combat
-    damage "hits" the weapon instead of a separate HP pool).
+    bonus from the player's HP left over after a fight. HP does not
+    regenerate between hunts: the weapon's HP *is* the hunter's persistent
+    health pool, refilled by repairing (see repair_weapon) or upgrading.
 
-    FIXED vs. the original: the JS version computed
-    `weapon.HP = remaining_hp - user.hp`, which silently ignored the
-    weapon's `hpBonus` multiplier. Since the actual HP stat used in combat
-    is `(user.hp + weapon.HP) * hpBonus` (see combat.build_combat_stats),
-    reversing that correctly requires dividing out `hpBonus` first:
-    `weapon.HP = remaining_hp_stat / hpBonus - user.hp`. For any weapon
-    with hpBonus == 1 this is identical to the original; it only differs
-    (and now behaves correctly) for weapons that boost/reduce HP.
+    FIXED vs. the original:
+    - The JS version computed `weapon.HP = remaining_hp - user.hp`, which
+      silently ignored the weapon's `hpBonus` multiplier. Since the actual
+      HP stat used in combat is `(user.hp + weapon.HP) * hpBonus`
+      (see combat.build_combat_stats), reversing that correctly requires
+      dividing out `hpBonus` first. Identical for hpBonus == 1.
+    - Losing a fight (or dropping to 0 weapon HP) used to *delete* the
+      weapon — for a fresh character that meant a ~17% chance per hunt of
+      being left with nothing to fight with. Now the weapon is only
+      *broken* (HP and durability zeroed) and can be repaired.
+
+    Returns True if the weapon broke, False if it is still usable.
     """
 
     def do(user):
-        if user.get("weapon") is None:
+        w = user.get("weapon")
+        if w is None:
             return FORBIDDEN
         user["the_luc"] = max(0, user["the_luc"] - 50)
-        if remaining_hp_stat < 0:
-            # Player's HP stat went negative during the fight (a loss) —
-            # the weapon is destroyed outright, same as the original intent.
-            user["weapon"] = None
-            return OK
-        hp_bonus = user["weapon"].get("hpBonus") or 1
-        new_weapon_hp = remaining_hp_stat / hp_bonus - user["hp"]
-        if new_weapon_hp <= 0:
-            user["weapon"] = None
-        else:
-            user["weapon"]["HP"] = round(new_weapon_hp)
-        return OK
+        w.setdefault("maxHP", w["HP"])
+        if remaining_hp_stat <= 0:
+            w["HP"] = 0
+            w["durability"] = 0
+            return True
+        hp_bonus = w.get("hpBonus") or 1
+        w["HP"] = max(0, round(remaining_hp_stat / hp_bonus - user["hp"]))
+        return w["durability"] <= 0
+
+    return _mutate_user(player_id, do)
+
+
+def repair_weapon(player_id: str):
+    """Restore the equipped weapon to full durability and full (max) HP.
+    Returns the repaired weapon dict, or FORBIDDEN if none is equipped."""
+
+    def do(user):
+        w = user.get("weapon")
+        if w is None:
+            return FORBIDDEN
+        w["durability"] = MAX_DURABILITY
+        w["HP"] = weapon_max_hp(w)
+        w["maxHP"] = w["HP"]
+        return dict(w)
 
     return _mutate_user(player_id, do)
 
