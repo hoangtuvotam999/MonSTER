@@ -456,10 +456,13 @@ def encounter_and_fight(player_id: str) -> dict:
     if c["weapon"]["durability"] <= 0:
         return {"ok": False, "reason": "weapon_broken"}
     location_level = data_store.get_location_level(c["locationID"])
-    if c["level"] < location_level:
-        return {"ok": False, "reason": "level_too_low", "required_level": location_level}
+    overlevel = bool(location_level is not None and c["level"] < location_level)
+    # Vượt cấp được phép: map cao hơn level nhân vật → đánh được nhưng tốn thêm thể lực
     if c["the_luc"] < MIN_STAMINA_TO_FIGHT:
         return {"ok": False, "reason": "no_stamina"}
+    if overlevel and c["the_luc"] < MIN_STAMINA_TO_FIGHT + 30:
+        return {"ok": False, "reason": "no_stamina", "overlevel": True,
+                "required_level": location_level}
     # FIXED vs. the original `>`: the bag could hold MAX + 1 trophies.
     if len(c["monster"]) >= MAX_TROPHY_BAG_SIZE:
         return {"ok": False, "reason": "bag_full"}
@@ -542,6 +545,8 @@ def encounter_and_fight(player_id: str) -> dict:
         "ok": True,
         "won": won,
         "draw": draw,
+        "overlevel": overlevel,
+        "location_level": location_level,
         "player_name": c["name"],
         "weapon_name": c["weapon"]["name"],
         "weapon_category": c["weapon"].get("category"),
@@ -570,11 +575,19 @@ def encounter_and_fight(player_id: str) -> dict:
         ],
     }
 
+    if overlevel:
+        def _overlevel_tax(u):
+            u["the_luc"] = max(0, u.get("the_luc", 0) - 30)
+            return True
+        data_store._mutate_user(player_id, _overlevel_tax)
+
     if reward_win:
         trophy = dict(monster_template)
         trophy["level"] = level
         data_store.add_monster(player_id, trophy)
         exp_final = exp_reward if won else max(1, exp_reward // 2)
+        if overlevel:
+            exp_final = round(exp_final * 1.25)  # risk bonus
         level_events = data_store.set_exp(player_id, exp_final)
         outcome["exp_gained"] = exp_final
         outcome["events"] = level_events if isinstance(level_events, list) else []
@@ -582,7 +595,7 @@ def encounter_and_fight(player_id: str) -> dict:
 
     result_word = "hòa (đồng quy)" if draw else ("thắng" if won else "thua")
     hunt_lines = [
-        f"📍 {location.get('name', '')}",
+        f"📍 {location.get('name', '')}" + (" ⚡VƯỢT CẤP" if overlevel else ""),
         f"{'☠️' if draw else ('🏆' if won else '💀')} {monster_template['Name']} "
         f"Tier {tier} Lv.{level} — {result_word}",
     ]

@@ -278,7 +278,8 @@ def render_hunt(outcome: dict, max_rounds: int = 12, rng: Optional[random.Random
     lines = []
     loc = outcome.get("location_name") or ""
     if loc:
-        lines.append(f"{LOCATION_ICONS.get(loc, '🗺️')} {loc.upper()}")
+        badge = "  ⚡VƯỢT CẤP" if outcome.get("overlevel") else ""
+        lines.append(f"{LOCATION_ICONS.get(loc, '🗺️')} {loc.upper()}{badge}")
     lines.append(f"{TIER_ICONS.get(tier, '❔')} Xuất hiện: {monster.name} · Tier {tier} · "
                  f"Lv.{outcome['monster_level']} · {outcome['monster_threat']}")
     lines.append(f"⚔️ {player.name} ({outcome['weapon_name']}) đối đầu {monster.name}!")
