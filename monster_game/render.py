@@ -66,10 +66,15 @@ FAILURE_MESSAGES = {
     "invalid_location": "🗺️ Khu vực hiện tại không tồn tại. Hãy chọn lại địa điểm.",
     "no_weapon": "🗡️ Bạn chưa trang bị vũ khí. Mở túi và trang bị một món trước.",
     "weapon_broken": "🔧 Vũ khí của bạn đã hỏng! Hãy sửa nó trước khi đi săn.",
-    "level_too_low": "⛔ Khu vực này yêu cầu cấp {required_level}. Hãy săn ở nơi thấp hơn để lên cấp.",
+    "level_too_low": "⛔ Khu vực này yêu cầu cấp {required_level}. (Đã hỗ trợ vượt cấp — cần thêm thể lực.)",
     "no_stamina": "😮‍💨 Bạn đã kiệt sức (cần 50 thể lực). Ăn gì đó rồi quay lại nhé.",
     "bag_full": "🎒 Túi chiến lợi phẩm đã đầy. Hãy bán bớt quái trước khi săn tiếp.",
     "no_encounter": "🍃 Bạn lùng sục khắp nơi nhưng chẳng thấy bóng con quái nào... Thử lại lần nữa!",
+    "not_in_party": "👥 Bạn chưa ở trong tổ đội nào.",
+    "already_in_party": "👥 Bạn đang trong tổ đội khác.",
+    "full": "👥 Tổ đội đã đủ người.",
+    "not_leader": "👑 Chỉ đội trưởng mới làm được việc này.",
+    "no_ready_members": "👥 Không ai trong tổ đội sẵn sàng (vũ khí / thể lực).",
 }
 
 
@@ -1020,5 +1025,104 @@ def render_dungeon_result(result: dict) -> str:
         lines.append(fin.get("message") or "🏰 Hoàn thành!")
         for drop in fin.get("bonus_drops") or []:
             lines.append(f"🎁 Thưởng: {drop['name']} ×{drop.get('qty', 1)}")
+    if result.get("party_title"):
+        lines.append(f"👥 Tổ đội: {result['party_title']}")
     return "\n".join(lines)
+
+
+def render_party_list(channel_id: str, name_of=None) -> str:
+    from . import game as game_mod
+    name_of = name_of or (lambda pid: (game_mod.get_character(pid) or {}).get("name", pid))
+    parties = game_mod.list_parties(channel_id)
+    lines = ["👥 DANH SÁCH TỔ ĐỘI", ""]
+    if not parties:
+        lines.append("Chưa có tổ đội nào. Tạo mới để bắt đầu.")
+        return "\n".join(lines)
+    for p in parties:
+        members = ", ".join(name_of(m) for m in p["members"])
+        flag = " 🏰" if p.get("dungeon_run") else ""
+        lines.append(f"#{p['stt']} {p['title']}{flag} — {len(p['members'])}/{p.get('max_size', 4)}")
+        lines.append(f"   👑 {name_of(p['leader'])} · TV: {members}")
+    return "\n".join(lines)
+
+
+def render_party(party: Optional[dict], name_of=None) -> str:
+    if not party:
+        return "👥 Không có tổ đội."
+    from . import game as game_mod
+    name_of = name_of or (lambda pid: (game_mod.get_character(pid) or {}).get("name", pid))
+    lines = [f"👥 TỔ ĐỘI — {party.get('title', '?')} (#{party.get('stt', '?')})",
+             f"👑 Đội trưởng: {name_of(party['leader'])}",
+             f"Thành viên ({len(party['members'])}/{party.get('max_size', 4)}):"]
+    for mid in party["members"]:
+        c = game_mod.get_character(mid)
+        if c is None:
+            lines.append(f"  · {mid} (không có nhân vật)")
+            continue
+        w = c.get("weapon") or {}
+        enh = int(w.get("enhance_level") or 0)
+        wname = w.get("name", "—")
+        if enh:
+            wname = f"{wname} +{enh}"
+        crown = "👑 " if mid == party["leader"] else "   "
+        lines.append(f"  {crown}{c['name']} Lv.{c['level']} · {wname} · ⚡{c.get('the_luc', 0)}")
+    if party.get("location_index"):
+        locs = game_mod.list_locations()
+        idx = party["location_index"] - 1
+        if 0 <= idx < len(locs):
+            lines.append(f"📍 Điểm đến: {locs[idx]['name']}")
+    if party.get("dungeon_run"):
+        run = party["dungeon_run"]
+        lines.append(f"🏰 Đang dungeon: {run.get('dungeon_id', '?')} "
+                     f"(phòng {int(run.get('room_index', 0)) + 1})")
+    return "\n".join(lines)
+
+
+def render_party_hunt(result: dict) -> str:
+    if not result.get("ok"):
+        reason = result.get("reason", "lỗi")
+        return FAILURE_MESSAGES.get(reason, f"👥 {reason}").format(
+            required_level=result.get("required_level", "?")
+        )
+    lines = [
+        f"👥 SĂN TỔ ĐỘI — {result.get('party_title', '')}",
+        f"📍 {result.get('location_name', '')}"
+        + ("  ⚡VƯỢT CẤP" if result.get("overlevel") else ""),
+        f"👹 {result.get('monster_name')} · Tier {result.get('monster_tier')} · "
+        f"Lv.{result.get('monster_level')} · HP {fmt(result.get('monster_max_hp', 0))}",
+        "",
+    ]
+    for seg in result.get("segments") or []:
+        status = "✔" if seg.get("survived") else "✖"
+        lines.append(
+            f"{status} {seg['player_name']} ({seg.get('weapon_name')}) "
+            f"gây {fmt(seg.get('dealt', 0))} · nhận {fmt(seg.get('taken', 0))} · "
+            f"quái còn {fmt(seg.get('monster_hp_left', 0))} HP"
+        )
+    lines.append("")
+    if result.get("won"):
+        lines.append("🏆 Tổ đội hạ gục mục tiêu!")
+        for rw in result.get("rewards") or []:
+            lines.append(f"  · {rw['player_name']}: +{fmt(rw['exp'])} EXP")
+            for d in rw.get("drops") or []:
+                lines.append(f"    🎁 {d['name']} ×{d.get('qty', 1)}")
+    else:
+        lines.append(f"💀 Thất bại — quái còn {fmt(result.get('monster_hp_left', 0))} HP.")
+    return "\n".join(lines)
+
+
+def render_party_action(result: dict) -> str:
+    """Generic create/join/leave/kick/disband message."""
+    if not result.get("ok"):
+        reason = result.get("reason", "lỗi")
+        return FAILURE_MESSAGES.get(reason, f"👥 {reason}")
+    if result.get("disbanded"):
+        return "👥 Tổ đội đã giải tán."
+    if result.get("promoted"):
+        from . import game as game_mod
+        name = (game_mod.get_character(result["promoted"]) or {}).get("name", result["promoted"])
+        return f"👥 Đội trưởng mới: {name}\n" + render_party(result.get("party"))
+    if result.get("party"):
+        return render_party(result["party"])
+    return result.get("message") or "👥 OK"
 

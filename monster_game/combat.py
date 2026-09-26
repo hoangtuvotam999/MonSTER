@@ -488,6 +488,7 @@ def fight_monster(player_stats: CombatStats, monster_stats: CombatStats,
         "draw": winner == "draw",
         "log": result["log"],
         "playerPow": result["player"],
+        "monsterPow": result["monster"],
         "belt": result.get("a_belt"),
     }
 

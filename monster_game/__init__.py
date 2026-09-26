@@ -33,10 +33,10 @@ Data (author new content here):
 """
 from . import (
     adventure, blacksmith, combat, craft, data_store, dungeon,
-    equipment, game, render, shop,
+    equipment, game, party, render, shop,
 )
 
 __all__ = [
     "adventure", "blacksmith", "combat", "craft", "data_store", "dungeon",
-    "equipment", "game", "render", "shop",
+    "equipment", "game", "party", "render", "shop",
 ]

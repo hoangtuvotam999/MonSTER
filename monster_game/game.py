@@ -327,6 +327,65 @@ def abandon_dungeon(player_id: str) -> dict:
     return dg.abandon_dungeon(player_id)
 
 
+# --------------------------------------------------------------------------
+# Party / tổ đội
+# --------------------------------------------------------------------------
+
+def create_party(channel_id: str, player_id: str, title: str = ""):
+    from . import party as party_mod
+    return party_mod.create_party(channel_id, player_id, title)
+
+
+def join_party(channel_id: str, player_id: str, stt_1based: int):
+    from . import party as party_mod
+    return party_mod.join_party(channel_id, player_id, stt_1based)
+
+
+def leave_party(channel_id: str, player_id: str):
+    from . import party as party_mod
+    return party_mod.leave_party(channel_id, player_id)
+
+
+def kick_party_member(channel_id: str, leader_id: str, target_id: str):
+    from . import party as party_mod
+    return party_mod.kick_member(channel_id, leader_id, target_id)
+
+
+def disband_party(channel_id: str, leader_id: str):
+    from . import party as party_mod
+    return party_mod.disband_party(channel_id, leader_id)
+
+
+def list_parties(channel_id: str):
+    from . import party as party_mod
+    return party_mod.list_parties(channel_id)
+
+
+def set_party_location(channel_id: str, leader_id: str, location_index_1based: int):
+    from . import party as party_mod
+    return party_mod.set_party_location(channel_id, leader_id, location_index_1based)
+
+
+def party_hunt(channel_id: str, starter_id: str, rng=None):
+    from . import party as party_mod
+    return party_mod.party_hunt(channel_id, starter_id, rng=rng)
+
+
+def party_start_dungeon(channel_id: str, leader_id: str, dungeon_id: str):
+    from . import party as party_mod
+    return party_mod.party_start_dungeon(channel_id, leader_id, dungeon_id)
+
+
+def party_advance_dungeon(channel_id: str, actor_id: str, action_id: Optional[str] = None, rng=None):
+    from . import party as party_mod
+    return party_mod.party_advance_dungeon(channel_id, actor_id, action_id=action_id, rng=rng)
+
+
+def party_abandon_dungeon(channel_id: str, leader_id: str):
+    from . import party as party_mod
+    return party_mod.party_abandon_dungeon(channel_id, leader_id)
+
+
 POINT_MULTIPLIERS = {"hp": 5, "def": 2, "atk": 2, "spd": 1}
 
 
