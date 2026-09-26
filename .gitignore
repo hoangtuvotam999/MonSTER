@@ -1,0 +1,5 @@
+# Player save data (generated at runtime)
+monster_game/data/users.json
+
+__pycache__/
+*.pyc
