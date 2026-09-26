@@ -5,7 +5,7 @@ then run a PvP match between the two characters.
 
 Run with:  python -m monster_game.demo   (from the repository root)
 """
-from monster_game import data_store, game, shop
+from monster_game import data_store, game, render, shop
 
 
 def main():
@@ -41,7 +41,8 @@ def main():
     game.set_location("alice", 1)
     for _ in range(3):
         outcome = game.encounter_and_fight("alice")
-        print(outcome)
+        print(render.render_hunt(outcome))
+        print("-" * 50)
     print()
 
     print("== Alice repairs her weapon ==")
@@ -58,7 +59,7 @@ def main():
     game.join_room("thread1", "bob", 1)
     game.set_ready("thread1", "bob")
     match_result = game.start_match("thread1", "alice")
-    print(match_result)
+    print(render.render_pvp(match_result) if match_result else "Không thể bắt đầu trận PvP.")
 
 
 if __name__ == "__main__":

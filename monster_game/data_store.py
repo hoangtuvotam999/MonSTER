@@ -73,8 +73,11 @@ def get_items(item_id: Optional[int] = None):
     return items
 
 
-def _find_location(location_id) -> Optional[dict]:
+def find_location(location_id) -> Optional[dict]:
     return next((loc for loc in _load(MONSTERS_FILE) if str(loc["ID"]) == str(location_id)), None)
+
+
+_find_location = find_location
 
 
 def get_monsters(location_id) -> Optional[list[dict]]:

@@ -375,6 +375,10 @@ def encounter_and_fight(player_id: str) -> dict:
         "AP": monster_template["ArmorPiercing"],
         "Mana": 1,
     }
+    # `_run_battle` mutates the dicts it is given; keep pristine copies for
+    # the renderer's HP bars / "who strikes first" line.
+    player_start = dict(player_stats)
+    monster_start = dict(monster_stats)
     result = combat.fight_monster(player_stats, monster_stats)
 
     durability = data_store.decrease_durability(player_id)
@@ -390,14 +394,23 @@ def encounter_and_fight(player_id: str) -> dict:
         else:
             dmg_taken += entry["damage"]
 
+    location = data_store.find_location(c["locationID"]) or {}
     outcome = {
         "ok": True,
         "won": result["winner"],
+        "player_name": c["name"],
+        "weapon_name": c["weapon"]["name"],
+        "weapon_category": c["weapon"].get("category"),
+        "location_name": location.get("name", ""),
         "monster_name": monster_template["Name"],
         "monster_tier": tier,
         "monster_level": level,
         "monster_power": base_power,
         "monster_threat": threat_label(base_power),
+        "monster_price": monster_template.get("price", 0),
+        "player_stats": player_start,
+        "monster_stats": monster_start,
+        "log": result["log"],
         "turns": len(result["log"]),
         "player_damage_dealt": dmg_dealt,
         "player_damage_taken": dmg_taken,
@@ -414,6 +427,13 @@ def encounter_and_fight(player_id: str) -> dict:
         level_events = data_store.set_exp(player_id, exp_reward)
         outcome["exp_gained"] = exp_reward
         outcome["events"] = level_events if isinstance(level_events, list) else []
+
+    after = get_character(player_id)
+    outcome["player_level"] = after["level"]
+    outcome["player_exp"] = round(after["exp"])
+    outcome["player_exp_needed"] = data_store.exp_needed_for(after["level"])
+    outcome["player_the_luc"] = after["the_luc"]
+    outcome["repair_cost"] = repair_cost(after["weapon"]) if after["weapon"] else 0
     return outcome
 
 
@@ -539,6 +559,8 @@ def start_match(channel_id: str, player_id: str) -> Optional[dict]:
         return None
 
     room["status"] = 3
+    p1_start = combat.build_combat_stats(char1)
+    p2_start = combat.build_combat_stats(char2)
     result = combat.fight_pvp(char1, char2)
 
     dmg = {"player1": 0, "player2": 0}
@@ -548,9 +570,17 @@ def start_match(channel_id: str, player_id: str) -> Optional[dict]:
     winner_id = p1_id if result["winner"] == "player1" else p2_id
     outcome = {
         "winner_id": winner_id,
+        "winner_name": char1["name"] if winner_id == p1_id else char2["name"],
         "rounds": len(result["log"]),
+        "room_title": room["title"],
         "player1_id": p1_id, "player2_id": p2_id,
+        "player1_name": char1["name"], "player2_name": char2["name"],
+        "player1_weapon": char1["weapon"]["name"], "player2_weapon": char2["weapon"]["name"],
+        "player1_weapon_category": char1["weapon"].get("category"),
+        "player2_weapon_category": char2["weapon"].get("category"),
+        "player1_stats": p1_start, "player2_stats": p2_start,
         "player1_damage": dmg["player1"], "player2_damage": dmg["player2"],
+        "log": result["log"],
     }
     room["status"] = 2
     room["ready"] = False

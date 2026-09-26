@@ -14,8 +14,9 @@ Layout:
     combat.py      turn-based battle engine
     shop.py        weapon / food / upgrade catalogs and purchase flow
     data_store.py  JSON persistence (data/users.json, items.json, monsters.json)
+    render.py      turn fight outcomes into chat-ready text (any platform)
     demo.py        `python -m monster_game.demo`
 """
-from . import combat, data_store, game, shop
+from . import combat, data_store, game, render, shop
 
-__all__ = ["combat", "data_store", "game", "shop"]
+__all__ = ["combat", "data_store", "game", "render", "shop"]
