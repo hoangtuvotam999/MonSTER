@@ -2,49 +2,49 @@
   {
     "type": "consumable",
     "id": "charm_luck_s",
-    "name": "Bùa May Nhỏ",
+    "name": "Bùa may tân thủ",
     "subtype": "enhance_luck",
     "tier": "A",
     "price": 800,
     "belt": false,
     "luck_bonus": 0.06,
     "desc": "Ép may +6% khi cường hóa (tổng may tối đa +36%).",
-    "lore": "Lông Mernos buộc chỉ đỏ."
+    "lore": "Bùa giấy phát ở NPC cổng."
   },
   {
     "type": "consumable",
     "id": "charm_luck_m",
-    "name": "Bùa May Vừa",
+    "name": "Bùa may hội",
     "subtype": "enhance_luck",
     "tier": "B",
     "price": 2200,
     "belt": false,
     "luck_bonus": 0.12,
     "desc": "Ép may +12% khi cường hóa (tổng may tối đa +36%).",
-    "lore": "Ngọc nhỏ lấy từ mắt Kulu."
+    "lore": "Hội trưởng ký tên lên bùa."
   },
   {
     "type": "consumable",
     "id": "charm_luck_l",
-    "name": "Bùa May Lớn",
+    "name": "Bùa may raid",
     "subtype": "enhance_luck",
     "tier": "C",
     "price": 5000,
     "belt": false,
     "luck_bonus": 0.18,
-    "desc": "Ép may +18% khi cường hóa (tổng may tối đa +36%).",
-    "lore": "Vảy Kirin nghiền mịn — chỉ dùng lúc đập cao cấp."
+    "desc": "Ép may lớn khi cường hóa (tổng may tối đa +36%).",
+    "lore": "Nhặt sau khi boss chịu mở rương."
   },
   {
     "type": "consumable",
     "id": "charm_luck_max",
-    "name": "Bùa May Cực Hạn",
+    "name": "Bùa may chương cuối",
     "subtype": "enhance_luck",
     "tier": "D",
     "price": 12000,
     "belt": false,
     "luck_bonus": 0.36,
-    "desc": "Ép may +36% (đạt trần may mắn một lần).",
-    "lore": "Giọt lệ phượng đông đặc. Thợ rèn già chỉ đốt khi +10 trở lên."
+    "desc": "Ép may cao nhất một lần đập (tổng may tối đa +36%).",
+    "lore": "Chỉ bán cho người đã xem hết cutscene."
   }
 ]

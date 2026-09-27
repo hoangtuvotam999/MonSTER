@@ -1,15 +1,15 @@
 {
   "ID": 2,
-  "slug": "map3_coral_highlands",
-  "name": "Coral Highlands",
-  "description": "Cao nguyên san hô lơ lửng giữa trời, thợ săn kỳ cựu mới nên tới.",
+  "slug": "hoc_vien_kiem",
+  "name": "Học Viện Kiếm",
+  "description": "Sân trường biết phóng nguyên tố. Đừng trốn tiết.",
   "level": 12,
   "minLevel": 10,
   "maxLevel": 20,
   "event_chance": 0.18,
   "creature": [
     {
-      "Name": "Raphinos",
+      "Name": "Chim thư viện",
       "Tier": "I",
       "HP": 16000,
       "ATK": 1600,
@@ -23,26 +23,20 @@
       "price": 2000,
       "drops": [
         {
-          "item_id": "raphinos_membrane",
+          "item_id": "xuong_lang",
           "chance": 0.7,
           "min": 1,
           "max": 2
         },
         {
-          "item_id": "monster_bone_s",
+          "item_id": "la_thuoc",
           "chance": 0.45,
           "min": 1,
           "max": 2
         },
         {
-          "item_id": "herb",
-          "chance": 0.35,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "stamina_berry",
-          "chance": 0.1,
+          "item_id": "candy",
+          "chance": 0.12,
           "min": 1,
           "max": 1
         }
@@ -78,11 +72,11 @@
           "when": "hp_below_35"
         }
       ],
-      "lore": "Thú bay cao nguyên san hô. Đẹp và dễ chết nếu bạn cần nguyên liệu.",
-      "desc": "Thú bay cao nguyên san hô."
+      "lore": "Chim thư viện. Quái bậc I trên server này.",
+      "desc": "Chim thư viện."
     },
     {
-      "Name": "Shamos",
+      "Name": "Dơi ký túc",
       "Tier": "I",
       "HP": 20000,
       "ATK": 1400,
@@ -96,26 +90,20 @@
       "price": 1900,
       "drops": [
         {
-          "item_id": "shamos_fang",
+          "item_id": "xuong_lang",
           "chance": 0.7,
           "min": 1,
           "max": 2
         },
         {
-          "item_id": "monster_bone_s",
+          "item_id": "la_thuoc",
           "chance": 0.45,
           "min": 1,
           "max": 2
         },
         {
-          "item_id": "herb",
-          "chance": 0.35,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "stamina_berry",
-          "chance": 0.1,
+          "item_id": "candy",
+          "chance": 0.12,
           "min": 1,
           "max": 1
         }
@@ -150,11 +138,11 @@
           "flavor": "níu đớp một cái rồi thụt lại"
         }
       ],
-      "lore": "Thú hang đêm. Đôi mắt phát sáng khi bị đèn soi.",
-      "desc": "Thú hang đêm."
+      "lore": "Dơi ký túc. Quái bậc I trên server này.",
+      "desc": "Dơi ký túc."
     },
     {
-      "Name": "Tzitzi-Ya-Ku",
+      "Name": "Cóc flash",
       "Tier": "II",
       "HP": 30000,
       "ATK": 2200,
@@ -168,28 +156,22 @@
       "price": 4500,
       "drops": [
         {
-          "item_id": "tzitzi_photophore",
-          "chance": 0.7,
+          "item_id": "xuong_lang",
+          "chance": 0.5,
           "min": 1,
           "max": 2
         },
         {
-          "item_id": "monster_bone_s",
-          "chance": 0.45,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "herb",
-          "chance": 0.35,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "stamina_berry",
-          "chance": 0.1,
+          "item_id": "xuong_pho",
+          "chance": 0.4,
           "min": 1,
           "max": 1
+        },
+        {
+          "item_id": "la_thuoc",
+          "chance": 0.3,
+          "min": 1,
+          "max": 2
         }
       ],
       "actions": [
@@ -222,11 +204,11 @@
           "flavor": "níu đớp một cái rồi thụt lại"
         }
       ],
-      "lore": "Thợ flash. Làm mù mắt rồi mới đánh — dungeon humor kiểu tàn nhẫn.",
-      "desc": "Thợ flash."
+      "lore": "Cóc flash. Quái bậc II trên server này.",
+      "desc": "Cóc flash."
     },
     {
-      "Name": "Paolumu",
+      "Name": "Dơi bông học viện",
       "Tier": "III",
       "HP": 50000,
       "ATK": 2600,
@@ -240,26 +222,20 @@
       "price": 10000,
       "drops": [
         {
-          "item_id": "paolumu_pelt",
-          "chance": 0.7,
+          "item_id": "xuong_pho",
+          "chance": 0.6,
           "min": 1,
           "max": 2
         },
         {
-          "item_id": "monster_bone_m",
-          "chance": 0.45,
+          "item_id": "quang_sat",
+          "chance": 0.4,
           "min": 1,
-          "max": 2
+          "max": 1
         },
         {
-          "item_id": "iron_ore",
-          "chance": 0.35,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "field_ration",
-          "chance": 0.1,
+          "item_id": "la_thuoc",
+          "chance": 0.25,
           "min": 1,
           "max": 1
         }
@@ -295,11 +271,11 @@
           "when": "hp_below_35"
         }
       ],
-      "lore": "Bay phồng. Bụng đầy khí, đòn đuôi quật như bao cát.",
-      "desc": "Bay phồng."
+      "lore": "Dơi bông học viện. Quái bậc III trên server này.",
+      "desc": "Dơi bông học viện."
     },
     {
-      "Name": "Legiana",
+      "Name": "Rồng băng giảng đường",
       "Tier": "IV",
       "HP": 75000,
       "ATK": 3500,
@@ -313,35 +289,22 @@
       "price": 20000,
       "drops": [
         {
-          "item_id": "legiana_claw",
-          "chance": 0.7,
+          "item_id": "xuong_hoc",
+          "chance": 0.55,
           "min": 1,
           "max": 2
         },
         {
-          "item_id": "monster_bone_m",
-          "chance": 0.45,
+          "item_id": "quang_sat",
+          "chance": 0.4,
           "min": 1,
           "max": 2
         },
         {
-          "item_id": "iron_ore",
-          "chance": 0.35,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "field_ration",
-          "chance": 0.1,
+          "item_id": "la_thuoc",
+          "chance": 0.2,
           "min": 1,
           "max": 1
-        },
-        {
-          "item_id": "boots_wind",
-          "chance": 0.18,
-          "min": 1,
-          "max": 1,
-          "kind": "equipment"
         }
       ],
       "actions": [
@@ -375,11 +338,11 @@
           "when": "hp_below_35"
         }
       ],
-      "lore": "Chúa tể gió lạnh. Móng để lại sương giá trên khiên.",
-      "desc": "Chúa tể gió lạnh."
+      "lore": "Rồng băng giảng đường. Quái bậc IV trên server này.",
+      "desc": "Rồng băng giảng đường."
     },
     {
-      "Name": "Odogaron",
+      "Name": "Sói đỏ câu lạc bộ",
       "Tier": "V",
       "HP": 90000,
       "ATK": 4500,
@@ -393,35 +356,22 @@
       "price": 30000,
       "drops": [
         {
-          "item_id": "odogaron_sinew",
-          "chance": 0.7,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "monster_bone_l",
-          "chance": 0.45,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "carbolite",
-          "chance": 0.35,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "mega_potion_leaf",
-          "chance": 0.1,
+          "item_id": "tinh_tho",
+          "chance": 0.5,
           "min": 1,
           "max": 1
         },
         {
-          "item_id": "pants_shadow",
-          "chance": 0.18,
+          "item_id": "xuong_chu",
+          "chance": 0.35,
           "min": 1,
-          "max": 1,
-          "kind": "equipment"
+          "max": 1
+        },
+        {
+          "item_id": "xuong_hoc",
+          "chance": 0.4,
+          "min": 1,
+          "max": 2
         }
       ],
       "actions": [
@@ -463,11 +413,11 @@
           "flavor": "dậm chân làm nứt đất"
         }
       ],
-      "lore": "Sói máu hang động. Theo dấu máu — kể cả máu của chính nó.",
-      "desc": "Sói máu hang động."
+      "lore": "Sói đỏ câu lạc bộ. Quái bậc V trên server này.",
+      "desc": "Sói đỏ câu lạc bộ."
     },
     {
-      "Name": "Kirin",
+      "Name": "Ngựa sấm hiệu trưởng",
       "Tier": "X",
       "HP": 160000,
       "ATK": 7000,
@@ -481,35 +431,22 @@
       "price": 90000,
       "drops": [
         {
-          "item_id": "kirin_mane",
-          "chance": 0.7,
+          "item_id": "xuong_chu",
+          "chance": 0.55,
           "min": 1,
           "max": 2
         },
         {
-          "item_id": "monster_bone_l",
-          "chance": 0.45,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "carbolite",
+          "item_id": "tinh_the",
           "chance": 0.35,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "mega_potion_leaf",
-          "chance": 0.1,
           "min": 1,
           "max": 1
         },
         {
-          "item_id": "brac_mana",
-          "chance": 0.18,
+          "item_id": "mat_r8",
+          "chance": 0.25,
           "min": 1,
-          "max": 1,
-          "kind": "equipment"
+          "max": 1
         }
       ],
       "actions": [
@@ -560,11 +497,11 @@
           "when": "hp_below_20"
         }
       ],
-      "lore": "Elder sấm. Không lớn, nhưng mỗi bước là một lời nguyền điện.",
-      "desc": "Elder sấm."
+      "lore": "Ngựa sấm hiệu trưởng. Quái bậc X trên server này.",
+      "desc": "Ngựa sấm hiệu trưởng."
     },
     {
-      "Name": "Vaal Hazak",
+      "Name": "Hồn sương hiệu phó",
       "Tier": "XX",
       "HP": 350000,
       "ATK": 12000,
@@ -578,35 +515,22 @@
       "price": 300000,
       "drops": [
         {
-          "item_id": "vaal_effluvium",
+          "item_id": "xuong_chu",
           "chance": 0.7,
           "min": 1,
           "max": 2
         },
         {
-          "item_id": "elder_dragon_bone",
-          "chance": 0.35,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "nova_crystal",
-          "chance": 0.35,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "blessed_charm",
-          "chance": 0.1,
+          "item_id": "tinh_the",
+          "chance": 0.5,
           "min": 1,
           "max": 1
         },
         {
-          "item_id": "cloak_assassin",
-          "chance": 0.18,
+          "item_id": "mat_r10",
+          "chance": 0.25,
           "min": 1,
-          "max": 1,
-          "kind": "equipment"
+          "max": 1
         }
       ],
       "actions": [
@@ -657,8 +581,8 @@
           "when": "hp_below_20"
         }
       ],
-      "lore": "Elder khí độc. Nơi nó đi, sự sống thối rữa.",
-      "desc": "Elder khí độc."
+      "lore": "Hồn sương hiệu phó. Quái bậc XX trên server này.",
+      "desc": "Hồn sương hiệu phó."
     }
   ],
   "events": [
@@ -702,12 +626,12 @@
             },
             "drops": [
               {
-                "item_id": "ancient_coin",
+                "item_id": "xuong_lang",
                 "min": 1,
                 "max": 2
               },
               {
-                "item_id": "wyvern_gem_shard",
+                "item_id": "tinh_the",
                 "min": 1,
                 "max": 1
               }
@@ -721,7 +645,7 @@
             "log": "Bạn phát hiện nước bọt nhớt quanh nắp — chắc chắn là Mimic. Bạn lấy vài thứ rơi quanh đó rồi chuồn.",
             "drops": [
               {
-                "item_id": "monster_bone_s",
+                "item_id": "xuong_lang",
                 "min": 1,
                 "max": 2
               }
@@ -806,7 +730,7 @@
             "log": "Bạn đựng nước vào bình — coi như có thêm thảo dược lỏng.",
             "drops": [
               {
-                "item_id": "herb",
+                "item_id": "la_thuoc",
                 "min": 1,
                 "max": 2
               }
@@ -846,7 +770,7 @@
             },
             "drops": [
               {
-                "item_id": "honey",
+                "item_id": "la_thuoc",
                 "min": 1,
                 "max": 2
               }
@@ -869,7 +793,7 @@
             "log": "Hai bên nhanh chóng đổi chác. Bạn được thêm nguyên liệu.",
             "drops": [
               {
-                "item_id": "monster_bone_s",
+                "item_id": "xuong_lang",
                 "min": 1,
                 "max": 3
               }
@@ -912,12 +836,12 @@
             "log": "Dưới lớp lá mục bạn tìm thấy túi nguyên liệu.",
             "drops": [
               {
-                "item_id": "iron_ore",
+                "item_id": "quang_sat",
                 "min": 1,
                 "max": 2
               },
               {
-                "item_id": "monster_bone_m",
+                "item_id": "xuong_pho",
                 "min": 1,
                 "max": 1
               }

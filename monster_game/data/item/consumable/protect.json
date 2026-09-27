@@ -2,7 +2,7 @@
   {
     "type": "consumable",
     "id": "scroll_keep_25",
-    "name": "Bùa Bảo Hộ 25%",
+    "name": "Bùa giữ 25%",
     "subtype": "enhance_protect",
     "tier": "A",
     "price": 1200,
@@ -11,12 +11,12 @@
       "keep_pct": 0.25
     },
     "desc": "Thất bại giữ lại 25% cấp gốc (tối thiểu +1).",
-    "lore": "Bùa giấy rẻ tiền — cứu vớt phần nhỏ công sức."
+    "lore": "Bùa giấy rẻ, cứu một phần công đập."
   },
   {
     "type": "consumable",
     "id": "scroll_keep_50",
-    "name": "Bùa Bảo Hộ 50%",
+    "name": "Bùa giữ 50%",
     "subtype": "enhance_protect",
     "tier": "B",
     "price": 4000,
@@ -25,12 +25,12 @@
       "keep_pct": 0.5
     },
     "desc": "Thất bại giữ lại 50% cấp gốc (tối thiểu +1).",
-    "lore": "Mực bạc từ vảy Rathian. Thợ rèn tin dùng."
+    "lore": "Mực bạc của hiệu trưởng."
   },
   {
     "type": "consumable",
     "id": "scroll_keep_60",
-    "name": "Bùa Bảo Hộ 60%",
+    "name": "Bùa giữ 60%",
     "subtype": "enhance_protect",
     "tier": "C",
     "price": 9000,
@@ -39,6 +39,6 @@
       "keep_pct": 0.6
     },
     "desc": "Thất bại giữ lại 60% cấp gốc (tối thiểu +1).",
-    "lore": "Viết bằng máu Elder Dragon. Hiếm và đắt."
+    "lore": "Bùa admin để quên không xóa."
   }
 ]

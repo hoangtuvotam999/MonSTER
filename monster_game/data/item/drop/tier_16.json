@@ -2,11 +2,11 @@
   {
     "id": "mat_r16",
     "type": "material",
-    "name": "Nguyên liệu bậc XVI",
+    "name": "Lõi thần điện",
     "tier": "16",
     "price": 0,
-    "desc": "Nguyên liệu bậc XVI.",
-    "lore": "Nguyên liệu bậc XVI.",
+    "desc": "Lõi thần điện.",
+    "lore": "Lõi thần điện. Nguyên liệu của server này.",
     "rarity": "legendary"
   },
   {
@@ -15,8 +15,8 @@
     "name": "Đá cường hóa XVI",
     "tier": "16",
     "price": 0,
-    "desc": "Đá cường hóa bậc XVI.",
-    "lore": "Đá cường hóa bậc XVI.",
+    "desc": "Đá cường hóa XVI.",
+    "lore": "Đá cường hóa XVI. Dùng khi đập vũ khí.",
     "rarity": "legendary",
     "tags": [
       "enhance_stone"

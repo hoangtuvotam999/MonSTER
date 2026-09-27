@@ -99,7 +99,7 @@ async def trogiup(interaction: discord.Interaction):
 /proi — rời tổ đội
 /pdi số — đội trưởng chọn map
 /psan — săn chung (HP quái chung, EXP chia đều)
-/pdun mã — vào dungeon theo đội (forest_ruin, waste_tomb)
+/pdun mã — vào dungeon theo đội (cong_tan_thu, ham_pho_dem)
 /ptiep [hành_động] — đội trưởng đi tiếp phòng
 """)
 
@@ -258,7 +258,7 @@ async def psan(interaction: discord.Interaction):
 
 
 @bot.tree.command(name="pdun", description="Cả đội vào dungeon")
-@app_commands.describe(ma="forest_ruin hoặc waste_tomb")
+@app_commands.describe(ma="cong_tan_thu hoặc ham_pho_dem")
 async def pdun(interaction: discord.Interaction, ma: str):
     result = game.party_start_dungeon(_ch(interaction.channel_id), _pid(interaction.user), ma.strip())
     if not result.get("ok"):

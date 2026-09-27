@@ -2,12 +2,12 @@
   {
     "id": "mat_r6",
     "type": "material",
-    "name": "Nguyên liệu bậc VI",
+    "name": "Vảy rồng con",
     "tier": "6",
     "price": 3721,
-    "desc": "Nguyên liệu bậc VI.",
-    "lore": "Nguyên liệu bậc VI.",
-    "rarity": "epic"
+    "desc": "Vảy rồng con.",
+    "lore": "Vảy rồng con. Nguyên liệu của server này.",
+    "rarity": "rare"
   },
   {
     "type": "material",
@@ -15,8 +15,8 @@
     "name": "Đá cường hóa VI",
     "tier": "6",
     "price": 11907,
-    "desc": "Đá cường hóa bậc VI.",
-    "lore": "Đá cường hóa bậc VI.",
+    "desc": "Đá cường hóa VI.",
+    "lore": "Đá cường hóa VI. Dùng khi đập vũ khí.",
     "rarity": "epic",
     "tags": [
       "enhance_stone"

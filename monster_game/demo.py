@@ -75,7 +75,7 @@ def main():
 
     print("== Blacksmith ==")
     _grant("alice", "enhance_stone_a", 8)
-    _grant("alice", "monster_bone_s", 8)
+    _grant("alice", "xuong_lang", 8)
     _grant("alice", "scroll_keep_50", 1)
     _grant("alice", "charm_luck_m", 2)
     print(render.render_enhance_quote(game.enhance_quote("alice", "weapon")))
@@ -98,7 +98,7 @@ def main():
     print("== Dungeons ==")
     print(render.render_dungeon_list())
     _top_up("alice")
-    start = game.start_dungeon("alice", "forest_ruin")
+    start = game.start_dungeon("alice", "cong_tan_thu")
     print(start)
     # resolve rooms until complete / fail / abort (cap steps)
     for step in range(12):

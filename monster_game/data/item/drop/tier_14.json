@@ -2,12 +2,12 @@
   {
     "id": "mat_r14",
     "type": "material",
-    "name": "Nguyên liệu bậc XIV",
+    "name": "Mảnh vương miện",
     "tier": "14",
     "price": 0,
-    "desc": "Nguyên liệu bậc XIV.",
-    "lore": "Nguyên liệu bậc XIV.",
-    "rarity": "epic"
+    "desc": "Mảnh vương miện.",
+    "lore": "Mảnh vương miện. Nguyên liệu của server này.",
+    "rarity": "legendary"
   },
   {
     "type": "material",
@@ -15,8 +15,8 @@
     "name": "Đá cường hóa XIV",
     "tier": "14",
     "price": 0,
-    "desc": "Đá cường hóa bậc XIV.",
-    "lore": "Đá cường hóa bậc XIV.",
+    "desc": "Đá cường hóa XIV.",
+    "lore": "Đá cường hóa XIV. Dùng khi đập vũ khí.",
     "rarity": "epic",
     "tags": [
       "enhance_stone"

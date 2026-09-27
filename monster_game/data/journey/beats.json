@@ -1,156 +1,352 @@
 [
   {
     "id": "trail",
-    "modes": ["solo", "party"],
-    "maps": ["*"],
+    "modes": [
+      "solo",
+      "party"
+    ],
+    "maps": [
+      "*"
+    ],
     "weight": 8,
-    "title": "Lối mòn",
-    "intro": "Đường mòn hẹp, dấu chân thú còn mới.",
+    "title": "Lối mòn sự kiện",
+    "intro": "Đường mòn còn dấu giày tân thủ và một slime vừa lăn qua.",
     "outcomes": [
-      {"chance": 0.6, "log": "Đi một đoạn yên ắng. Gió mang mùi máu rất nhạt."},
-      {"chance": 0.4, "log": "Lạc vài phút rồi tìm lại lối. Mất sức.", "effects": {"the_luc": -15}}
+      {
+        "chance": 0.6,
+        "log": "Đi một đoạn yên. Có bảng hướng dẫn nhưng chữ đã mờ."
+      },
+      {
+        "chance": 0.4,
+        "log": "Lạc vài phút rồi thấy lại cổng. Mất sức.",
+        "effects": {
+          "the_luc": -15
+        }
+      }
     ]
   },
   {
     "id": "herb_patch",
-    "modes": ["solo", "party"],
-    "maps": ["*"],
+    "modes": [
+      "solo",
+      "party"
+    ],
+    "maps": [
+      "*"
+    ],
     "weight": 12,
-    "title": "Bụi thảo dược",
-    "intro": "Một khoảng sáng giữa cây, lá thuốc còn đọng sương.",
+    "title": "Bụi lá thuốc",
+    "intro": "Một bụi lá quest. NPC chắc đã đánh dấu sẵn.",
     "outcomes": [
       {
         "chance": 0.7,
-        "log": "Bạn hái được một bình thuốc còn nút kín.",
-        "drops": [{"item_id": "potion_s", "min": 1, "max": 1}]
+        "log": "Hái được một bình máu còn nút.",
+        "drops": [
+          {
+            "item_id": "potion_s",
+            "min": 1,
+            "max": 1
+          }
+        ]
       },
       {
         "chance": 0.3,
-        "log": "Lá đã úa. Chỉ còn vài cọng cỏ và một viên kẹo ai đó đánh rơi.",
-        "drops": [{"item_id": "candy", "min": 1, "max": 2}]
+        "log": "Lá đã úa. Chỉ còn kẹo sự kiện ai đó đánh rơi.",
+        "drops": [
+          {
+            "item_id": "candy",
+            "min": 1,
+            "max": 2
+          }
+        ]
       }
     ]
   },
   {
     "id": "abandoned_camp",
-    "modes": ["solo", "party"],
-    "maps": ["Ancient Forest", "*"],
+    "modes": [
+      "solo",
+      "party"
+    ],
+    "maps": [
+      "Cổng Tân Thủ",
+      "*"
+    ],
     "weight": 10,
-    "title": "Trại thợ săn bỏ hoang",
-    "intro": "Lều rách và bếp lửa nguội — ai đó đã rời đi vội vàng.",
+    "title": "Lều tân thủ bỏ quên",
+    "intro": "Lều vải và bếp nguội. Người trước đã log out giữa chừng.",
     "outcomes": [
-      {"chance": 0.45, "log": "Bẫy dây siết cổ chân! Bạn mất thời gian gỡ ra.", "effects": {"the_luc": -35}},
+      {
+        "chance": 0.45,
+        "log": "Dây bẫy siết cổ chân. Mất một lúc mới gỡ.",
+        "effects": {
+          "the_luc": -35
+        }
+      },
       {
         "chance": 0.35,
-        "log": "Dưới đống chăn có vàng vụn và một lọ máu.",
-        "effects": {"gold": 80},
-        "drops": [{"item_id": "potion_s", "min": 1, "max": 1}]
+        "log": "Dưới chăn có ít vàng và một bình máu.",
+        "effects": {
+          "gold": 80
+        },
+        "drops": [
+          {
+            "item_id": "potion_s",
+            "min": 1,
+            "max": 1
+          }
+        ]
       },
-      {"chance": 0.2, "log": "Trại trống. Bạn ngồi một chút cho đỡ mỏi.", "effects": {"the_luc": 25}}
+      {
+        "chance": 0.2,
+        "log": "Lều trống. Ngồi một chút cho đỡ mỏi.",
+        "effects": {
+          "the_luc": 25
+        }
+      }
     ]
   },
   {
     "id": "rest_stop",
-    "modes": ["solo", "party"],
-    "maps": ["*"],
+    "modes": [
+      "solo",
+      "party"
+    ],
+    "maps": [
+      "*"
+    ],
     "weight": 11,
-    "title": "Trạm nghỉ",
-    "intro": "Một mái che cũ, thùng nước mưa còn dùng được.",
+    "title": "Quán nghỉ",
+    "intro": "Mái che và thùng nước phép. Quán không có chủ.",
     "outcomes": [
-      {"chance": 0.65, "log": "Cả nhóm nghỉ ngắn. Thể lực hồi lại.", "effects": {"the_luc": 40}},
-      {"chance": 0.35, "log": "Nước mưa đắng nhưng đủ để lấy lại nhịp thở.", "effects": {"the_luc": 20}}
+      {
+        "chance": 0.65,
+        "log": "Nghỉ ngắn. Thể lực hồi lại.",
+        "effects": {
+          "the_luc": 40
+        }
+      },
+      {
+        "chance": 0.35,
+        "log": "Nước hơi đắng, vẫn đủ để lấy lại nhịp.",
+        "effects": {
+          "the_luc": 20
+        }
+      }
     ]
   },
   {
     "id": "cache",
-    "modes": ["solo", "party"],
-    "maps": ["*"],
+    "modes": [
+      "solo",
+      "party"
+    ],
+    "maps": [
+      "*"
+    ],
     "weight": 9,
-    "title": "Hốc đá",
-    "intro": "Khe đá nhét một túi vải mục.",
+    "title": "Hốc đồ",
+    "intro": "Khe đá nhét một túi vải, đúng kiểu rương phụ.",
     "outcomes": [
       {
         "chance": 0.5,
-        "log": "Trong túi có xương vụn và thảo mộc.",
+        "log": "Trong túi có xương làng và lá thuốc.",
         "drops": [
-          {"item_id": "monster_bone_s", "min": 1, "max": 2},
-          {"item_id": "herb", "min": 1, "max": 2}
+          {
+            "item_id": "xuong_lang",
+            "min": 1,
+            "max": 2
+          },
+          {
+            "item_id": "la_thuoc",
+            "min": 1,
+            "max": 2
+          }
         ]
       },
-      {"chance": 0.3, "log": "Túi rỗng, chỉ còn mùi thú.", "effects": {"the_luc": -10}},
-      {"chance": 0.2, "log": "Một đồng xu cũ kẹt trong khe.", "effects": {"gold": 60}}
+      {
+        "chance": 0.3,
+        "log": "Túi rỗng. Chỉ còn mùi slime.",
+        "effects": {
+          "the_luc": -10
+        }
+      },
+      {
+        "chance": 0.2,
+        "log": "Một đồng xu sự kiện kẹt trong khe.",
+        "effects": {
+          "gold": 60
+        }
+      }
     ]
   },
   {
     "id": "lone_fork",
-    "modes": ["solo"],
-    "maps": ["*"],
+    "modes": [
+      "solo"
+    ],
+    "maps": [
+      "*"
+    ],
     "weight": 8,
-    "title": "Ngã ba vắng",
-    "intro": "Không có ai để hỏi đường. Bạn tự chọn.",
+    "title": "Ngã ba không NPC",
+    "intro": "Không có dấu chấm than để hỏi đường.",
     "outcomes": [
-      {"chance": 0.5, "log": "Lối trái ngắn hơn dự tính. Bạn ra được khoảng trống."},
-      {"chance": 0.5, "log": "Lối phải vòng xa. Chân nặng hơn.", "effects": {"the_luc": -25}}
+      {
+        "chance": 0.5,
+        "log": "Lối trái ngắn. Ra được khoảng trống."
+      },
+      {
+        "chance": 0.5,
+        "log": "Lối phải vòng xa. Chân nặng hơn.",
+        "effects": {
+          "the_luc": -25
+        }
+      }
     ]
   },
   {
     "id": "share_meat",
-    "modes": ["party"],
-    "maps": ["*"],
+    "modes": [
+      "party"
+    ],
+    "maps": [
+      "*"
+    ],
     "weight": 10,
-    "title": "Chia phần thịt nướng",
-    "intro": "Một người trong đội nhóm lửa rất nhanh.",
+    "title": "Chia cơm gà",
+    "intro": "Một người trong đội nhóm lửa nhanh hơn cả skill nấu ăn.",
     "outcomes": [
-      {"chance": 0.7, "log": "Cả đội ăn vội. Ai cũng thấy nhẹ người.", "effects": {"the_luc": 30}},
-      {"chance": 0.3, "log": "Thịt chưa chín. Vẫn ăn, nhưng mất thời gian.", "effects": {"the_luc": -10}}
+      {
+        "chance": 0.7,
+        "log": "Cả đội ăn vội. Ai cũng nhẹ người.",
+        "effects": {
+          "the_luc": 30
+        }
+      },
+      {
+        "chance": 0.3,
+        "log": "Cơm chưa chín. Vẫn ăn, nhưng mất thời gian.",
+        "effects": {
+          "the_luc": -10
+        }
+      }
     ]
   },
   {
     "id": "watch_rotation",
-    "modes": ["party"],
-    "maps": ["*"],
+    "modes": [
+      "party"
+    ],
+    "maps": [
+      "*"
+    ],
     "weight": 7,
     "title": "Phiên gác",
-    "intro": "Có tiếng cành gãy ngoài vòng sáng.",
+    "intro": "Có tiếng bước ngoài vòng sáng. Có thể là slime, có thể là người AFK.",
     "outcomes": [
-      {"chance": 0.55, "log": "Người gác đuổi được bóng thú. Cả đội ngủ được một chút.", "effects": {"the_luc": 20}},
-      {"chance": 0.45, "log": "Cả đội bị đánh thức. Không ai bị thương, chỉ mất ngủ.", "effects": {"the_luc": -20}}
+      {
+        "chance": 0.55,
+        "log": "Người gác đuổi được bóng. Cả đội nghỉ được một chút.",
+        "effects": {
+          "the_luc": 20
+        }
+      },
+      {
+        "chance": 0.45,
+        "log": "Cả đội bị đánh thức. Không ai mất máu, chỉ mất ngủ.",
+        "effects": {
+          "the_luc": -20
+        }
+      }
     ]
   },
   {
-    "id": "waste_mirage",
-    "modes": ["solo", "party"],
-    "maps": ["Wildspire Waste"],
+    "id": "neon_alley",
+    "modes": [
+      "solo",
+      "party"
+    ],
+    "maps": [
+      "Phố Đêm Neon"
+    ],
     "weight": 9,
-    "title": "Ảo ảnh cát",
-    "intro": "Nóng rung lên thành một hồ nước không có thật.",
+    "title": "Hẻm đèn phép",
+    "intro": "Đèn neon vẽ một vũng nước không có thật giữa phố.",
     "outcomes": [
-      {"chance": 0.5, "log": "Bạn nhận ra kịp. Vòng qua được.", "effects": {"the_luc": -15}},
-      {"chance": 0.5, "log": "Đi nhầm một đoạn. Cát lọt vào giày.", "effects": {"the_luc": -30, "gold": 40}}
+      {
+        "chance": 0.5,
+        "log": "Nhận ra là ảo ảnh. Vòng qua được.",
+        "effects": {
+          "the_luc": -15
+        }
+      },
+      {
+        "chance": 0.5,
+        "log": "Đi nhầm một đoạn. Giày dính nước phép.",
+        "effects": {
+          "the_luc": -30,
+          "gold": 40
+        }
+      }
     ]
   },
   {
-    "id": "coral_nest",
-    "modes": ["solo", "party"],
-    "maps": ["Coral Highlands"],
+    "id": "academy_bell",
+    "modes": [
+      "solo",
+      "party"
+    ],
+    "maps": [
+      "Học Viện Kiếm"
+    ],
     "weight": 8,
-    "title": "Tổ san hô",
-    "intro": "Những mảnh vỏ óng ánh kêu leng keng dưới gió.",
+    "title": "Chuông vào tiết",
+    "intro": "Chuông trường vang. Sân còn vài mảnh phép sót lại.",
     "outcomes": [
-      {"chance": 0.6, "log": "Bạn nhặt vài mảnh lấp lánh.", "effects": {"gold": 100}},
-      {"chance": 0.4, "log": "Tổ rung. Bạn rút lui trước khi chủ nhà về.", "effects": {"the_luc": -20}}
+      {
+        "chance": 0.6,
+        "log": "Nhặt được vài mảnh lấp lánh trước khi tiết sau bắt đầu.",
+        "effects": {
+          "gold": 100
+        }
+      },
+      {
+        "chance": 0.4,
+        "log": "Chuông réo quá gần. Rút lui cho đỡ ù tai.",
+        "effects": {
+          "the_luc": -20
+        }
+      }
     ]
   },
   {
-    "id": "elder_heat",
-    "modes": ["solo", "party"],
-    "maps": ["Elder's Recess"],
+    "id": "cutscene_heat",
+    "modes": [
+      "solo",
+      "party"
+    ],
+    "maps": [
+      "Đỉnh Cutscene"
+    ],
     "weight": 8,
-    "title": "Hơi nóng khe đá",
-    "intro": "Mặt đá nứt, không khí rung như lò.",
+    "title": "Hơi nóng đoạn cao trào",
+    "intro": "Đá nứt. Nhạc nền đã chuyển sang hồi boss.",
     "outcomes": [
-      {"chance": 0.55, "log": "Nóng đến nghẹt thở. Phải nghỉ giữa đường.", "effects": {"the_luc": -40}},
-      {"chance": 0.45, "log": "Một mạch nước khoáng. Uống được vài ngụm.", "effects": {"the_luc": 15}}
+      {
+        "chance": 0.55,
+        "log": "Nóng đến nghẹt. Phải nghỉ giữa cao trào.",
+        "effects": {
+          "the_luc": -40
+        }
+      },
+      {
+        "chance": 0.45,
+        "log": "Một mạch nước khoáng. Uống được vài ngụm trước khi skip bị khóa.",
+        "effects": {
+          "the_luc": 15
+        }
+      }
     ]
   }
 ]

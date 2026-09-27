@@ -2,11 +2,11 @@
   {
     "id": "mat_r20",
     "type": "material",
-    "name": "Nguyên liệu bậc XX",
+    "name": "Mảnh chương cuối",
     "tier": "20",
     "price": 0,
-    "desc": "Nguyên liệu bậc XX.",
-    "lore": "Nguyên liệu bậc XX.",
+    "desc": "Mảnh chương cuối.",
+    "lore": "Mảnh chương cuối. Nguyên liệu của server này.",
     "rarity": "legendary"
   },
   {
@@ -15,8 +15,8 @@
     "name": "Đá cường hóa XX",
     "tier": "20",
     "price": 0,
-    "desc": "Đá cường hóa bậc XX.",
-    "lore": "Đá cường hóa bậc XX.",
+    "desc": "Đá cường hóa XX.",
+    "lore": "Đá cường hóa XX. Dùng khi đập vũ khí.",
     "rarity": "legendary",
     "tags": [
       "enhance_stone"

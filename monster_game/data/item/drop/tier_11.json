@@ -2,11 +2,11 @@
   {
     "id": "mat_r11",
     "type": "material",
-    "name": "Nguyên liệu bậc XI",
+    "name": "Mảnh truyền thuyết",
     "tier": "11",
     "price": 0,
-    "desc": "Nguyên liệu bậc XI.",
-    "lore": "Nguyên liệu bậc XI.",
+    "desc": "Mảnh truyền thuyết.",
+    "lore": "Mảnh truyền thuyết. Nguyên liệu của server này.",
     "rarity": "epic"
   },
   {
@@ -15,8 +15,8 @@
     "name": "Đá cường hóa XI",
     "tier": "11",
     "price": 0,
-    "desc": "Đá cường hóa bậc XI.",
-    "lore": "Đá cường hóa bậc XI.",
+    "desc": "Đá cường hóa XI.",
+    "lore": "Đá cường hóa XI. Dùng khi đập vũ khí.",
     "rarity": "epic",
     "tags": [
       "enhance_stone"

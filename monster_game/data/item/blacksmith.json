@@ -57,37 +57,37 @@
   "mat_extra": {
     "A": [
       {
-        "item_id": "monster_bone_s",
+        "item_id": "xuong_lang",
         "qty": 1
       }
     ],
     "B": [
       {
-        "item_id": "monster_bone_m",
+        "item_id": "xuong_pho",
         "qty": 1
       },
       {
-        "item_id": "iron_ore",
+        "item_id": "quang_sat",
         "qty": 1
       }
     ],
     "C": [
       {
-        "item_id": "monster_bone_l",
+        "item_id": "xuong_hoc",
         "qty": 1
       },
       {
-        "item_id": "carbolite",
+        "item_id": "tinh_tho",
         "qty": 1
       }
     ],
     "D": [
       {
-        "item_id": "elder_dragon_bone",
+        "item_id": "xuong_chu",
         "qty": 1
       },
       {
-        "item_id": "nova_crystal",
+        "item_id": "tinh_the",
         "qty": 1
       }
     ]

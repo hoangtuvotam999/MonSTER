@@ -1,13 +1,13 @@
 {
-  "dragon_scale": {
-    "id": "dragon_scale",
-    "name": "Bộ Vảy Rồng",
+  "tan_thu": {
+    "id": "tan_thu",
+    "name": "Bộ tân thủ",
     "pieces": 3,
     "bonus": {
-      "hp": 300,
-      "def": 100,
-      "atk": 50,
-      "desc": "3 món: da cứng như thép rồng."
+      "hp": 120,
+      "def": 30,
+      "atk": 10,
+      "desc": "Đủ mũ, áo và giày bậc I: tân thủ đỡ được một nhát slime."
     }
   }
 }

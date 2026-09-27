@@ -1,7 +1,7 @@
 {
-  "id": "waste_tomb",
-  "name": "Lăng Mộ Cát",
-  "description": "Lăng nửa chìm nửa nổi giữa Wildspire.",
+  "id": "ham_pho_dem",
+  "name": "Hầm Phố Đêm",
+  "description": "Tầng hầm dưới chợ đêm. Đèn phép không đủ sáng.",
   "min_level": 5,
   "map_ref": 1,
   "stamina_cost": 120,
@@ -155,7 +155,7 @@
       "id": "boss",
       "type": "boss",
       "title": "Sảnh Sừng",
-      "monster_name": "Barroth",
+      "monster_name": "Bò bùn thị vệ",
       "flavor": "Bùn và sừng chắn lối ra.",
       "bonus_drops": [
         {

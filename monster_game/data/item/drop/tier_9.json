@@ -2,11 +2,11 @@
   {
     "id": "mat_r9",
     "type": "material",
-    "name": "Nguyên liệu bậc IX",
+    "name": "Bụi raid",
     "tier": "9",
     "price": 0,
-    "desc": "Nguyên liệu bậc IX.",
-    "lore": "Nguyên liệu bậc IX.",
+    "desc": "Bụi raid.",
+    "lore": "Bụi raid. Nguyên liệu của server này.",
     "rarity": "epic"
   },
   {
@@ -15,8 +15,8 @@
     "name": "Đá cường hóa IX",
     "tier": "9",
     "price": 0,
-    "desc": "Đá cường hóa bậc IX.",
-    "lore": "Đá cường hóa bậc IX.",
+    "desc": "Đá cường hóa IX.",
+    "lore": "Đá cường hóa IX. Dùng khi đập vũ khí.",
     "rarity": "epic",
     "tags": [
       "enhance_stone"

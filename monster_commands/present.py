@@ -67,19 +67,19 @@ def _items(outcome: dict) -> str:
 
 
 _BOSS_LINES = {
-    "Tobi-Kadachi": ["Tobi-Kadachi trườn xuống thân cây, lông dựng lên vì điện.", "Nó không phải lũ nhỏ các người vẫn săn."],
-    "Rathian": ["Rathian xòe cánh. Đuôi độc quét một vòng trước khi lao xuống.", "Mini-boss này không bỏ cuộc giữa chừng."],
-    "Odogaron": ["Odogaron chạy bằng bốn chân, miệng đầy máu khô.", "Nó đã đánh hơi thấy các người từ rất xa."],
-    "Legiana": ["Legiana gấp cánh, gió lạnh đọng thành sương.", "Bầu trời trên đầu không còn là chỗ trú."],
-    "Azure Rathalos": ["Azure Rathalos gầm một tiếng. Lửa xanh liếm mép hàm.", "Đây là bản hung hơn của vua trời."],
-    "Anjanath": ["Anjanath ngẩng đầu. Lửa chảy ra từ hàm.", "Đất rung. Đây là boss của khu rừng."],
-    "Diablos": ["Diablos phá cát chui lên, sừng nhằm thẳng vào các người.", "Nó không nhìn. Nó húc."],
-    "Kirin": ["Kirin đứng trong sấm. Mỗi bước một tia đánh xuống.", "Boss này không cho các người lại gần."],
-    "Teostra": ["Teostra thở ra. Không khí quanh nó bắt lửa.", "Sư tử già đã thức."],
-    "Rathalos": ["Rathalos đáp xuống, cánh che cả vạt rừng.", "Vua trời. Nó nhìn các người như con mồi."],
-    "Black Diablos": ["Black Diablos gầm trong cát bụi. Sừng đen nhằm vào ngực.", "Con cái này còn hung hơn cả con đực."],
-    "Vaal Hazak": ["Vaal Hazak bước ra từ màn sương. Hơi thở làm phổi nặng.", "Elder. Đừng hít sâu."],
-    "Nergigante": ["Nergigante xòe gai. Nó đến để ăn những con còn lại.", "Elder này không nói. Nó bổ xuống."],
+    "Sóc sét tốc độ": ["Sóc sét tốc độ phóng xuống từ cột đèn.", "Nó không phải slime tutorial."],
+    "Phượng độc part-time": ["Phượng độc part-time xòe cánh giữa phố.", "Ca đêm này không tan sớm."],
+    "Sói đỏ câu lạc bộ": ["Sói đỏ câu lạc bộ chạy bốn chân, miệng còn vương máu.", "Nó đánh hơi thấy các người từ sân trường."],
+    "Rồng băng giảng đường": ["Rồng băng giảng đường gấp cánh. Sương đọng trên bảng."],
+    "Rồng xanh cutscene": ["Rồng xanh cutscene gầm. Lửa xanh liếm mép hàm.", "Bản này không cho skip."],
+    "Khủng long lửa tập sự": ["Khủng long lửa tập sự ngẩng đầu. Lửa chảy từ hàm.", "Boss của cổng làng. Nhạc đã đổi."],
+    "Quỷ sừng cát": ["Quỷ sừng cát phá nền phố chui lên.", "Nó không nhìn. Nó húc."],
+    "Ngựa sấm hiệu trưởng": ["Ngựa sấm hiệu trưởng đứng giữa sân. Mỗi bước một tia.", "Hiệu trưởng không cho lại gần."],
+    "Sư tử lửa già": ["Sư tử lửa già thở ra. Không khí quanh nó bắt lửa.", "Boss già đã thức."],
+    "Rồng trời unfollow": ["Rồng trời unfollow đáp xuống, cánh che cả cổng làng.", "Nó nhìn các người như người chơi mới."],
+    "Quỷ sừng đen": ["Quỷ sừng đen gầm trong khói neon. Sừng nhằm vào ngực.", "Ca này còn hung hơn ca trước."],
+    "Hồn sương hiệu phó": ["Hồn sương hiệu phó bước ra từ sương thư viện.", "Đừng hít sâu."],
+    "Rồng gai cuối tập": ["Rồng gai cuối tập xòe gai.", "Nó không nói. Nó bổ xuống."],
 }
 
 

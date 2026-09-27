@@ -2,7 +2,7 @@
   {
     "type": "food",
     "id": "platter_mini",
-    "name": "A Platter Mini (+5 mọi chỉ số)",
+    "name": "Mì ly tân thủ (+5 mọi chỉ số)",
     "price": 5000,
     "heal": 100,
     "boostHP": 5,
@@ -17,7 +17,7 @@
   {
     "type": "food",
     "id": "platter_medium",
-    "name": "B Platter Medium (+10 mọi chỉ số)",
+    "name": "Cơm gà hội (+10 mọi chỉ số)",
     "price": 12500,
     "heal": 250,
     "boostHP": 10,
@@ -32,7 +32,7 @@
   {
     "type": "food",
     "id": "platter_xl",
-    "name": "C Platter XL (+15 mọi chỉ số)",
+    "name": "Lẩu party (+15 mọi chỉ số)",
     "price": 25000,
     "heal": 500,
     "boostHP": 15,
@@ -47,7 +47,7 @@
   {
     "type": "food",
     "id": "tocotoco",
-    "name": "Trà Sữa TocoToco Full Topping (+20 mọi chỉ số)",
+    "name": "Trà sữa full topping (+20 mọi chỉ số)",
     "price": 50000,
     "heal": 1000,
     "boostHP": 20,
@@ -62,7 +62,7 @@
   {
     "type": "food",
     "id": "upgrade_pill",
-    "name": "Upgrade Pill+ (đột phá mọi chỉ số)",
+    "name": "Viên đột phá (cộng mạnh mọi chỉ số)",
     "price": 2000000,
     "heal": 0,
     "boostHP": 2000,
@@ -77,7 +77,7 @@
   {
     "type": "food",
     "id": "upgrade_pill_10",
-    "name": "10x Upgrade Pill+ (đột phá mọi chỉ số)",
+    "name": "Hộp mười viên đột phá",
     "price": 20000000,
     "heal": 0,
     "boostHP": 20000,
@@ -92,7 +92,7 @@
   {
     "type": "food",
     "id": "holy_water",
-    "name": "Nước Thánh (-10 Karma)",
+    "name": "Nước thánh rửa karma (-10)",
     "price": 5000,
     "heal": 0,
     "boostHP": 0,
@@ -107,7 +107,7 @@
   {
     "type": "food",
     "id": "holy_water_max",
-    "name": "Nước Thánh Tối Thượng (-100 Karma)",
+    "name": "Nước thánh tối thượng (-100 karma)",
     "price": 500000,
     "heal": 0,
     "boostHP": 0,
@@ -122,7 +122,7 @@
   {
     "type": "food",
     "id": "karma_boost",
-    "name": "Cách để tăng độ khó cho game",
+    "name": "Vé tăng độ khó (+100 karma)",
     "price": 100000,
     "heal": 0,
     "boostHP": 0,

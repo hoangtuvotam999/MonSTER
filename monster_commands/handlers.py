@@ -377,7 +377,7 @@ def cmd_vaodun(ctx: Ctx) -> str:
     if err:
         return err
     if not ctx.args:
-        raise UsageError("enter <forest_ruin|waste_tomb|elder_vault>")
+        raise UsageError("enter <cong_tan_thu|ham_pho_dem|kho_cutscene>")
     result = game.start_dungeon(ctx.player_id, ctx.args[0])
     if not result.get("ok"):
         return render.render_dungeon_result(result)
@@ -446,7 +446,7 @@ def cmd_pdun(ctx: Ctx) -> str:
     if err:
         return err
     if not ctx.args:
-        raise UsageError("penter <forest_ruin|waste_tomb|elder_vault>")
+        raise UsageError("penter <cong_tan_thu|ham_pho_dem|kho_cutscene>")
     result = game.party_start_dungeon(ctx.channel_id, ctx.player_id, ctx.args[0])
     if not result.get("ok"):
         return render.render_dungeon_result(result)

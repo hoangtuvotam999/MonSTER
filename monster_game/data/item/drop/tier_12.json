@@ -2,11 +2,11 @@
   {
     "id": "mat_r12",
     "type": "material",
-    "name": "Nguyên liệu bậc XII",
+    "name": "Lõi mây",
     "tier": "12",
     "price": 0,
-    "desc": "Nguyên liệu bậc XII.",
-    "lore": "Nguyên liệu bậc XII.",
+    "desc": "Lõi mây.",
+    "lore": "Lõi mây. Nguyên liệu của server này.",
     "rarity": "epic"
   },
   {
@@ -15,8 +15,8 @@
     "name": "Đá cường hóa XII",
     "tier": "12",
     "price": 0,
-    "desc": "Đá cường hóa bậc XII.",
-    "lore": "Đá cường hóa bậc XII.",
+    "desc": "Đá cường hóa XII.",
+    "lore": "Đá cường hóa XII. Dùng khi đập vũ khí.",
     "rarity": "epic",
     "tags": [
       "enhance_stone"

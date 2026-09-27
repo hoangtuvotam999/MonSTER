@@ -78,7 +78,7 @@ def _formula_amounts(rank: int, cur: int, nxt: int) -> tuple[int, int, list[dict
     growth = 1.35 ** steps
     gold = round(4000 * growth) + round(1500 * growth) * nxt
     stones = (4 + steps // 2) + 2 * cur
-    mats = [{"item_id": "elder_dragon_bone", "qty": max(1, 1 + cur)}]
+    mats = [{"item_id": "xuong_chu", "qty": max(1, 1 + cur)}]
     pct = 0.07 + 0.005 * steps
     return gold, max(1, stones), mats, pct
 

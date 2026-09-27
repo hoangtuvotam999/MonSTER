@@ -2,11 +2,11 @@
   {
     "id": "mat_r8",
     "type": "material",
-    "name": "Nguyên liệu bậc VIII",
+    "name": "Mảnh cấm kèo",
     "tier": "8",
     "price": 0,
-    "desc": "Nguyên liệu bậc VIII.",
-    "lore": "Nguyên liệu bậc VIII.",
+    "desc": "Mảnh cấm kèo.",
+    "lore": "Mảnh cấm kèo. Nguyên liệu của server này.",
     "rarity": "epic"
   },
   {
@@ -15,8 +15,8 @@
     "name": "Đá cường hóa VIII",
     "tier": "8",
     "price": 0,
-    "desc": "Đá cường hóa bậc VIII.",
-    "lore": "Đá cường hóa bậc VIII.",
+    "desc": "Đá cường hóa VIII.",
+    "lore": "Đá cường hóa VIII. Dùng khi đập vũ khí.",
     "rarity": "epic",
     "tags": [
       "enhance_stone"

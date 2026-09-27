@@ -290,7 +290,7 @@ def _stock_smith(uid: str, wallet: int, log: list) -> int:
     c = game.get_character(uid)
     tier = str((c.get("weapon") or {}).get("tier") or "A").lower()
     stone = f"enhance_stone_{tier}"
-    bone = {"a": "monster_bone_s", "b": "monster_bone_m", "c": "monster_bone_l", "d": "elder_dragon_bone"}.get(tier, "monster_bone_s")
+    bone = {"a": "xuong_lang", "b": "xuong_pho", "c": "xuong_hoc", "d": "xuong_chu"}.get(tier, "xuong_lang")
     if data_store.count_bag_item(c, stone) < 4:
         _grant(uid, stone, 4)
         _grant(uid, bone, 4)
@@ -303,20 +303,20 @@ def _try_dungeon(uid: str, wallet: int, log: list, rng: random.Random) -> int:
     c = game.get_character(uid)
     if not c or c.get("dungeon_run"):
         return wallet
-    dungeon_id = "forest_ruin" if c["level"] < 5 else "waste_tomb"
-    if c["level"] < 5 and dungeon_id == "waste_tomb":
-        dungeon_id = "forest_ruin"
+    dungeon_id = "cong_tan_thu" if c["level"] < 5 else "ham_pho_dem"
+    if c["level"] < 5 and dungeon_id == "ham_pho_dem":
+        dungeon_id = "cong_tan_thu"
     if c["level"] < 5:
-        dungeon_id = "forest_ruin"
+        dungeon_id = "cong_tan_thu"
     elif c["level"] >= 5:
-        dungeon_id = "waste_tomb"
+        dungeon_id = "ham_pho_dem"
     start = game.start_dungeon(uid, dungeon_id)
     if not start.get("ok"):
         if c["level"] >= 5:
-            start = game.start_dungeon(uid, "forest_ruin")
+            start = game.start_dungeon(uid, "cong_tan_thu")
         if not start.get("ok"):
             return wallet
-        dungeon_id = "forest_ruin"
+        dungeon_id = "cong_tan_thu"
     log.append(f"🏰 Vào {start.get('dungeon')}")
     print(f"\n🏰 Dungeon: {start.get('dungeon')}")
     for step in range(16):
@@ -389,7 +389,7 @@ def main():
             if map_index != 1:
                 map_index = 1
                 game.set_location(uid, 1)
-                log.append("🗺️ Quay lại Ancient Forest (farm / xả karma)")
+                log.append("🗺️ Quay lại Cổng Tân Thủ (farm / xả karma)")
             elif c["locationID"] is None:
                 game.set_location(uid, 1)
         elif c["locationID"] is None:
@@ -479,7 +479,7 @@ def main():
         c = game.get_character(uid)
         tier = str((c.get("weapon") or {}).get("tier") or "A").lower()
         _grant(uid, f"enhance_stone_{tier}", 6)
-        bone = {"a": "monster_bone_s", "b": "monster_bone_m", "c": "monster_bone_l"}.get(tier, "monster_bone_s")
+        bone = {"a": "xuong_lang", "b": "xuong_pho", "c": "xuong_hoc"}.get(tier, "xuong_lang")
         _grant(uid, bone, 6)
         if tier == "b":
             _grant(uid, "iron_ore", 6)

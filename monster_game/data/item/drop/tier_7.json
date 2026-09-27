@@ -2,12 +2,12 @@
   {
     "id": "mat_r7",
     "type": "material",
-    "name": "Nguyên liệu bậc VII",
+    "name": "Pha lê hội",
     "tier": "7",
     "price": 4540,
-    "desc": "Nguyên liệu bậc VII.",
-    "lore": "Nguyên liệu bậc VII.",
-    "rarity": "epic"
+    "desc": "Pha lê hội.",
+    "lore": "Pha lê hội. Nguyên liệu của server này.",
+    "rarity": "rare"
   },
   {
     "type": "material",
@@ -15,8 +15,8 @@
     "name": "Đá cường hóa VII",
     "tier": "7",
     "price": 14527,
-    "desc": "Đá cường hóa bậc VII.",
-    "lore": "Đá cường hóa bậc VII.",
+    "desc": "Đá cường hóa VII.",
+    "lore": "Đá cường hóa VII. Dùng khi đập vũ khí.",
     "rarity": "epic",
     "tags": [
       "enhance_stone"

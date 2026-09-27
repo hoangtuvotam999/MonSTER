@@ -1,205 +1,36 @@
 [
   {
-    "id": "monster_bone_m",
+    "id": "xuong_pho",
     "type": "material",
-    "name": "Xương Quái Vừa",
+    "name": "Xương phố đêm",
     "tier": "B",
-    "price": 180,
-    "desc": "Xương chắc hơn, có thể khắc rune sơ.",
-    "lore": "Xương chắc hơn, có thể khắc rune sơ.",
-    "rarity": "rare"
-  },
-  {
-    "id": "iron_ore",
-    "type": "material",
-    "name": "Quặng Sắt",
-    "tier": "B",
-    "price": 160,
-    "desc": "Quặng xám.",
-    "lore": "Quặng xám. Lò rèn làng nào cũng cần.",
-    "rarity": "rare"
-  },
-  {
-    "id": "g_jagras_mane",
-    "type": "material",
-    "name": "Bờm Great Jagras",
-    "tier": "B",
-    "price": 220,
-    "desc": "Bờm dầu mỡ.",
-    "lore": "Bờm dầu mỡ. Khó giặt, nhưng giữ ấm tuyệt vời.",
-    "rarity": "rare",
-    "source_monster": "Great Jagras"
-  },
-  {
-    "id": "kulu_beak",
-    "type": "material",
-    "name": "Mỏ Kulu-Ya-Ku",
-    "tier": "B",
-    "price": 240,
-    "desc": "Mỏ biết cầm đá.",
-    "lore": "Mỏ biết cầm đá. Thợ săn hay đùa: nó thông minh hơn một số người đồng đội.",
-    "rarity": "rare",
-    "source_monster": "Kulu-Ya-Ku"
-  },
-  {
-    "id": "pukei_sac",
-    "type": "material",
-    "name": "Túi Độc Pukei",
-    "tier": "B",
-    "price": 320,
-    "desc": "Đừng đâm thủng.",
-    "lore": "Đừng đâm thủng. Mùi đủ để đuổi cả đội săn.",
-    "rarity": "rare",
-    "source_monster": "Pukei-Pukei"
-  },
-  {
-    "id": "kadachi_whisker",
-    "type": "material",
-    "name": "Râu Sấm Kadachi",
-    "tier": "B",
-    "price": 380,
-    "desc": "Râu tích điện.",
-    "lore": "Râu tích điện. Chạm vào còn tê tay.",
-    "rarity": "rare",
-    "source_monster": "Tobi-Kadachi"
-  },
-  {
-    "id": "gajau_skin",
-    "type": "material",
-    "name": "Da Gajau",
-    "tier": "B",
-    "price": 200,
-    "desc": "Da cá săn, nhờn và bền nước.",
-    "lore": "Da cá săn, nhờn và bền nước.",
-    "rarity": "rare",
-    "source_monster": "Gajau"
-  },
-  {
-    "id": "barroth_mud",
-    "type": "material",
-    "name": "Bùn Barroth",
-    "tier": "B",
-    "price": 350,
-    "desc": "Bùn khô cứng như gạch.",
-    "lore": "Bùn khô cứng như gạch. Người Wildspire xây tường bằng thứ này.",
-    "rarity": "rare",
-    "source_monster": "Barroth"
-  },
-  {
-    "id": "jyura_fin",
-    "type": "material",
-    "name": "Vây Jyuratodus",
-    "tier": "B",
-    "price": 520,
-    "desc": "Vây sắc, còn dính bùn thối.",
-    "lore": "Vây sắc, còn dính bùn thối.",
-    "rarity": "rare",
-    "source_monster": "Jyuratodus"
-  },
-  {
-    "id": "tzitzi_photophore",
-    "type": "material",
-    "name": "Túi Sáng Tzitzi",
-    "tier": "B",
-    "price": 480,
-    "desc": "Phát flash chói mắt.",
-    "lore": "Phát flash chói mắt. Thợ ảnh… không tồn tại ở đây, nhưng thợ săn thì ghét.",
-    "rarity": "rare",
-    "source_monster": "Tzitzi-Ya-Ku"
-  },
-  {
-    "id": "paolumu_pelt",
-    "type": "material",
-    "name": "Lông Paolumu",
-    "tier": "B",
-    "price": 700,
-    "desc": "Lông mềm như gối.",
-    "lore": "Lông mềm như gối. Quái thì không mềm chút nào.",
-    "rarity": "rare",
-    "source_monster": "Paolumu"
-  },
-  {
-    "id": "gastodon_horn",
-    "type": "material",
-    "name": "Sừng Gastodon",
-    "tier": "B",
-    "price": 400,
-    "desc": "Sừng ngắn, cứng.",
-    "lore": "Sừng ngắn, cứng. Dùng làm chốt cửa hang cũng được.",
-    "rarity": "rare",
-    "source_monster": "Gastodon"
-  },
-  {
-    "id": "barnos_talon",
-    "type": "material",
-    "name": "Móng Barnos",
-    "tier": "B",
-    "price": 380,
-    "desc": "Móng đen dính lưu huỳnh.",
-    "lore": "Móng đen dính lưu huỳnh.",
-    "rarity": "rare",
-    "source_monster": "Barnos"
-  },
-  {
-    "id": "sharp_claw",
-    "type": "material",
-    "name": "Móng Vuốt Sắc",
-    "tier": "B",
-    "price": 220,
-    "desc": "Móng generic từ thú săn.",
-    "lore": "Móng generic từ thú săn. Dễ mài thành mũi tên.",
-    "rarity": "rare"
-  },
-  {
-    "id": "quality_hide",
-    "type": "material",
-    "name": "Da Quái Tốt",
-    "tier": "B",
-    "price": 250,
-    "desc": "Da thuộc loại xuất xưởng.",
-    "lore": "Da thuộc loại xuất xưởng.",
-    "rarity": "rare"
-  },
-  {
-    "id": "flashbug",
-    "type": "material",
-    "name": "Bọ Flash",
-    "tier": "B",
-    "price": 200,
-    "desc": "Đập một cái — sáng lòa.",
-    "lore": "Đập một cái — sáng lòa.",
-    "rarity": "rare"
-  },
-  {
-    "id": "field_ration",
-    "type": "consumable",
-    "name": "Lương Khô",
-    "tier": "B",
-    "price": 300,
-    "desc": "Hồi 150 thể lực.",
-    "lore": "Khô và mặn. Ăn khi không còn lựa chọn.",
-    "heal": 150,
-    "boostHP": 0,
-    "boostATK": 0,
-    "boostDEF": 0,
-    "boostSPD": 0,
-    "boostEXP": 0,
-    "boostKarma": 0,
-    "boostPoints": 0,
-    "rarity": "rare"
+    "price": 140,
+    "desc": "Xương phố đêm.",
+    "lore": "Xương phố đêm. Nguyên liệu của server này.",
+    "rarity": "common"
   },
   {
     "type": "material",
     "id": "enhance_stone_b",
-    "name": "Đá Cường Hóa Hiếm",
+    "name": "Đá cường hóa phố đêm",
     "tier": "B",
     "price": 800,
-    "desc": "Đá xanh dương cho trang bị bậc B.",
-    "lore": "Kết tinh gần mạch sắt sâu. Phát sáng yếu khi đập.",
+    "desc": "Đá cường hóa phố đêm.",
+    "lore": "Đá cường hóa phố đêm. Dùng khi đập vũ khí.",
     "rarity": "rare",
     "tags": [
       "enhance_stone"
     ],
     "enhance_tier": "B"
+  },
+  {
+    "id": "quang_sat",
+    "type": "material",
+    "name": "Quặng sắt phố",
+    "tier": "B",
+    "price": 180,
+    "desc": "Quặng sắt phố.",
+    "lore": "Quặng sắt phố. Nguyên liệu của server này.",
+    "rarity": "common"
   }
 ]

@@ -107,7 +107,7 @@ def main() -> None:
 
     _print("4) DUNGEON — Di Tích Rừng Cổ")
     _top_up(pid, 800)
-    start = game.start_dungeon(pid, "forest_ruin")
+    start = game.start_dungeon(pid, "cong_tan_thu")
     print(f"Start: {start.get('dungeon')} (−{start.get('stamina_cost')} thể lực)")
     for step in range(14):
         c = game.get_character(pid)
@@ -132,21 +132,21 @@ def main() -> None:
 
     _print("5) THỢ RÈN — cost tăng cấp · ép may · bảo hộ %")
     _grant(pid, "enhance_stone_a", 20)
-    _grant(pid, "monster_bone_s", 20)
+    _grant(pid, "xuong_lang", 20)
     _grant(pid, "scroll_keep_25", 1)
     _grant(pid, "scroll_keep_50", 1)
     _grant(pid, "scroll_keep_60", 1)
     _grant(pid, "charm_luck_s", 3)
     _grant(pid, "charm_luck_m", 2)
     _grant(pid, "charm_luck_l", 1)
-    print(f"Túi: đá A×{_bag_qty(pid,'enhance_stone_a')} · xương×{_bag_qty(pid,'monster_bone_s')}")
+    print(f"Túi: đá A×{_bag_qty(pid,'enhance_stone_a')} · xương×{_bag_qty(pid,'xuong_lang')}")
     print(render.render_enhance_quote(game.enhance_quote(pid, "weapon")))
 
     spent_gold = 0
     attempts = []
     for i in range(10):
         c = game.get_character(pid)
-        if _bag_qty(pid, "enhance_stone_a") < 1 or _bag_qty(pid, "monster_bone_s") < 1:
+        if _bag_qty(pid, "enhance_stone_a") < 1 or _bag_qty(pid, "xuong_lang") < 1:
             print("Hết nguyên liệu — dừng.")
             break
         cur = bs.enhance_level(c["weapon"])

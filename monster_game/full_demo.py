@@ -325,7 +325,7 @@ def main():
         w = game.get_character(uid)["weapon"]
         tier = str(w.get("tier") or "A").lower()
         _grant(uid, f"enhance_stone_{tier}", 40)
-        bone = {"a": "monster_bone_s", "b": "monster_bone_m", "c": "monster_bone_l"}.get(tier, "monster_bone_s")
+        bone = {"a": "xuong_lang", "b": "xuong_pho", "c": "xuong_hoc"}.get(tier, "xuong_lang")
         _grant(uid, bone, 40)
         if tier == "b":
             _grant(uid, "iron_ore", 40)
@@ -375,7 +375,7 @@ def main():
 
         # enhance gear in bag too
         _grant(uid, "enhance_stone_a", 5)
-        _grant(uid, "monster_bone_s", 5)
+        _grant(uid, "xuong_lang", 5)
         # buy cheap armor piece into bag
         r = shop.purchase_equipment(uid, 1, wallet, slot="pants")
         if r.ok:
@@ -397,14 +397,14 @@ def main():
     try:
         # abandon path
         _top_up(uid)
-        st = game.start_dungeon(uid, "forest_ruin")
+        st = game.start_dungeon(uid, "cong_tan_thu")
         S.check("dungeon.start_forest", st.get("ok"), str(st))
         ab = game.abandon_dungeon(uid)
         S.check("dungeon.abandon", ab.get("ok"), str(ab))
 
         # clear forest
         _top_up(uid)
-        st = game.start_dungeon(uid, "forest_ruin")
+        st = game.start_dungeon(uid, "cong_tan_thu")
         cleared = failed = False
         for step in range(20):
             c = game.get_character(uid)
@@ -443,9 +443,9 @@ def main():
             _top_up(uid)
             if game.get_character(uid).get("dungeon_run"):
                 game.abandon_dungeon(uid)
-            st = game.start_dungeon(uid, "waste_tomb")
+            st = game.start_dungeon(uid, "ham_pho_dem")
             if not st.get("ok"):
-                S.note(f"waste_tomb start: {st}")
+                S.note(f"ham_pho_dem start: {st}")
                 continue
             for step in range(20):
                 c = game.get_character(uid)
@@ -470,10 +470,10 @@ def main():
             if tomb_ok:
                 break
         if tomb_ok:
-            S.ok("dungeon.clear_waste_tomb")
+            S.ok("dungeon.clear_ham_pho_dem")
         else:
-            S.note("waste_tomb chưa clear sau 3 try — ghi nhận độ khó cao (không hard-fail)")
-            S.ok("dungeon.waste_tomb_attempted")
+            S.note("ham_pho_dem chưa clear sau 3 try — ghi nhận độ khó cao (không hard-fail)")
+            S.ok("dungeon.ham_pho_dem_attempted")
     except Exception:
         S.fail("dungeon.suite", traceback.format_exc())
 
@@ -632,7 +632,7 @@ def main():
         w = game.get_character(uid)["weapon"]
         tier = str(w.get("tier") or "A").lower()
         _grant(uid, f"enhance_stone_{tier}", 20)
-        bone = {"a": "monster_bone_s", "b": "monster_bone_m", "c": "monster_bone_l"}.get(tier, "monster_bone_s")
+        bone = {"a": "xuong_lang", "b": "xuong_pho", "c": "xuong_hoc"}.get(tier, "xuong_lang")
         _grant(uid, bone, 20)
         if tier == "b":
             _grant(uid, "iron_ore", 20)

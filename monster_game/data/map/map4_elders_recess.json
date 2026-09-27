@@ -1,15 +1,15 @@
 {
   "ID": 3,
-  "slug": "map4_elders_recess",
-  "name": "Elder's Recess",
-  "description": "Hang ổ của các Elder Dragon. Chỉ dành cho thợ săn mạnh nhất.",
+  "slug": "dinh_cutscene",
+  "name": "Đỉnh Cutscene",
+  "description": "Boss cuối. Nhạc đã nổi. Đừng bấm skip.",
   "level": 25,
   "minLevel": 20,
   "maxLevel": 40,
   "event_chance": 0.16,
   "creature": [
     {
-      "Name": "Gastodon",
+      "Name": "Dê dung nham",
       "Tier": "I",
       "HP": 60000,
       "ATK": 5000,
@@ -23,26 +23,20 @@
       "price": 6000,
       "drops": [
         {
-          "item_id": "gastodon_horn",
+          "item_id": "xuong_lang",
           "chance": 0.7,
           "min": 1,
           "max": 2
         },
         {
-          "item_id": "monster_bone_s",
+          "item_id": "la_thuoc",
           "chance": 0.45,
           "min": 1,
           "max": 2
         },
         {
-          "item_id": "herb",
-          "chance": 0.35,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "stamina_berry",
-          "chance": 0.1,
+          "item_id": "candy",
+          "chance": 0.12,
           "min": 1,
           "max": 1
         }
@@ -86,11 +80,11 @@
           "flavor": "dậm chân làm nứt đất"
         }
       ],
-      "lore": "Bò núi lửa. Húc nhau để phân cấp đàn.",
-      "desc": "Bò núi lửa."
+      "lore": "Dê dung nham. Quái bậc I trên server này.",
+      "desc": "Dê dung nham."
     },
     {
-      "Name": "Barnos",
+      "Name": "Dơi núi lửa",
       "Tier": "I",
       "HP": 45000,
       "ATK": 5500,
@@ -104,26 +98,20 @@
       "price": 5500,
       "drops": [
         {
-          "item_id": "barnos_talon",
+          "item_id": "xuong_lang",
           "chance": 0.7,
           "min": 1,
           "max": 2
         },
         {
-          "item_id": "monster_bone_s",
+          "item_id": "la_thuoc",
           "chance": 0.45,
           "min": 1,
           "max": 2
         },
         {
-          "item_id": "herb",
-          "chance": 0.35,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "stamina_berry",
-          "chance": 0.1,
+          "item_id": "candy",
+          "chance": 0.12,
           "min": 1,
           "max": 1
         }
@@ -159,11 +147,11 @@
           "when": "hp_below_35"
         }
       ],
-      "lore": "Dơi lưu huỳnh. Phân chúng ăn mòn giày.",
-      "desc": "Dơi lưu huỳnh."
+      "lore": "Dơi núi lửa. Quái bậc I trên server này.",
+      "desc": "Dơi núi lửa."
     },
     {
-      "Name": "Dodogama",
+      "Name": "Cóc nuốt đá",
       "Tier": "II",
       "HP": 100000,
       "ATK": 6500,
@@ -177,28 +165,22 @@
       "price": 14000,
       "drops": [
         {
-          "item_id": "dodogama_sac",
-          "chance": 0.7,
+          "item_id": "xuong_lang",
+          "chance": 0.5,
           "min": 1,
           "max": 2
         },
         {
-          "item_id": "monster_bone_s",
-          "chance": 0.45,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "herb",
-          "chance": 0.35,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "stamina_berry",
-          "chance": 0.1,
+          "item_id": "xuong_pho",
+          "chance": 0.4,
           "min": 1,
           "max": 1
+        },
+        {
+          "item_id": "la_thuoc",
+          "chance": 0.3,
+          "min": 1,
+          "max": 2
         }
       ],
       "actions": [
@@ -240,11 +222,11 @@
           "flavor": "dậm chân làm nứt đất"
         }
       ],
-      "lore": "Há miệng nuốt đá rồi phun lại. Đầu bếp địa ngục.",
-      "desc": "Há miệng nuốt đá rồi phun lại."
+      "lore": "Cóc nuốt đá. Quái bậc II trên server này.",
+      "desc": "Cóc nuốt đá."
     },
     {
-      "Name": "Uragaan",
+      "Name": "Golem lưng bom",
       "Tier": "III",
       "HP": 180000,
       "ATK": 8000,
@@ -258,26 +240,20 @@
       "price": 30000,
       "drops": [
         {
-          "item_id": "uragaan_ruby",
-          "chance": 0.7,
+          "item_id": "xuong_pho",
+          "chance": 0.6,
           "min": 1,
           "max": 2
         },
         {
-          "item_id": "monster_bone_m",
-          "chance": 0.45,
+          "item_id": "quang_sat",
+          "chance": 0.4,
           "min": 1,
-          "max": 2
+          "max": 1
         },
         {
-          "item_id": "iron_ore",
-          "chance": 0.35,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "field_ration",
-          "chance": 0.1,
+          "item_id": "la_thuoc",
+          "chance": 0.25,
           "min": 1,
           "max": 1
         }
@@ -321,11 +297,11 @@
           "flavor": "dậm chân làm nứt đất"
         }
       ],
-      "lore": "Núi di động. Lưng gắn quặng và ngọc.",
-      "desc": "Núi di động."
+      "lore": "Golem lưng bom. Quái bậc III trên server này.",
+      "desc": "Golem lưng bom."
     },
     {
-      "Name": "Lavasioth",
+      "Name": "Cá dung nham",
       "Tier": "IV",
       "HP": 220000,
       "ATK": 9500,
@@ -339,26 +315,20 @@
       "price": 50000,
       "drops": [
         {
-          "item_id": "lavasioth_shard",
-          "chance": 0.7,
+          "item_id": "xuong_hoc",
+          "chance": 0.55,
           "min": 1,
           "max": 2
         },
         {
-          "item_id": "monster_bone_m",
-          "chance": 0.45,
+          "item_id": "quang_sat",
+          "chance": 0.4,
           "min": 1,
           "max": 2
         },
         {
-          "item_id": "iron_ore",
-          "chance": 0.35,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "field_ration",
-          "chance": 0.1,
+          "item_id": "la_thuoc",
+          "chance": 0.2,
           "min": 1,
           "max": 1
         }
@@ -402,11 +372,11 @@
           "flavor": "dậm chân làm nứt đất"
         }
       ],
-      "lore": "Cá dung nham. Bơi trong nham thạch như cá thường bơi nước.",
+      "lore": "Cá dung nham. Quái bậc IV trên server này.",
       "desc": "Cá dung nham."
     },
     {
-      "Name": "Azure Rathalos",
+      "Name": "Rồng xanh cutscene",
       "Tier": "V",
       "HP": 280000,
       "ATK": 12000,
@@ -420,35 +390,22 @@
       "price": 80000,
       "drops": [
         {
-          "item_id": "azure_scale",
-          "chance": 0.7,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "monster_bone_l",
-          "chance": 0.45,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "carbolite",
-          "chance": 0.35,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "mega_potion_leaf",
-          "chance": 0.1,
+          "item_id": "tinh_tho",
+          "chance": 0.5,
           "min": 1,
           "max": 1
         },
         {
-          "item_id": "cloak_guardian",
-          "chance": 0.18,
+          "item_id": "xuong_chu",
+          "chance": 0.35,
           "min": 1,
-          "max": 1,
-          "kind": "equipment"
+          "max": 1
+        },
+        {
+          "item_id": "xuong_hoc",
+          "chance": 0.4,
+          "min": 1,
+          "max": 2
         }
       ],
       "actions": [
@@ -482,11 +439,11 @@
           "when": "hp_below_35"
         }
       ],
-      "lore": "Rathalos biến dị xanh. Nhanh và kiêu hơn bản gốc.",
-      "desc": "Rathalos biến dị xanh."
+      "lore": "Rồng xanh cutscene. Quái bậc V trên server này.",
+      "desc": "Rồng xanh cutscene."
     },
     {
-      "Name": "Teostra",
+      "Name": "Sư tử lửa già",
       "Tier": "X",
       "HP": 500000,
       "ATK": 20000,
@@ -500,35 +457,22 @@
       "price": 250000,
       "drops": [
         {
-          "item_id": "teostra_powder",
-          "chance": 0.7,
+          "item_id": "xuong_chu",
+          "chance": 0.55,
           "min": 1,
           "max": 2
         },
         {
-          "item_id": "monster_bone_l",
-          "chance": 0.45,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "carbolite",
+          "item_id": "tinh_the",
           "chance": 0.35,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "mega_potion_leaf",
-          "chance": 0.1,
           "min": 1,
           "max": 1
         },
         {
-          "item_id": "helm_dragon",
-          "chance": 0.18,
+          "item_id": "mat_r8",
+          "chance": 0.25,
           "min": 1,
-          "max": 1,
-          "kind": "equipment"
+          "max": 1
         }
       ],
       "actions": [
@@ -579,11 +523,11 @@
           "when": "hp_below_20"
         }
       ],
-      "lore": "Elder lửa và bụi nổ. Vương miện của vực dung nham.",
-      "desc": "Elder lửa và bụi nổ."
+      "lore": "Sư tử lửa già. Quái bậc X trên server này.",
+      "desc": "Sư tử lửa già."
     },
     {
-      "Name": "Nergigante",
+      "Name": "Rồng gai cuối tập",
       "Tier": "XX",
       "HP": 1000000,
       "ATK": 35000,
@@ -597,35 +541,22 @@
       "price": 800000,
       "drops": [
         {
-          "item_id": "nergi_spike",
+          "item_id": "xuong_chu",
           "chance": 0.7,
           "min": 1,
           "max": 2
         },
         {
-          "item_id": "elder_dragon_bone",
-          "chance": 0.35,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "nova_crystal",
-          "chance": 0.35,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "blessed_charm",
-          "chance": 0.1,
+          "item_id": "tinh_the",
+          "chance": 0.5,
           "min": 1,
           "max": 1
         },
         {
-          "item_id": "chest_dragon",
-          "chance": 0.18,
+          "item_id": "mat_r10",
+          "chance": 0.25,
           "min": 1,
-          "max": 1,
-          "kind": "equipment"
+          "max": 1
         }
       ],
       "actions": [
@@ -676,8 +607,8 @@
           "when": "hp_below_20"
         }
       ],
-      "lore": "Elder gai. Phá hủy để tái tạo — định nghĩa của đói khát sức mạnh.",
-      "desc": "Elder gai."
+      "lore": "Rồng gai cuối tập. Quái bậc XX trên server này.",
+      "desc": "Rồng gai cuối tập."
     }
   ],
   "events": [
@@ -721,12 +652,12 @@
             },
             "drops": [
               {
-                "item_id": "nova_crystal",
+                "item_id": "tinh_the",
                 "min": 1,
                 "max": 1
               },
               {
-                "item_id": "dragonite_ore",
+                "item_id": "tinh_the",
                 "min": 1,
                 "max": 2
               }
@@ -740,7 +671,7 @@
             "log": "Bạn phát hiện nước bọt nhớt quanh nắp — chắc chắn là Mimic. Bạn lấy vài thứ rơi quanh đó rồi chuồn.",
             "drops": [
               {
-                "item_id": "monster_bone_s",
+                "item_id": "xuong_lang",
                 "min": 1,
                 "max": 2
               }
@@ -825,7 +756,7 @@
             "log": "Bạn đựng nước vào bình — coi như có thêm thảo dược lỏng.",
             "drops": [
               {
-                "item_id": "herb",
+                "item_id": "la_thuoc",
                 "min": 1,
                 "max": 2
               }
@@ -865,7 +796,7 @@
             },
             "drops": [
               {
-                "item_id": "honey",
+                "item_id": "la_thuoc",
                 "min": 1,
                 "max": 2
               }
@@ -888,7 +819,7 @@
             "log": "Hai bên nhanh chóng đổi chác. Bạn được thêm nguyên liệu.",
             "drops": [
               {
-                "item_id": "monster_bone_s",
+                "item_id": "xuong_lang",
                 "min": 1,
                 "max": 3
               }
@@ -931,12 +862,12 @@
             "log": "Dưới lớp lá mục bạn tìm thấy túi nguyên liệu.",
             "drops": [
               {
-                "item_id": "iron_ore",
+                "item_id": "quang_sat",
                 "min": 1,
                 "max": 2
               },
               {
-                "item_id": "monster_bone_m",
+                "item_id": "xuong_pho",
                 "min": 1,
                 "max": 1
               }

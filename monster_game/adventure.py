@@ -120,7 +120,7 @@ def _roll_ranked_drop(player_id: str, monster_template: dict, kind: str,
 
 def roll_weapon_drop(player_id: str, monster_template: dict,
                      rng: Optional[random.Random] = None) -> list[dict]:
-    """Rare weapon on a winning fight. Skips Taleblade and any copy already owned."""
+    """Rare weapon on a winning fight. Skips Kiếm Lời Thoại and any copy already owned."""
     rng = rng or random.Random()
     return _roll_ranked_drop(player_id, monster_template, "weapon", rng)
 

@@ -29,7 +29,7 @@ DEFAULT_STARTING_WEAPON = {
     "type": "weapon",
     "id": STARTING_WEAPON_ID,
     "category": "Sword",
-    "name": "Iron Sword I",
+    "name": "Kiếm gỗ sự kiện",
     "usage": 0,
     "exp": 0,
     "HP": 4000,
@@ -78,7 +78,7 @@ def create_character(player_id: str, name: str):
         return None
     starting_weapon = data_store.get_items(STARTING_WEAPON_ID) or DEFAULT_STARTING_WEAPON
     # Starter kit: cloth gear + small potion on belt
-    starter_helm = data_store.get_equipment_by_id("helm_leather")
+    starter_helm = data_store.get_equipment_by_id("helm_r1")
     starter_potion = data_store.get_consumable("potion_s")
     bag = [dict(starting_weapon)]
     if starter_helm:

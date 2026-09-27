@@ -33,10 +33,10 @@ PLAYER_ICON = "🧑‍🚀"
 MONSTER_ICON = "👾"
 TIER_ICONS = {"I": "🟢", "II": "🟢", "III": "🟡", "IV": "🟠", "V": "🟠", "X": "🔴", "XX": "☠️"}
 LOCATION_ICONS = {
-    "Ancient Forest": "🌲",
-    "Wildspire Waste": "🏜️",
-    "Coral Highlands": "🪸",
-    "Elder's Recess": "🌋",
+    "Cổng Tân Thủ": "🏰",
+    "Phố Đêm Neon": "🌃",
+    "Học Viện Kiếm": "⚔️",
+    "Đỉnh Cutscene": "🎬",
 }
 
 WEAPON_VERBS = {

@@ -2,12 +2,12 @@
   {
     "id": "mat_r13",
     "type": "material",
-    "name": "Nguyên liệu bậc XIII",
+    "name": "Tinh nguyên tố",
     "tier": "13",
     "price": 0,
-    "desc": "Nguyên liệu bậc XIII.",
-    "lore": "Nguyên liệu bậc XIII.",
-    "rarity": "epic"
+    "desc": "Tinh nguyên tố.",
+    "lore": "Tinh nguyên tố. Nguyên liệu của server này.",
+    "rarity": "legendary"
   },
   {
     "type": "material",
@@ -15,8 +15,8 @@
     "name": "Đá cường hóa XIII",
     "tier": "13",
     "price": 0,
-    "desc": "Đá cường hóa bậc XIII.",
-    "lore": "Đá cường hóa bậc XIII.",
+    "desc": "Đá cường hóa XIII.",
+    "lore": "Đá cường hóa XIII. Dùng khi đập vũ khí.",
     "rarity": "epic",
     "tags": [
       "enhance_stone"

@@ -227,7 +227,13 @@ def get_equipment(slot: Optional[str] = None) -> list[dict]:
         _equipment_cache = items
     if slot is None:
         return _equipment_cache
-    return [i for i in _equipment_cache if i.get("slot") == slot]
+    aliases = {
+        "gloves": "glove",
+        "rings": "ring",
+        "bracelets": "bracelet",
+    }
+    wanted = {slot, aliases.get(slot, slot)}
+    return [i for i in _equipment_cache if i.get("slot") in wanted]
 
 
 def get_equipment_sets() -> dict:

@@ -2,7 +2,7 @@
   {
     "type": "consumable",
     "id": "potion_s",
-    "name": "Bình Máu Nhỏ",
+    "name": "Bình máu tân thủ",
     "subtype": "heal",
     "tier": "A",
     "price": 300,
@@ -13,13 +13,14 @@
       "threshold": 0.45,
       "priority": 10
     },
-    "desc": "Hồi HP khi máu thấp giữa trận.",
-    "belt": true
+    "desc": "Hồi máu khi thanh máu xuống thấp giữa trận.",
+    "belt": true,
+    "lore": "Bình đỏ phát ở cổng làng."
   },
   {
     "type": "consumable",
     "id": "potion_m",
-    "name": "Bình Máu Vừa",
+    "name": "Bình máu hội",
     "subtype": "heal",
     "tier": "B",
     "price": 900,
@@ -30,13 +31,14 @@
       "threshold": 0.4,
       "priority": 20
     },
-    "desc": "Hồi nhiều HP hơn.",
-    "belt": true
+    "desc": "Hồi một khoảng máu lớn hơn.",
+    "belt": true,
+    "lore": "Bình hội trưởng để dành cho raid."
   },
   {
     "type": "consumable",
     "id": "potion_l",
-    "name": "Bình Máu Lớn",
+    "name": "Bình máu raid",
     "subtype": "heal",
     "tier": "C",
     "price": 2500,
@@ -47,13 +49,14 @@
       "threshold": 0.35,
       "priority": 30
     },
-    "desc": "Hồi mạnh, cứu nguy.",
-    "belt": true
+    "desc": "Hồi rất nhiều máu.",
+    "belt": true,
+    "lore": "Chỉ mở khi boss đã cắt cảnh."
   },
   {
     "type": "consumable",
     "id": "stamina_drink",
-    "name": "Thuốc Hồi Thể Lực",
+    "name": "Nước tăng lực quán",
     "subtype": "stamina",
     "tier": "A",
     "price": 400,
@@ -63,13 +66,14 @@
       "threshold": 100,
       "priority": 5
     },
-    "desc": "Hồi thể lực (ngoài trận / giữa phiên săn).",
-    "belt": true
+    "desc": "Uống là hồi thể lực ngay.",
+    "belt": true,
+    "lore": "Ngọt, lạnh, hơi quen quán net."
   },
   {
     "type": "consumable",
     "id": "adrenaline",
-    "name": "Adrenaline Shot",
+    "name": "Thuốc tốc độ",
     "subtype": "buff",
     "tier": "B",
     "price": 1200,
@@ -80,13 +84,14 @@
       "threshold": 0.5,
       "priority": 8
     },
-    "desc": "Tăng ATK 3 đòn kế.",
-    "belt": true
+    "desc": "Tăng tốc một lúc.",
+    "belt": true,
+    "lore": "Tim đập theo nhạc mở màn."
   },
   {
     "type": "consumable",
     "id": "iron_skin",
-    "name": "Da Sắt Tạm Thời",
+    "name": "Thuốc da sắt",
     "subtype": "buff",
     "tier": "B",
     "price": 1200,
@@ -97,13 +102,14 @@
       "threshold": 0.5,
       "priority": 7
     },
-    "desc": "Tăng DEF 3 đòn chịu đòn.",
-    "belt": true
+    "desc": "Tăng đỡ một lúc.",
+    "belt": true,
+    "lore": "Da cứng như popup sự kiện."
   },
   {
     "type": "consumable",
     "id": "dong_quy",
-    "name": "Bùa Đồng Quy Vô Tận",
+    "name": "Bùa đồng quy",
     "subtype": "special",
     "special": "mutual_doom",
     "tier": "C",
@@ -118,13 +124,14 @@
       "enemy_hp_pct": 0.0,
       "damage_both_flat": 0
     },
-    "desc": "Khi gần chết: tỉ lệ kéo quái xuống mồ cùng bạn.",
-    "belt": true
+    "desc": "Bùa máu dùng lâu trong trận.",
+    "belt": true,
+    "lore": "Vẽ bằng mực phép, không phải mực in."
   },
   {
     "type": "consumable",
     "id": "void_slash",
-    "name": "Lưỡi Hư Không",
+    "name": "Phù chém hư không",
     "subtype": "special",
     "special": "mutual_burst",
     "tier": "C",
@@ -138,13 +145,14 @@
       "damage_both_pct_max": 0.35,
       "damage_both_flat": 500
     },
-    "desc": "Gây sát thương lớn tức thì cho CẢ HAI phía.",
-    "belt": true
+    "desc": "Một nhát phép gắn lên đai.",
+    "belt": true,
+    "lore": "Kỹ năng từng bị khóa sau paywall."
   },
   {
     "type": "consumable",
     "id": "phoenix_tear",
-    "name": "Giọt Lệ Phượng",
+    "name": "Nước mắt phượng",
     "subtype": "special",
     "special": "revive",
     "tier": "D",
@@ -156,13 +164,14 @@
     "effect": {
       "heal_hp_pct": 0.35
     },
-    "desc": "Khi đòn chí mạng ập tới: tỉ lệ sống lại với 35% HP.",
-    "belt": true
+    "desc": "Hồi mạnh khi sắp gục.",
+    "belt": true,
+    "lore": "Phượng part-time khóc hộ."
   },
   {
     "type": "consumable",
     "id": "smoke_bomb",
-    "name": "Bom Khói",
+    "name": "Bom khói AFK",
     "subtype": "special",
     "special": "escape_chip",
     "tier": "B",
@@ -176,17 +185,19 @@
       "reduce_incoming_pct": 0.7,
       "turns": 1
     },
-    "desc": "Né đòn chết người — giảm sát thương nhận vào.",
-    "belt": true
+    "desc": "Che mắt một nhịp.",
+    "belt": true,
+    "lore": "Dùng khi muốn biến mất khỏi bảng xếp hạng."
   },
   {
     "type": "consumable",
     "id": "candy",
-    "name": "Kẹo",
+    "name": "Kẹo sự kiện",
     "subtype": "stamina",
     "price": 40,
     "heal_stamina": 25,
-    "desc": "Kẹo ngọt. Dùng ngoài trận để hồi nhẹ thể lực.",
-    "belt": false
+    "desc": "Ngọt, hồi một chút thể lực.",
+    "belt": false,
+    "lore": "Rơi từ hộp quà tân thủ."
   }
 ]

@@ -2,7 +2,7 @@
   {
     "type": "upgrade",
     "id": "mithril",
-    "name": "Mithril",
+    "name": "Thép phép",
     "usage": 0,
     "price": 20000,
     "boostHPweapon": 2000,
@@ -14,7 +14,7 @@
   {
     "type": "upgrade",
     "id": "orichalcum",
-    "name": "Orichalcum",
+    "name": "Đồng trời",
     "usage": 0,
     "price": 50000,
     "boostHPweapon": 4000,
@@ -26,7 +26,7 @@
   {
     "type": "upgrade",
     "id": "adamantium",
-    "name": "Adamantium",
+    "name": "Kim loại dungeon",
     "usage": 0,
     "price": 120000,
     "boostHPweapon": 8000,
@@ -38,7 +38,7 @@
   {
     "type": "upgrade",
     "id": "scarite",
-    "name": "Scarite",
+    "name": "Đá sẹo raid",
     "usage": 0,
     "price": 260000,
     "boostHPweapon": 16000,
@@ -50,7 +50,7 @@
   {
     "type": "upgrade",
     "id": "dragonite",
-    "name": "Dragonite",
+    "name": "Đá rồng con",
     "usage": 0,
     "price": 420000,
     "boostHPweapon": 32000,
@@ -62,7 +62,7 @@
   {
     "type": "upgrade",
     "id": "lunarite",
-    "name": "Lunarite",
+    "name": "Đá trăng học viện",
     "usage": 0,
     "price": 840000,
     "boostHPweapon": 64000,
@@ -74,7 +74,7 @@
   {
     "type": "upgrade",
     "id": "kriztonite",
-    "name": "Kriztonite",
+    "name": "Đá cắt tên",
     "usage": 0,
     "price": 1580000,
     "boostHPweapon": 128000,
@@ -86,7 +86,7 @@
   {
     "type": "upgrade",
     "id": "damascusium",
-    "name": "Damascusium Crytalite",
+    "name": "Tinh thể chương cuối",
     "usage": 0,
     "price": 4560000,
     "boostHPweapon": 256000,

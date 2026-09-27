@@ -93,7 +93,7 @@ def _weapon_text(summary: dict) -> str:
         bits.append(f"+{summary['weapon_enhance']}")
     if summary.get("weapon_level"):
         bits.append(f"Lv.{summary['weapon_level']}")
-    category = summary.get("weapon_category") or "vũ khí"
+    category = shop.CATEGORY_LABELS.get(summary.get("weapon_category") or "", summary.get("weapon_category") or "vũ khí")
     durability = int(summary.get("weapon_durability") or 0)
     lines = [
         f"{' '.join(bits)} · {category}",
@@ -525,10 +525,13 @@ def shop_reply(player_id: str, notice: str = "") -> Reply:
 
 
 def weapon_menu_reply(player_id: str, notice: str = "") -> Reply:
-    options = [_opt(name, name, "Xem vũ khí loại này") for _key, name in shop.WEAPON_CATEGORIES.items()]
+    options = [
+        _opt(shop.CATEGORY_LABELS.get(name, name), name, "Xem vũ khí loại này")
+        for _key, name in shop.WEAPON_CATEGORIES.items()
+    ]
     header = blocks(
         row("Vũ khí", "Chọn loại"),
-        "Taleblade có nhiều câu ra đòn hơn kiếm thường.",
+        "Kiếm Lời Thoại có nhiều câu ra đòn hơn kiếm thường.",
         measure("Loại", str(len(options))),
         "Chọn loại trong menu.",
     )
@@ -954,18 +957,26 @@ def dungeon_reply(player_id: str, notice: str = "") -> Reply:
         return _reply("Chưa có nhân vật.", "Chưa có nhân vật.")
     run = character.get("dungeon_run")
     if not run:
+        labels = {
+            "cong_tan_thu": "🏰 Vào cổng",
+            "ham_pho_dem": "🌃 Vào phố",
+            "kho_cutscene": "🎬 Vào kho",
+        }
         lines = []
+        buttons = []
         for dungeon in game.list_dungeons():
+            dungeon_id = dungeon.get("id") or ""
             lines.append(row(
                 dungeon.get("name") or "Hầm",
                 f"cấp {dungeon.get('min_level', 1)}+, tốn {dungeon.get('stamina_cost', 0)} thể lực",
             ))
-        buttons = [
-            {"id": "mx:dun:forest_ruin", "label": "Rừng", "style": "primary", "band": "vao", "hint": "Di Tích Rừng Cổ"},
-            {"id": "mx:dun:waste_tomb", "label": "Hoang", "style": "primary", "band": "vao", "hint": "Lăng Mộ Cát"},
-            {"id": "mx:dun:elder_vault", "label": "Kho", "style": "primary", "band": "vao", "hint": "Rương mũ bậc XV"},
-            {"id": "mx:nav:menu", "label": "Menu", "style": "secondary", "band": "chan"},
-        ]
+            buttons.append({
+                "id": f"mx:dun:{dungeon_id}",
+                "label": labels.get(dungeon_id, (dungeon.get("name") or "Vào")[:20]),
+                "style": "primary",
+                "band": "vao",
+            })
+        buttons.append({"id": "mx:nav:menu", "label": "Menu", "style": "secondary", "band": "chan"})
         header = blocks(
             row("Hầm", "Chưa vào"),
             "\n".join(lines) or row("Hầm", None),
@@ -1117,7 +1128,7 @@ _HELP_GROUPS = (
     ]),
     ("ham", "Hầm", [
         _lenh("dungeon", "xem các hầm đang mở"),
-        _lenh("enter forest_ruin", "vào một hầm theo mã"),
+        _lenh("enter cong_tan_thu", "vào hầm cổng tân thủ"),
         _lenh("next", "đi tiếp một phòng"),
         _lenh("abort", "rút khỏi hầm"),
         "Khi đang trong hầm, bấm nút trên thẻ đang mở.",

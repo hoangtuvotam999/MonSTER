@@ -1,7 +1,7 @@
 {
-  "id": "forest_ruin",
-  "name": "Di Tích Rừng Cổ",
-  "description": "Lối đá rêu phong dẫn xuống hầm dưới Ancient Forest.",
+  "id": "cong_tan_thu",
+  "name": "Hầm Cổng Tân Thủ",
+  "description": "Hầm ngắn dưới làng. Slime thực tập cũng lạc xuống đây.",
   "min_level": 1,
   "map_ref": 0,
   "stamina_cost": 80,
@@ -83,7 +83,7 @@
           "max": 2
         },
         {
-          "item_id": "worn_coin",
+          "item_id": "xuong_lang",
           "chance": 0.5,
           "min": 1,
           "max": 3
@@ -124,7 +124,7 @@
       "id": "boss",
       "type": "boss",
       "title": "Sảnh Thủ Lĩnh",
-      "monster_name": "Great Jagras",
+      "monster_name": "Slime đã tốt nghiệp",
       "flavor": "Thủ lĩnh hang há miệng đầy mỡ và giận dữ.",
       "bonus_drops": [
         {

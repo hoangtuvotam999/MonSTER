@@ -131,7 +131,7 @@ def main():
     try:
         for uid in ("a", "b", "c"):
             _top(uid)
-        st = game.party_start_dungeon(ch, "a", "forest_ruin")
+        st = game.party_start_dungeon(ch, "a", "cong_tan_thu")
         S.check("party.dungeon_start", st.get("ok"), str(st))
         print(render.render_party(game.list_parties(ch)[0]))
         # non-leader cannot advance
@@ -164,7 +164,7 @@ def main():
                 ab = game.party_abandon_dungeon(ch, "a")
                 S.check("party.dungeon_abandon", ab.get("ok"), str(ab))
             else:
-                st = game.party_start_dungeon(ch, "a", "forest_ruin")
+                st = game.party_start_dungeon(ch, "a", "cong_tan_thu")
                 if st.get("ok"):
                     ab = game.party_abandon_dungeon(ch, "a")
                     S.check("party.dungeon_abandon", ab.get("ok"), str(ab))

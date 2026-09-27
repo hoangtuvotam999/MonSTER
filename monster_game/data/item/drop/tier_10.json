@@ -2,11 +2,11 @@
   {
     "id": "mat_r10",
     "type": "material",
-    "name": "Nguyên liệu bậc X",
+    "name": "Gai rồng con",
     "tier": "10",
     "price": 0,
-    "desc": "Nguyên liệu bậc X.",
-    "lore": "Nguyên liệu bậc X.",
+    "desc": "Gai rồng con.",
+    "lore": "Gai rồng con. Nguyên liệu của server này.",
     "rarity": "epic"
   },
   {
@@ -15,8 +15,8 @@
     "name": "Đá cường hóa X",
     "tier": "10",
     "price": 0,
-    "desc": "Đá cường hóa bậc X.",
-    "lore": "Đá cường hóa bậc X.",
+    "desc": "Đá cường hóa X.",
+    "lore": "Đá cường hóa X. Dùng khi đập vũ khí.",
     "rarity": "epic",
     "tags": [
       "enhance_stone"

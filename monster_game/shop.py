@@ -21,6 +21,15 @@ WEAPON_CATEGORIES = {
     "6": "Light Bowgun",
 }
 
+CATEGORY_LABELS = {
+    "Great Sword": "Đại kiếm",
+    "Lance": "Thương",
+    "Sword": "Kiếm",
+    "Dual Blades": "Song kiếm",
+    "Heavy Bowgun": "Pháo nặng",
+    "Light Bowgun": "Súng phép",
+}
+
 def weapon_tier_labels() -> dict:
     """Roman label for each tier id and its aliases (A is I)."""
     labels = {}

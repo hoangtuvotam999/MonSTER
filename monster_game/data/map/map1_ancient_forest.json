@@ -1,15 +1,15 @@
 {
   "ID": 0,
-  "slug": "map1_ancient_forest",
-  "name": "Ancient Forest",
-  "description": "Khu rừng cổ đại, nơi thích hợp cho thợ săn mới vào nghề.",
+  "slug": "cong_tan_thu",
+  "name": "Cổng Tân Thủ",
+  "description": "Làng mới mở server. Slime còn đang làm tutorial.",
   "level": 1,
   "minLevel": 1,
   "maxLevel": 5,
   "event_chance": 0.22,
   "creature": [
     {
-      "Name": "Jagras",
+      "Name": "Slime thực tập",
       "Tier": "I",
       "HP": 2500,
       "ATK": 280,
@@ -23,26 +23,20 @@
       "price": 300,
       "drops": [
         {
-          "item_id": "jagras_scale",
+          "item_id": "xuong_lang",
           "chance": 0.7,
           "min": 1,
           "max": 2
         },
         {
-          "item_id": "monster_bone_s",
+          "item_id": "la_thuoc",
           "chance": 0.45,
           "min": 1,
           "max": 2
         },
         {
-          "item_id": "herb",
-          "chance": 0.35,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "stamina_berry",
-          "chance": 0.1,
+          "item_id": "candy",
+          "chance": 0.12,
           "min": 1,
           "max": 1
         }
@@ -77,11 +71,11 @@
           "flavor": "níu đớp một cái rồi thụt lại"
         }
       ],
-      "lore": "Thú ăn xác nhỏ của Ancient Forest. Đi đàn, hèn khi gặp Great Jagras — thủ lĩnh của chúng.",
-      "desc": "Thú ăn xác nhỏ của Ancient Forest."
+      "lore": "Slime thực tập. Quái bậc I trên server này.",
+      "desc": "Slime thực tập."
     },
     {
-      "Name": "Mernos",
+      "Name": "Quạ đưa thư",
       "Tier": "I",
       "HP": 1800,
       "ATK": 250,
@@ -95,26 +89,20 @@
       "price": 250,
       "drops": [
         {
-          "item_id": "mernos_feather",
+          "item_id": "xuong_lang",
           "chance": 0.7,
           "min": 1,
           "max": 2
         },
         {
-          "item_id": "monster_bone_s",
+          "item_id": "la_thuoc",
           "chance": 0.45,
           "min": 1,
           "max": 2
         },
         {
-          "item_id": "herb",
-          "chance": 0.35,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "stamina_berry",
-          "chance": 0.1,
+          "item_id": "candy",
+          "chance": 0.12,
           "min": 1,
           "max": 1
         }
@@ -150,11 +138,11 @@
           "when": "hp_below_35"
         }
       ],
-      "lore": "Chim đưa thư tự nhiên. Thợ săn lành nghề không giết bừa; nhưng bạn thì cần lông.",
-      "desc": "Chim đưa thư tự nhiên."
+      "lore": "Quạ đưa thư. Quái bậc I trên server này.",
+      "desc": "Quạ đưa thư."
     },
     {
-      "Name": "Aptonoth",
+      "Name": "Trâu cỏ AFK",
       "Tier": "I",
       "HP": 3200,
       "ATK": 200,
@@ -168,26 +156,20 @@
       "price": 280,
       "drops": [
         {
-          "item_id": "aptonoth_hide",
+          "item_id": "xuong_lang",
           "chance": 0.7,
           "min": 1,
           "max": 2
         },
         {
-          "item_id": "monster_bone_s",
+          "item_id": "la_thuoc",
           "chance": 0.45,
           "min": 1,
           "max": 2
         },
         {
-          "item_id": "herb",
-          "chance": 0.35,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "stamina_berry",
-          "chance": 0.1,
+          "item_id": "candy",
+          "chance": 0.12,
           "min": 1,
           "max": 1
         }
@@ -231,11 +213,11 @@
           "flavor": "dậm chân làm nứt đất"
         }
       ],
-      "lore": "Động vật ăn cỏ hiền. Máu của chúng nuôi cả hệ sinh thái… và cả thợ săn đói.",
-      "desc": "Động vật ăn cỏ hiền."
+      "lore": "Trâu cỏ AFK. Quái bậc I trên server này.",
+      "desc": "Trâu cỏ AFK."
     },
     {
-      "Name": "Kestodon",
+      "Name": "Khủng long học phí",
       "Tier": "II",
       "HP": 4200,
       "ATK": 360,
@@ -249,28 +231,22 @@
       "price": 600,
       "drops": [
         {
-          "item_id": "kestodon_shell",
-          "chance": 0.7,
+          "item_id": "xuong_lang",
+          "chance": 0.5,
           "min": 1,
           "max": 2
         },
         {
-          "item_id": "monster_bone_s",
-          "chance": 0.45,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "herb",
-          "chance": 0.35,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "stamina_berry",
-          "chance": 0.1,
+          "item_id": "xuong_pho",
+          "chance": 0.4,
           "min": 1,
           "max": 1
+        },
+        {
+          "item_id": "la_thuoc",
+          "chance": 0.3,
+          "min": 1,
+          "max": 2
         }
       ],
       "actions": [
@@ -312,11 +288,11 @@
           "flavor": "dậm chân làm nứt đất"
         }
       ],
-      "lore": "Bò mai hung. Đực húc trước hỏi sau.",
-      "desc": "Bò mai hung."
+      "lore": "Khủng long học phí. Quái bậc II trên server này.",
+      "desc": "Khủng long học phí."
     },
     {
-      "Name": "Shamos",
+      "Name": "Dơi hầm ngục",
       "Tier": "II",
       "HP": 3600,
       "ATK": 400,
@@ -330,28 +306,22 @@
       "price": 550,
       "drops": [
         {
-          "item_id": "shamos_fang",
-          "chance": 0.7,
+          "item_id": "xuong_lang",
+          "chance": 0.5,
           "min": 1,
           "max": 2
         },
         {
-          "item_id": "monster_bone_s",
-          "chance": 0.45,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "herb",
-          "chance": 0.35,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "stamina_berry",
-          "chance": 0.1,
+          "item_id": "xuong_pho",
+          "chance": 0.4,
           "min": 1,
           "max": 1
+        },
+        {
+          "item_id": "la_thuoc",
+          "chance": 0.3,
+          "min": 1,
+          "max": 2
         }
       ],
       "actions": [
@@ -384,11 +354,11 @@
           "flavor": "níu đớp một cái rồi thụt lại"
         }
       ],
-      "lore": "Thú hang đêm. Đôi mắt phát sáng khi bị đèn soi.",
-      "desc": "Thú hang đêm."
+      "lore": "Dơi hầm ngục. Quái bậc II trên server này.",
+      "desc": "Dơi hầm ngục."
     },
     {
-      "Name": "Great Jagras",
+      "Name": "Slime đã tốt nghiệp",
       "Tier": "III",
       "HP": 8000,
       "ATK": 450,
@@ -402,26 +372,20 @@
       "price": 1500,
       "drops": [
         {
-          "item_id": "g_jagras_mane",
-          "chance": 0.7,
+          "item_id": "xuong_pho",
+          "chance": 0.6,
           "min": 1,
           "max": 2
         },
         {
-          "item_id": "monster_bone_m",
-          "chance": 0.45,
+          "item_id": "quang_sat",
+          "chance": 0.4,
           "min": 1,
-          "max": 2
+          "max": 1
         },
         {
-          "item_id": "iron_ore",
-          "chance": 0.35,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "field_ration",
-          "chance": 0.1,
+          "item_id": "la_thuoc",
+          "chance": 0.25,
           "min": 1,
           "max": 1
         }
@@ -465,11 +429,11 @@
           "flavor": "dậm chân làm nứt đất"
         }
       ],
-      "lore": "Thủ lĩnh Jagras. Bụng phình sau bữa ăn — đó là lúc nó chậm và nguy hiểm theo cách khác.",
-      "desc": "Thủ lĩnh Jagras."
+      "lore": "Slime đã tốt nghiệp. Quái bậc III trên server này.",
+      "desc": "Slime đã tốt nghiệp."
     },
     {
-      "Name": "Kulu-Ya-Ku",
+      "Name": "Goblin cuỗm vũ khí",
       "Tier": "III",
       "HP": 7000,
       "ATK": 480,
@@ -483,26 +447,20 @@
       "price": 1600,
       "drops": [
         {
-          "item_id": "kulu_beak",
-          "chance": 0.7,
+          "item_id": "xuong_pho",
+          "chance": 0.6,
           "min": 1,
           "max": 2
         },
         {
-          "item_id": "monster_bone_m",
-          "chance": 0.45,
+          "item_id": "quang_sat",
+          "chance": 0.4,
           "min": 1,
-          "max": 2
+          "max": 1
         },
         {
-          "item_id": "iron_ore",
-          "chance": 0.35,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "field_ration",
-          "chance": 0.1,
+          "item_id": "la_thuoc",
+          "chance": 0.25,
           "min": 1,
           "max": 1
         }
@@ -537,11 +495,11 @@
           "flavor": "níu đớp một cái rồi thụt lại"
         }
       ],
-      "lore": "Khủng long biết dùng công cụ. Nó cầm đá như khiên; đừng cười.",
-      "desc": "Khủng long biết dùng công cụ."
+      "lore": "Goblin cuỗm vũ khí. Quái bậc III trên server này.",
+      "desc": "Goblin cuỗm vũ khí."
     },
     {
-      "Name": "Pukei-Pukei",
+      "Name": "Rắn độc bình luận",
       "Tier": "IV",
       "HP": 12000,
       "ATK": 550,
@@ -555,26 +513,20 @@
       "price": 3000,
       "drops": [
         {
-          "item_id": "pukei_sac",
-          "chance": 0.7,
+          "item_id": "xuong_hoc",
+          "chance": 0.55,
           "min": 1,
           "max": 2
         },
         {
-          "item_id": "monster_bone_m",
-          "chance": 0.45,
+          "item_id": "quang_sat",
+          "chance": 0.4,
           "min": 1,
           "max": 2
         },
         {
-          "item_id": "iron_ore",
-          "chance": 0.35,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "field_ration",
-          "chance": 0.1,
+          "item_id": "la_thuoc",
+          "chance": 0.2,
           "min": 1,
           "max": 1
         }
@@ -618,11 +570,11 @@
           "flavor": "dậm chân làm nứt đất"
         }
       ],
-      "lore": "Tắc kè độc. Phun dịch từ miệng và đuôi; rừng sẽ im cả tiếng ve.",
-      "desc": "Tắc kè độc."
+      "lore": "Rắn độc bình luận. Quái bậc IV trên server này.",
+      "desc": "Rắn độc bình luận."
     },
     {
-      "Name": "Tobi-Kadachi",
+      "Name": "Sóc sét tốc độ",
       "Tier": "V",
       "HP": 16000,
       "ATK": 700,
@@ -636,28 +588,22 @@
       "price": 5000,
       "drops": [
         {
-          "item_id": "kadachi_whisker",
-          "chance": 0.7,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "monster_bone_l",
-          "chance": 0.45,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "carbolite",
-          "chance": 0.35,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "mega_potion_leaf",
-          "chance": 0.1,
+          "item_id": "tinh_tho",
+          "chance": 0.5,
           "min": 1,
           "max": 1
+        },
+        {
+          "item_id": "xuong_chu",
+          "chance": 0.35,
+          "min": 1,
+          "max": 1
+        },
+        {
+          "item_id": "xuong_hoc",
+          "chance": 0.4,
+          "min": 1,
+          "max": 2
         }
       ],
       "actions": [
@@ -699,11 +645,11 @@
           "flavor": "dậm chân làm nứt đất"
         }
       ],
-      "lore": "Thú điện trên cây. Lướt giữa cành như tia sét sống.",
-      "desc": "Thú điện trên cây."
+      "lore": "Sóc sét tốc độ. Quái bậc V trên server này.",
+      "desc": "Sóc sét tốc độ."
     },
     {
-      "Name": "Anjanath",
+      "Name": "Khủng long lửa tập sự",
       "Tier": "X",
       "HP": 30000,
       "ATK": 1200,
@@ -717,35 +663,22 @@
       "price": 15000,
       "drops": [
         {
-          "item_id": "anja_fang",
-          "chance": 0.7,
+          "item_id": "xuong_chu",
+          "chance": 0.55,
           "min": 1,
           "max": 2
         },
         {
-          "item_id": "monster_bone_l",
-          "chance": 0.45,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "carbolite",
+          "item_id": "tinh_the",
           "chance": 0.35,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "mega_potion_leaf",
-          "chance": 0.1,
           "min": 1,
           "max": 1
         },
         {
-          "item_id": "glove_rage",
-          "chance": 0.18,
+          "item_id": "mat_r8",
+          "chance": 0.25,
           "min": 1,
-          "max": 1,
-          "kind": "equipment"
+          "max": 1
         }
       ],
       "actions": [
@@ -795,11 +728,11 @@
           "when": "hp_below_20"
         }
       ],
-      "lore": "Bạo chúa hơi thở lửa của Forest. Gầm một cái, đàn Aptonoth tán loạn.",
-      "desc": "Bạo chúa hơi thở lửa của Forest."
+      "lore": "Khủng long lửa tập sự. Quái bậc X trên server này.",
+      "desc": "Khủng long lửa tập sự."
     },
     {
-      "Name": "Rathalos",
+      "Name": "Rồng trời unfollow",
       "Tier": "XX",
       "HP": 60000,
       "ATK": 2000,
@@ -813,35 +746,22 @@
       "price": 50000,
       "drops": [
         {
-          "item_id": "rathalos_scale",
+          "item_id": "xuong_chu",
           "chance": 0.7,
           "min": 1,
           "max": 2
         },
         {
-          "item_id": "elder_dragon_bone",
-          "chance": 0.35,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "nova_crystal",
-          "chance": 0.35,
-          "min": 1,
-          "max": 2
-        },
-        {
-          "item_id": "blessed_charm",
-          "chance": 0.1,
+          "item_id": "tinh_the",
+          "chance": 0.5,
           "min": 1,
           "max": 1
         },
         {
-          "item_id": "ring_dragon",
-          "chance": 0.18,
+          "item_id": "mat_r10",
+          "chance": 0.25,
           "min": 1,
-          "max": 1,
-          "kind": "equipment"
+          "max": 1
         }
       ],
       "actions": [
@@ -883,8 +803,8 @@
           "when": "hp_below_20"
         }
       ],
-      "lore": "Vua trời. Bay, lửa, móng — ba thứ khiến thợ săn nhớ mãi trận đầu.",
-      "desc": "Vua trời."
+      "lore": "Rồng trời unfollow. Quái bậc XX trên server này.",
+      "desc": "Rồng trời unfollow."
     }
   ],
   "events": [
@@ -928,12 +848,12 @@
             },
             "drops": [
               {
-                "item_id": "worn_coin",
+                "item_id": "xuong_lang",
                 "min": 1,
                 "max": 2
               },
               {
-                "item_id": "herb",
+                "item_id": "la_thuoc",
                 "min": 1,
                 "max": 3
               }
@@ -947,7 +867,7 @@
             "log": "Bạn phát hiện nước bọt nhớt quanh nắp — chắc chắn là Mimic. Bạn lấy vài thứ rơi quanh đó rồi chuồn.",
             "drops": [
               {
-                "item_id": "monster_bone_s",
+                "item_id": "xuong_lang",
                 "min": 1,
                 "max": 2
               }
@@ -1032,7 +952,7 @@
             "log": "Bạn đựng nước vào bình — coi như có thêm thảo dược lỏng.",
             "drops": [
               {
-                "item_id": "herb",
+                "item_id": "la_thuoc",
                 "min": 1,
                 "max": 2
               }
@@ -1072,7 +992,7 @@
             },
             "drops": [
               {
-                "item_id": "honey",
+                "item_id": "la_thuoc",
                 "min": 1,
                 "max": 2
               }
@@ -1095,7 +1015,7 @@
             "log": "Hai bên nhanh chóng đổi chác. Bạn được thêm nguyên liệu.",
             "drops": [
               {
-                "item_id": "monster_bone_s",
+                "item_id": "xuong_lang",
                 "min": 1,
                 "max": 3
               }
@@ -1138,12 +1058,12 @@
             "log": "Dưới lớp lá mục bạn tìm thấy túi nguyên liệu.",
             "drops": [
               {
-                "item_id": "iron_ore",
+                "item_id": "quang_sat",
                 "min": 1,
                 "max": 2
               },
               {
-                "item_id": "monster_bone_m",
+                "item_id": "xuong_pho",
                 "min": 1,
                 "max": 1
               }
