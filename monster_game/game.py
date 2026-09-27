@@ -98,6 +98,7 @@ def create_character(player_id: str, name: str):
         "the_luc": 500,
         "karma": 0,
         "points": 0,
+        "gold": 2500,
         "weapon": None,
         "equipment": equip_mod.empty_equipment(),
         "consumables": belt,

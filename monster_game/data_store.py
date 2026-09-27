@@ -625,6 +625,22 @@ def repair_weapon(player_id: str):
     return _mutate_user(player_id, do)
 
 
+def get_gold(player_id: str) -> int:
+    user = get_user(player_id)
+    if user is None:
+        return 0
+    return int(user.get("gold", 0))
+
+
+def add_gold(player_id: str, delta: int) -> int:
+    def do(user):
+        user["gold"] = max(0, int(user.get("gold", 0)) + int(delta))
+        return user["gold"]
+
+    out = _mutate_user(player_id, do)
+    return 0 if out in (NOT_FOUND, FORBIDDEN) else int(out)
+
+
 def karma_up(player_id: str, amount: int = 1):
     def do(user):
         user["karma"] = max(0, user["karma"] + int(amount))

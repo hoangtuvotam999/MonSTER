@@ -17,6 +17,16 @@ from . import game as game_mod
 
 MAX_PARTY_SIZE = 4
 
+
+def _even_shares(total: int, n: int) -> list[int]:
+    """Split `total` into n integer parts that sum back to total."""
+    if n <= 0 or total <= 0:
+        return []
+    base = total // n
+    shares = [base] * n
+    shares[-1] += total - base * n
+    return shares
+
 _parties: dict[str, list[dict]] = {}
 
 
@@ -290,18 +300,18 @@ def party_hunt(channel_id: str, starter_id: str, rng: Optional[random.Random] = 
     exp_base = round(template.get("exp", 50) * (1 + 0.15 * (mlevel - 1)))
     if overlevel:
         exp_base = round(exp_base * 1.25)
-    # split exp among contributors (each gets a share, min 30% of full)
-    share = max(0.3, 1.0 / max(1, len(contributors)))
+    # Equal split across everyone who was ready — total stays 100% of the reward
+    payout = members if won else []
+    shares = _even_shares(exp_base, len(payout))
     rewards = []
     if won:
-        for mid in contributors:
-            exp_gain = round(exp_base * share)
+        for mid, exp_gain in zip(payout, shares):
             events = data_store.set_exp(mid, exp_gain)
             trophy = dict(template)
             trophy["level"] = mlevel
             data_store.add_monster(mid, trophy)
             drops = adventure.roll_monster_drops(mid, template, rng=rng)
-            if isinstance(events, list) is False:
+            if not isinstance(events, list):
                 events = []
             data_store.karma_up(mid, data_store.KARMA_ON_WIN)
             rewards.append({
@@ -343,9 +353,29 @@ def party_start_dungeon(channel_id: str, leader_id: str, dungeon_id: str) -> dic
             u["dungeon_run"] = None
             return True
         data_store._mutate_user(mid, clear)
+    dungeon = dungeon_mod.get_dungeon(dungeon_id)
+    cost = int((dungeon or {}).get("stamina_cost", 50))
+    for mid in party["members"]:
+        if mid == leader_id:
+            continue
+        c = game_mod.get_character(mid)
+        if c is None or c.get("the_luc", 0) < cost:
+            return {"ok": False, "reason": "no_stamina", "player_id": mid}
+        if c["level"] < int((dungeon or {}).get("min_level", 1)):
+            return {"ok": False, "reason": "level_too_low", "required_level": dungeon["min_level"],
+                    "player_id": mid}
+
     start = dungeon_mod.start_dungeon(leader_id, dungeon_id)
     if not start.get("ok"):
         return start
+    for mid in party["members"]:
+        if mid == leader_id:
+            continue
+
+        def pay(u, amount=cost):
+            u["the_luc"] = max(0, u.get("the_luc", 0) - amount)
+            return True
+        data_store._mutate_user(mid, pay)
     # move run onto party and clear leader personal (keep progress on party)
     leader = game_mod.get_character(leader_id)
 
@@ -367,34 +397,179 @@ def party_start_dungeon(channel_id: str, leader_id: str, dungeon_id: str) -> dic
             "stamina_cost": start.get("stamina_cost"), "room": start.get("room")}
 
 
+def _ready_members(party: dict) -> list[str]:
+    ready = []
+    for mid in party["members"]:
+        c = game_mod.get_character(mid)
+        if c and c.get("weapon") and c["weapon"].get("durability", 0) > 0 and c.get("the_luc", 0) >= 40:
+            ready.append(mid)
+    return ready
+
+
+def _party_room_combat(party: dict, player_id: str, dungeon: dict, room: dict, rng: random.Random) -> dict:
+    """Shared-HP room fight. EXP is split evenly; each ready member rolls loot."""
+    leader = game_mod.get_character(party["leader"]) or game_mod.get_character(player_id)
+    template = dungeon_mod._pick_monster(dungeon, room, leader["level"], leader.get("karma", 0))
+    if template is None:
+        return {"ok": False, "reason": "no_monster"}
+    members = _ready_members(party) or [party["leader"]]
+    level = max(leader["level"], data_store.get_min_level(dungeon.get("map_ref", 0)) or 1)
+    growth = 1 + 0.15 * (level - 1)
+    size_factor = 1 + 0.25 * (len(members) - 1)
+    mhp = round(template["HP"] * growth * size_factor)
+    monster_live = {
+        "HP": mhp,
+        "ATK": round(template["ATK"] * growth) * template.get("ATKbonus", 1),
+        "DEF": round(template["DEF"] * growth) * template.get("DEFbonus", 1),
+        "SPD": round(template["SPD"] * growth) * template.get("SPDbonus", 1),
+        "AP": template.get("ArmorPiercing", 1),
+        "Mana": 1,
+        "maxHP": mhp,
+    }
+    segments = []
+    won = False
+    for mid in members:
+        if monster_live["HP"] <= 0:
+            won = True
+            break
+        c = game_mod.get_character(mid)
+        equip_mod.ensure_loadout(c)
+        belt = [dict(x) if x else None for x in c.get("consumables") or []]
+        pstats = combat.build_combat_stats(c)
+        result = combat.fight_monster(
+            pstats, monster_live,
+            monster_actions=template.get("actions") or [],
+            player_belt=belt,
+            weapon_category=c["weapon"].get("category") or "",
+            rng=rng,
+        )
+        if result.get("monsterPow"):
+            for k in ("HP", "ATK", "DEF", "SPD", "AP", "Mana", "maxHP"):
+                if k in result["monsterPow"]:
+                    monster_live[k] = result["monsterPow"][k]
+
+        def after(u, belt_out=result.get("belt")):
+            equip_mod.ensure_loadout(u)
+            if belt_out is not None:
+                u["consumables"] = belt_out
+            if u.get("weapon"):
+                u["weapon"]["durability"] = max(0, u["weapon"]["durability"] - 5)
+            u["the_luc"] = max(0, u.get("the_luc", 0) - 40)
+            return True
+        data_store._mutate_user(mid, after)
+        segments.append({
+            "player_name": c["name"],
+            "dealt": sum(e["damage"] for e in result["log"] if e["attacker"] == "player"),
+            "monster_hp_left": max(0, monster_live["HP"]),
+        })
+        if monster_live["HP"] <= 0:
+            won = True
+            break
+
+    drops = []
+    exp_each = 0
+    rewards = []
+    if won:
+        exp_total = round(template.get("exp", 50) * (1.2 if room.get("type") == "boss" else 1.0))
+        shares = _even_shares(exp_total, len(members))
+        for mid, share in zip(members, shares):
+            data_store.set_exp(mid, share)
+            trophy = dict(template)
+            trophy["level"] = level
+            data_store.add_monster(mid, trophy)
+            mine = adventure.roll_monster_drops(mid, template, rng=rng)
+            for spec in room.get("bonus_drops") or []:
+                mine.extend(adventure.grant_drops(mid, [spec], rng=rng))
+            data_store.karma_up(mid, data_store.KARMA_ON_WIN)
+            rewards.append({"player_id": mid, "player_name": game_mod.get_character(mid)["name"],
+                            "exp": share, "drops": mine})
+            if mid == party["leader"]:
+                drops = mine
+                exp_each = share
+        if not drops and rewards:
+            drops = rewards[0]["drops"]
+            exp_each = rewards[0]["exp"]
+
+    leader_c = game_mod.get_character(party["leader"])
+    return {
+        "ok": True,
+        "kind": "combat",
+        "won": won,
+        "draw": False,
+        "monster_name": template["Name"],
+        "monster_tier": template.get("Tier"),
+        "log": f"👥 {len(segments)} người giao tranh · quái còn {max(0, int(monster_live['HP']))} HP",
+        "player_stats": {},
+        "monster_stats": monster_live,
+        "drops": drops,
+        "exp_gained": exp_each,
+        "flavor": room.get("flavor"),
+        "title": room.get("title"),
+        "weapon_name": leader_c["weapon"]["name"] if leader_c and leader_c.get("weapon") else "",
+        "weapon_category": (leader_c or {}).get("weapon", {}).get("category") if leader_c else "",
+        "player_name": leader_c["name"] if leader_c else party["leader"],
+        "party_segments": segments,
+        "party_rewards": rewards,
+    }
+
+
+def _copy_drops(party: dict, leader_id: str, drops: list) -> None:
+    for mid in party["members"]:
+        if mid == leader_id:
+            continue
+        for drop in drops or []:
+            data_store.add_to_bag(mid, dict(drop))
+
+
 def party_advance_dungeon(channel_id: str, actor_id: str, action_id: Optional[str] = None,
                           rng: Optional[random.Random] = None) -> dict:
     party = find_party(channel_id, actor_id)
     if party is None or not party.get("dungeon_run"):
         return {"ok": False, "reason": "not_in_dungeon"}
-    # only leader advances (keeps sync simple)
     if actor_id != party["leader"]:
         return {"ok": False, "reason": "not_leader"}
-    # restore run onto leader, advance, sync back
     run = party["dungeon_run"]
 
     def put(u, r=dict(run)):
         u["dungeon_run"] = r
         return True
     data_store._mutate_user(party["leader"], put)
-    result = dungeon_mod.advance_dungeon(party["leader"], action_id=action_id, rng=rng)
+
+    def combat_fn(pid, dungeon, room, fight_rng, party_ref=party):
+        return _party_room_combat(party_ref, pid, dungeon, room, fight_rng)
+
+    result = dungeon_mod.advance_dungeon(
+        party["leader"], action_id=action_id, rng=rng, combat_fn=combat_fn,
+    )
     leader = game_mod.get_character(party["leader"])
-    new_run = leader.get("dungeon_run")
+    new_run = leader.get("dungeon_run") if leader else None
     party["dungeon_run"] = new_run
     for mid in party["members"]:
         def sync(u, r=dict(new_run) if new_run else None):
             u["dungeon_run"] = ({**r, "party": True, "party_title": party["title"]} if r else None)
             return True
         data_store._mutate_user(mid, sync)
-    # share gold_delta / note completion
+    # Non-combat loot was granted only to the leader — copy it to the rest
+    if result.get("ok") and not result.get("party_rewards"):
+        _copy_drops(party, party["leader"], result.get("drops") or [])
+        gold = int(result.get("gold_delta") or 0)
+        if gold:
+            share = _even_shares(gold, len(party["members"]))
+            result["gold_shares"] = {
+                mid: amt for mid, amt in zip(party["members"], share)
+            }
+            result["gold_delta"] = share[0] if share else 0
     result["party_title"] = party["title"]
     result["party_members"] = list(party["members"])
-    if result.get("dungeon_complete") or result.get("dungeon_failed") or result.get("kind") == "abort":
+    if result.get("dungeon_failed"):
+        for mid in party["members"]:
+            def clear(u):
+                u["dungeon_run"] = None
+                return True
+            data_store._mutate_user(mid, clear)
+        party["dungeon_run"] = None
+        party.pop("dungeon_id", None)
+    if result.get("dungeon_complete") or result.get("kind") == "abort":
         party["dungeon_run"] = None
         party.pop("dungeon_id", None)
     return result

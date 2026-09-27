@@ -121,7 +121,7 @@ def main():
             if hunt.get("won"):
                 S.ok("party.hunt_win", f"rewards={len(hunt.get('rewards') or [])}")
                 S.check("party.hunt_reward_all",
-                        len(hunt.get("rewards") or []) == len(hunt.get("segments") or []))
+                        len(hunt.get("rewards") or []) == len(hunt.get("members") or []))
             else:
                 S.ok("party.hunt_lose_ok", f"hp_left={hunt.get('monster_hp_left')}")
     except Exception:

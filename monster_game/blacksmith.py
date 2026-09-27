@@ -16,7 +16,9 @@ from . import data_store
 
 _cfg_cache = None
 
-MAX_LUCK_BONUS = 0.36  # absolute +36% success, hard cap
+MAX_LUCK_BONUS = 0.36  # below +7
+LUCK_CAP_FROM_7 = 0.20  # current enhance >= 7
+LUCK_CAP_FROM_15 = 0.125  # current enhance >= 15
 
 
 def get_config() -> dict:
@@ -50,9 +52,22 @@ def success_rate(target_level: int) -> float:
     return max(0.01, 0.015 * (0.7 ** max(0, target_level - 15)))
 
 
-def effective_rate(base: float, luck_bonus: float = 0.0) -> float:
-    """Base enhance rate + luck charms, luck capped at MAX_LUCK_BONUS."""
-    luck = max(0.0, min(float(luck_bonus), MAX_LUCK_BONUS))
+def max_luck_for_level(current_level: int) -> float:
+    """Luck charms stack only up to a cap that shrinks at high +.
+    < +7 → 36%, >= +7 → 20%, >= +15 → 12.5%.
+    """
+    lvl = int(current_level)
+    if lvl >= 15:
+        return LUCK_CAP_FROM_15
+    if lvl >= 7:
+        return LUCK_CAP_FROM_7
+    return MAX_LUCK_BONUS
+
+
+def effective_rate(base: float, luck_bonus: float = 0.0, cap: Optional[float] = None) -> float:
+    """Base enhance rate + luck charms, luck hard-capped."""
+    limit = MAX_LUCK_BONUS if cap is None else float(cap)
+    luck = max(0.0, min(float(luck_bonus), limit))
     return max(0.0, min(1.0, float(base) + luck))
 
 
@@ -73,37 +88,85 @@ def cost_for(item: dict) -> dict:
         qty += int((cfg.get("mat_per_level") or {}).get(tier, 0)) * cur
         mats.append({"item_id": req["item_id"], "qty": max(1, qty)})
     base = success_rate(nxt)
+    cap = max_luck_for_level(cur)
     return {
         "next_level": nxt,
         "rate": base,
-        "rate_with_max_luck": effective_rate(base, MAX_LUCK_BONUS),
+        "rate_with_max_luck": effective_rate(base, cap, cap),
         "gold": gold,
         "stones": [{"item_id": stone_id, "qty": max(1, stones)}],
         "materials": mats,
         "tier": tier,
-        "max_luck": MAX_LUCK_BONUS,
+        "max_luck": cap,
     }
 
 
-def _apply_stat_gain(item: dict, levels_gained: int = 1) -> None:
-    if levels_gained <= 0:
-        return
+def _pct_for(item: dict) -> float:
     cfg = get_config()
-    pct = float((cfg.get("stat_bonus_per_level") or {}).get(item_tier(item), 0.04))
-    kind = item.get("type")
-    if kind == "weapon":
-        for key in ("HP", "ATK", "DEF", "SPD"):
-            if key in item:
-                gain = max(1, round(item[key] * pct * levels_gained))
-                item[key] = int(item[key] + gain)
-        if "maxHP" in item:
-            item["maxHP"] = max(item["maxHP"], item.get("HP", item["maxHP"]))
-    elif kind == "equipment":
-        for key in ("hp", "atk", "def", "spd"):
-            if key in item and item[key]:
-                base = item[key]
-                gain = max(1, round(abs(base) * pct * levels_gained))
-                item[key] = int(base + (gain if base >= 0 else -gain))
+    return float((cfg.get("stat_bonus_per_level") or {}).get(item_tier(item), 0.04))
+
+
+def _stat_keys(item: dict) -> list[str]:
+    if item.get("type") == "weapon":
+        return [k for k in ("HP", "ATK", "DEF", "SPD") if k in item]
+    return [k for k in ("hp", "atk", "def", "spd") if item.get(k)]
+
+
+def _one_step(prev: int, pct: float) -> int:
+    if not prev:
+        return int(prev)
+    gain = max(1, round(abs(prev) * pct))
+    return int(prev + gain if prev >= 0 else prev - gain)
+
+
+def _at_level(base_val: int, pct: float, levels: int) -> int:
+    v = int(base_val)
+    for _ in range(max(0, int(levels))):
+        v = _one_step(v, pct)
+    return v
+
+
+def _infer_base(current: int, pct: float, levels: int) -> int:
+    """Walk a compounded enhance bonus back to the +0 value."""
+    v = int(current)
+    for _ in range(max(0, int(levels))):
+        guess = int(round(v / (1 + pct))) if pct else v
+        found = None
+        for prev in range(guess - 8, guess + 9):
+            if _one_step(prev, pct) == v:
+                found = prev
+                break
+        v = found if found is not None else guess
+    return v
+
+
+def _capture_base(item: dict) -> None:
+    """Snapshot +0 stats once, inferred from the current enhance level."""
+    if item.get("enhance_base"):
+        return
+    pct = _pct_for(item)
+    lvl = enhance_level(item)
+    base = {}
+    for key in _stat_keys(item):
+        base[key] = _infer_base(int(item[key]), pct, lvl)
+    if item.get("type") == "weapon":
+        base["maxHP"] = _infer_base(int(item.get("maxHP", item.get("HP", 0))), pct, lvl)
+    item["enhance_base"] = base
+
+
+def _sync_enhance_stats(item: dict) -> None:
+    """Rewrite combat stats so the enhance bonus matches enhance_level exactly."""
+    _capture_base(item)
+    pct = _pct_for(item)
+    lvl = enhance_level(item)
+    base = item["enhance_base"]
+    for key, raw in base.items():
+        if key == "maxHP":
+            continue
+        item[key] = _at_level(int(raw), pct, lvl)
+    if item.get("type") == "weapon":
+        item["maxHP"] = _at_level(int(base.get("maxHP", base.get("HP", 0))), pct, lvl)
+        item["HP"] = item["maxHP"]
 
 
 def _resolve_fail_level(current: int, protect: Optional[dict], default_to: int = 1) -> int:
@@ -171,12 +234,13 @@ def _consume_bag_index(bag: list, idx: int) -> Optional[dict]:
     return taken
 
 
-def _consume_luck_by_ids(bag: list, item_ids: list[str]) -> tuple[float, list[str]]:
-    """Consume luck charms matching ids (in order), cap bonus at MAX_LUCK_BONUS."""
+def _consume_luck_by_ids(bag: list, item_ids: list[str], cap: float) -> tuple[float, list[str]]:
+    """Consume luck charms matching ids (in order), cap bonus at `cap`."""
     bonus = 0.0
     names: list[str] = []
+    limit = max(0.0, float(cap))
     for want_id in item_ids:
-        if bonus >= MAX_LUCK_BONUS:
+        if bonus >= limit - 1e-9:
             break
         idx = next((i for i, it in enumerate(bag)
                     if it.get("id") == want_id and it.get("subtype") == "enhance_luck"), None)
@@ -189,7 +253,7 @@ def _consume_luck_by_ids(bag: list, item_ids: list[str]) -> tuple[float, list[st
         _consume_bag_index(bag, idx)
         bonus += add
         names.append(it.get("name", "charm"))
-    return min(bonus, MAX_LUCK_BONUS), names
+    return min(bonus, limit), names
 
 
 def enhance(player_id: str, where: str = "weapon", bag_index_0: Optional[int] = None,
@@ -259,7 +323,9 @@ def enhance(player_id: str, where: str = "weapon", bag_index_0: Optional[int] = 
             return data_store.FORBIDDEN
 
         bag = u["bag"]
-        luck_bonus, luck_names = _consume_luck_by_ids(bag, luck_ids)
+        before_peek = enhance_level(target)
+        luck_cap = max_luck_for_level(before_peek)
+        luck_bonus, luck_names = _consume_luck_by_ids(bag, luck_ids, luck_cap)
 
         if protect_id:
             idx = next((i for i, it in enumerate(bag)
@@ -278,23 +344,31 @@ def enhance(player_id: str, where: str = "weapon", bag_index_0: Optional[int] = 
                     protect_item_name = taken.get("name")
 
         before = enhance_level(target)
+        _capture_base(target)
+        stats_before = {k: target.get(k) for k in _stat_keys(target)}
         base = success_rate(before + 1)
-        rate = effective_rate(base, luck_bonus)
+        rate = effective_rate(base, luck_bonus, luck_cap)
         rolled = rng.random()
         success = rolled < rate
         if success:
             target["enhance_level"] = before + 1
-            _apply_stat_gain(target, 1)
             after = target["enhance_level"]
+            _sync_enhance_stats(target)
             msg = (f"Đinh! Thành công → {display_name(target)} "
-                   f"(base {base*100:.0f}% + luck {luck_bonus*100:.0f}% = {rate*100:.0f}% / roll {rolled:.2f})")
+                   f"(base {base*100:.0f}% + luck {luck_bonus*100:.0f}%/{luck_cap*100:.1f}% "
+                   f"= {rate*100:.0f}% / roll {rolled:.2f})")
         else:
             after = _resolve_fail_level(before, protect, default_fail)
             target["enhance_level"] = after
+            _sync_enhance_stats(target)
+            lost = {k: int(stats_before.get(k) or 0) - int(target.get(k) or 0) for k in stats_before}
             msg = f"Vỡ! Thất bại → {display_name(target)} (tỉ lệ {rate*100:.0f}%)"
             if protect_item_name and protect:
                 pct = int(float(protect.get("keep_pct", 0)) * 100)
                 msg += f" — {protect_item_name} giữ ~{pct}% cấp gốc"
+            if any(v > 0 for v in lost.values()):
+                bits = [f"{k} -{v}" for k, v in lost.items() if v > 0]
+                msg += " · trừ " + ", ".join(bits)
             if luck_names:
                 msg += f" · đã ép may: {', '.join(luck_names)}"
         return {
@@ -304,6 +378,7 @@ def enhance(player_id: str, where: str = "weapon", bag_index_0: Optional[int] = 
             "level_after": after,
             "rate_base": base,
             "luck_bonus": luck_bonus,
+            "luck_cap": luck_cap,
             "rate": rate,
             "roll": rolled,
             "message": msg,

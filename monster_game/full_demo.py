@@ -365,8 +365,9 @@ def main():
         S.check("enhance.attempt_ok", r.get("ok"), str(r))
         if r.get("ok"):
             wallet -= r["gold_cost"]
-            S.check("enhance.luck_applied_cap", abs(r.get("luck_bonus", 0) - 0.36) < 1e-9,
-                    f"luck={r.get('luck_bonus')}")
+            S.check("enhance.luck_applied_cap",
+                    abs(r.get("luck_bonus", 0) - r.get("luck_cap", 0.2)) < 1e-9,
+                    f"luck={r.get('luck_bonus')} cap={r.get('luck_cap')}")
             S.check("enhance.fail_keep_60", r["level_after"] == 5,  # 60% of 8
                     f"after={r['level_after']}")
             S.ok("enhance.message", r.get("message", "")[:80])
@@ -656,9 +657,10 @@ def main():
             wallet -= r["gold_cost"]
             luck = r.get("luck_bonus") or 0
             S.note(f"đập +{r['level_before']}→+{r['level_after']} "
-                   f"luck {luck*100:.0f}%/{bs.MAX_LUCK_BONUS*100:.0f}% rate {r['rate']*100:.0f}% "
+                   f"luck {luck*100:.0f}%/{(r.get('luck_cap') or bs.MAX_LUCK_BONUS)*100:.0f}% rate {r['rate']*100:.0f}% "
                    f"{'OK' if r['success'] else 'FAIL'}")
-            S.check("enhance.luck_never_over_cap", luck <= bs.MAX_LUCK_BONUS + 1e-9, f"luck={luck}")
+            cap = r.get("luck_cap") or bs.MAX_LUCK_BONUS
+            S.check("enhance.luck_never_over_cap", luck <= cap + 1e-9, f"luck={luck} cap={cap}")
         S.ok("enhance.final", bs.display_name(game.get_character(uid)["weapon"]))
     except Exception:
         S.fail("enhance.final", traceback.format_exc())

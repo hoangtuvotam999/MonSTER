@@ -3,3 +3,5 @@ monster_game/data/users.json
 
 __pycache__/
 *.pyc
+.venv/
+.bot_token

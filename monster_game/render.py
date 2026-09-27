@@ -937,8 +937,10 @@ def render_enhance_quote(quote: dict) -> str:
     for req in need:
         drop = data_store.get_drop(req["item_id"]) or data_store.get_consumable(req["item_id"])
         lines.append(f"   · {(drop or {}).get('name', req['item_id'])} ×{req['qty']}")
-    lines.append("   Bùa bảo hộ: giữ 25% / 50% / 60% cấp gốc khi vỡ")
-    lines.append("   Ép may: cộng dồn tối đa +36% tỉ lệ")
+    cap = quote.get("max_luck", 0.36)
+    lines.append("   Bùa bảo hộ: giữ 25% / 50% / 60% cấp gốc khi vỡ (chỉ số cộng thêm bị trừ theo cấp còn lại)")
+    lines.append(f"   Ép may tối đa ở cấp này: +{cap * 100:.1f}% "
+                 f"(+0–6: 36% · +7–14: 20% · +15 trở đi: 12.5%)")
     return "\n".join(lines)
 
 

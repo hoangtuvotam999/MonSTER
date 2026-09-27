@@ -173,7 +173,8 @@ def _rest_room(player_id: str, room: dict) -> dict:
 
 
 def advance_dungeon(player_id: str, action_id: Optional[str] = None,
-                    rng: Optional[random.Random] = None) -> dict:
+                    rng: Optional[random.Random] = None,
+                    combat_fn=None) -> dict:
     """Enter/resolve current room. For event rooms, pass action_id when pending."""
     rng = rng or random.Random()
     user = data_store.get_user(player_id)
@@ -218,7 +219,8 @@ def advance_dungeon(player_id: str, action_id: Optional[str] = None,
         return data_store._mutate_user(player_id, set_pending)
 
     if rtype in ("combat", "boss"):
-        result = _fight_room(player_id, dungeon, room, rng)
+        result = (combat_fn(player_id, dungeon, room, rng) if combat_fn
+                  else _fight_room(player_id, dungeon, room, rng))
         if not result.get("ok"):
             return result
         cleared = result.get("won") or result.get("draw")
