@@ -20,7 +20,7 @@ import random
 import time
 from typing import Optional
 
-from . import adventure, combat, data_store, equipment as equip_mod
+from . import adventure, combat, data_store, equipment as equip_mod, journey
 
 STARTING_WEAPON_ID = 10
 
@@ -85,7 +85,10 @@ def create_character(player_id: str, name: str):
         bag.append(dict(starter_helm))
     belt = equip_mod.empty_belt()
     if starter_potion:
-        belt[0] = {**dict(starter_potion), "qty": 2}
+        belt[0] = {**dict(starter_potion), "qty": 3}
+    candy = data_store.get_consumable("candy")
+    if candy:
+        bag.append({**dict(candy), "qty": 2})
     data = {
         "id": player_id,
         "name": name,
@@ -108,6 +111,7 @@ def create_character(player_id: str, name: str):
         "history": [],
         "pending_event": None,
         "dungeon_run": None,
+        "potion_kit": True,
         "created": int(time.time() * 1000),
     }
     # Starter items start at +0 enhance
@@ -162,8 +166,40 @@ def bag_status_icon(monster_count: int) -> str:
     return ""
 
 
+def ensure_potion_kit(player_id: str) -> None:
+    """One-time: hunters created before potions existed get a small stack."""
+    existing = data_store.get_user(player_id)
+    if existing is None or existing.get("potion_kit"):
+        return
+
+    def mut(user):
+        if user.get("potion_kit"):
+            return False
+        equip_mod.ensure_loadout(user)
+
+        def heal_qty(item):
+            if not item or item.get("subtype") != "heal":
+                return 0
+            return int(item.get("qty", 1))
+
+        total = sum(heal_qty(it) for it in user["consumables"])
+        total += sum(heal_qty(it) for it in user.get("bag") or [])
+        if total <= 0:
+            potion = data_store.get_consumable("potion_s")
+            if potion:
+                equip_mod.stow_stack_on_belt(user, {**dict(potion), "qty": 3})
+            candy = data_store.get_consumable("candy")
+            if candy and not any(it.get("id") == "candy" for it in user.get("bag") or []):
+                data_store._stack_into_bag(user, {**dict(candy), "qty": 2})
+        user["potion_kit"] = True
+        return True
+
+    data_store._mutate_user(player_id, mut)
+
+
 def character_summary(player_id: str) -> Optional[dict]:
     """A display-ready dict of computed character stats (no message text)."""
+    ensure_potion_kit(player_id)
     c = get_character(player_id)
     if c is None:
         return None
@@ -209,12 +245,194 @@ def character_summary(player_id: str) -> Optional[dict]:
         "location_id": c["locationID"],
         "location_name": location["name"] if location else None,
         "dungeon_run": c.get("dungeon_run"),
+        "battle": _battle_stats(c),
     }
+
+
+def _battle_stats(character: dict) -> Optional[dict]:
+    """Stats actually used in a fight: body + weapon + armor, after multipliers."""
+    if not character.get("weapon"):
+        return None
+    built = combat.build_combat_stats(character)
+    return {key: round(built[key]) for key in ("HP", "ATK", "DEF", "SPD")}
 
 
 # --------------------------------------------------------------------------
 # Bag / equipment
 # --------------------------------------------------------------------------
+
+REST_HEAL = 150
+REST_CAP = 500
+REST_PER_DAY = 3
+TASKS = (
+    ("sell", "Bán xác quái một lần", 150),
+    ("craft", "Chế một món", 200),
+    ("dungeon", "Vào một dungeon", 250),
+)
+
+
+def task_lines(player_id: str) -> list[str]:
+    user = get_character(player_id) or {}
+    flags = user.get("tasks") or {}
+    lines = []
+    for task_id, text, gold in TASKS:
+        if flags.get(task_id):
+            lines.append(f"✓ {text}")
+        else:
+            lines.append(f"○ {text} · +{gold} vàng")
+    return lines
+
+
+DAILIES = (
+    ("hunt", "Săn", 3, 300),
+    ("sell", "Bán xác", 1, 150),
+    ("rest", "Nghỉ", 1, 120),
+)
+
+
+def _today() -> str:
+    from datetime import date
+    return date.today().isoformat()
+
+
+def _fresh_daily(today: str) -> dict:
+    return {"day": today, "progress": {}, "paid": {}}
+
+
+def daily_view(player_id: str) -> list[dict]:
+    """Today's three jobs. A new date clears yesterday's progress."""
+    user = get_character(player_id) or {}
+    today = _today()
+    bucket = user.get("daily") or {}
+    if bucket.get("day") != today:
+        bucket = _fresh_daily(today)
+    progress = bucket.get("progress") or {}
+    paid = bucket.get("paid") or {}
+    rows = []
+    for quest_id, text, need, gold in DAILIES:
+        have = int(progress.get(quest_id) or 0)
+        rows.append({
+            "id": quest_id,
+            "text": text,
+            "need": need,
+            "have": min(have, need),
+            "gold": gold,
+            "done": bool(paid.get(quest_id)),
+        })
+    return rows
+
+
+def bump_daily(player_id: str, quest_id: str, steps: int = 1) -> str:
+    """Advance one daily job. Pays gold once when the count reaches the goal."""
+    spec = next((row for row in DAILIES if row[0] == quest_id), None)
+    if spec is None or steps <= 0:
+        return ""
+    today = _today()
+
+    def do(user):
+        bucket = dict(user.get("daily") or {})
+        if bucket.get("day") != today:
+            bucket = _fresh_daily(today)
+        progress = dict(bucket.get("progress") or {})
+        paid = dict(bucket.get("paid") or {})
+        if paid.get(quest_id):
+            user["daily"] = bucket
+            return ""
+        have = int(progress.get(quest_id) or 0) + int(steps)
+        progress[quest_id] = have
+        bucket["progress"] = progress
+        bucket["paid"] = paid
+        if have >= spec[2]:
+            paid[quest_id] = True
+            bucket["paid"] = paid
+            user["gold"] = int(user.get("gold") or 0) + spec[3]
+            note = f"Việc ngày: {spec[1]} {spec[2]}/{spec[2]}. +{spec[3]} vàng."
+        else:
+            note = f"Việc ngày: {spec[1]} {have}/{spec[2]}."
+        user["daily"] = bucket
+        return note
+
+    result = data_store._mutate_user(player_id, do)
+    if result in (data_store.NOT_FOUND, data_store.FORBIDDEN, None):
+        return ""
+    return result or ""
+
+
+def complete_task(player_id: str, task_id: str) -> str:
+    spec = next((row for row in TASKS if row[0] == task_id), None)
+    if spec is None:
+        return ""
+
+    def do(user):
+        flags = dict(user.get("tasks") or {})
+        if flags.get(task_id):
+            return ""
+        flags[task_id] = True
+        user["tasks"] = flags
+        user["gold"] = int(user.get("gold") or 0) + spec[2]
+        return f"Xong việc: {spec[1]}. +{spec[2]} vàng."
+
+    result = data_store._mutate_user(player_id, do)
+    if result in (data_store.NOT_FOUND, data_store.FORBIDDEN, None):
+        return ""
+    return result or ""
+
+
+def rest_character(player_id: str) -> dict:
+    from datetime import date
+    today = date.today().isoformat()
+
+    def do(user):
+        used = dict(user.get("rest_used") or {})
+        if used.get("day") != today:
+            used = {"day": today, "n": 0}
+        if int(used.get("n") or 0) >= REST_PER_DAY:
+            return {"ok": False, "message": f"Hôm nay đã nghỉ {REST_PER_DAY} lần."}
+        before = int(user.get("the_luc") or 0)
+        if before >= REST_CAP:
+            return {"ok": False, "message": f"Thể lực đã {before}, không nghỉ thêm."}
+        after = min(REST_CAP, before + REST_HEAL)
+        user["the_luc"] = after
+        used["n"] = int(used.get("n") or 0) + 1
+        user["rest_used"] = used
+        left = REST_PER_DAY - used["n"]
+        return {
+            "ok": True,
+            "message": f"Nghỉ ngơi. Thể lực {before} → {after}. Còn {left} lần hôm nay.",
+        }
+
+    result = data_store._mutate_user(player_id, do)
+    if result in (data_store.NOT_FOUND, data_store.FORBIDDEN, None):
+        return {"ok": False, "message": "Chưa có nhân vật."}
+    if isinstance(result, dict) and result.get("ok"):
+        note = bump_daily(player_id, "rest")
+        if note:
+            result["message"] += "\n" + note
+    return result
+
+
+def waiting_text(player_id: str, channel_id: str = "") -> str:
+    character = get_character(player_id)
+    if character is None:
+        return "Đang chờ: không"
+    bits = []
+    pending = character.get("pending_event") or {}
+    if pending:
+        bits.append(f"sự kiện {pending.get('title') or 'sau trận'}")
+    run = character.get("dungeon_run")
+    if run:
+        bits.append(f"hầm, phòng {int(run.get('room_index') or 0) + 1}")
+    if channel_id:
+        from . import party as party_mod
+        party = party_mod.find_party(str(channel_id), str(player_id))
+        if party:
+            bits.append(f"đội {party.get('title') or ''}".strip())
+        if find_room(str(channel_id), str(player_id)):
+            bits.append("phòng đấu")
+    if not bits:
+        return "Đang chờ: không"
+    return "Đang chờ: " + " · ".join(bits)
+
 
 def equip_or_consume(player_id: str, bag_index_1based: int):
     """Equip a weapon / equipment, or consume food at the given 1-based bag index.
@@ -226,11 +444,53 @@ def equip_or_consume(player_id: str, bag_index_1based: int):
         return None
     item = c["bag"][bag_index_1based - 1]
     if item.get("type") == "equipment":
-        return equip_gear(player_id, bag_index_1based)
+        result = equip_gear(player_id, bag_index_1based)
+        if not result:
+            return None
+        name = item.get("name")
+        if isinstance(result, dict):
+            name = (result.get("item") or {}).get("name", name)
+        return {"ok": True, "action": "equip_gear", "name": name}
     result = data_store.set_item(player_id, bag_index_1based - 1)
-    if result is not data_store.OK:
-        return None
-    return item
+    if isinstance(result, dict) and result.get("ok"):
+        return result
+    return None
+
+
+def drink_belt(player_id: str, slot_1based: int) -> dict:
+    """Drink one stamina charge from a belt slot. Combat items stay on the belt."""
+
+    def do(user):
+        equip_mod.ensure_loadout(user)
+        belt = user["consumables"]
+        idx = slot_1based - 1
+        if not (0 <= idx < len(belt)) or not belt[idx]:
+            return {"ok": False, "message": "Ô đai trống."}
+        item = belt[idx]
+        amount = int(item.get("heal_stamina") or 0)
+        if item.get("subtype") != "stamina" and amount <= 0:
+            return {
+                "ok": False,
+                "message": f"{item.get('name')} nằm trên đai và tự kích hoạt trong trận, không uống ngay.",
+            }
+        before = int(user.get("the_luc", 0))
+        user["the_luc"] = before + amount
+        left = int(item.get("qty", 1)) - 1
+        if left > 0:
+            item["qty"] = left
+        else:
+            belt[idx] = None
+            left = 0
+        return {
+            "ok": True, "action": "consume", "name": item.get("name"),
+            "stamina": amount, "before": before, "the_luc": user["the_luc"],
+            "left": left, "notes": [f"⚡ Thể lực {before} → {user['the_luc']} (+{amount})"],
+        }
+
+    result = data_store._mutate_user(player_id, do)
+    if result in (data_store.NOT_FOUND, data_store.FORBIDDEN, None):
+        return {"ok": False, "message": "Không dùng được ô đai."}
+    return result
 
 
 def equip_gear(player_id: str, bag_index_1based: int, multi_slot_index: Optional[int] = None):
@@ -391,12 +651,27 @@ POINT_MULTIPLIERS = {"hp": 5, "def": 2, "atk": 2, "spd": 1}
 
 
 def spend_points(player_id: str, stat: str, points: int):
-    """Port of increaseHp/Def/Atk/Spd. `stat` is one of 'hp','def','atk','spd'.
-    Point costs mirror the original: 1pt = 5HP, 1pt = 2DEF, 1pt = 2ATK, 1pt = 1SPD.
-    Returns the new stat value, or NOT_FOUND / FORBIDDEN."""
+    """Spend skill points. HP, ATK and DEF become +1% of the fight stat per point.
+    SPD still adds 1 speed on the body. Returns the spent total, or NOT_FOUND / FORBIDDEN."""
     if stat not in POINT_MULTIPLIERS or points <= 0:
         return data_store.FORBIDDEN
     return data_store.spend_points(player_id, stat, points, POINT_MULTIPLIERS[stat])
+
+
+def next_battle(player_id: str, stat: str, points: int = 1) -> tuple[Optional[dict], Optional[dict]]:
+    """Fight stats now, and after `points` more on `stat`. None without a weapon."""
+    if stat not in ("hp", "atk", "def", "spd") or int(points) <= 0:
+        return None, None
+    character = get_character(player_id)
+    if character is None or not character.get("weapon"):
+        return None, None
+    ghost = dict(character)
+    spent = dict(character.get("spent") or {})
+    spent[stat] = int(spent.get(stat) or 0) + int(points)
+    ghost["spent"] = spent
+    if stat == "spd":
+        ghost["spd"] = int(character.get("spd") or 0) + int(points) * POINT_MULTIPLIERS["spd"]
+    return _battle_stats(character), _battle_stats(ghost)
 
 
 REPAIR_COST_RATIO = 0.5  # a from-zero repair costs half the weapon's price
@@ -502,6 +777,7 @@ def encounter_and_fight(player_id: str) -> dict:
     breakage, EXP/level-up). Returns a dict describing the outcome instead
     of sending chat messages — render it however you like.
     """
+    ensure_potion_kit(player_id)
     c = get_character(player_id)
     if c is None:
         return {"ok": False, "reason": "no_character"}
@@ -573,6 +849,7 @@ def encounter_and_fight(player_id: str) -> dict:
         monster_actions=monster_template.get("actions") or [],
         player_belt=belt_snapshot,
         weapon_category=c["weapon"].get("category") or "",
+        weapon=c["weapon"],
     )
 
     def _save_belt(u):
@@ -666,6 +943,9 @@ def encounter_and_fight(player_id: str) -> dict:
     for ev in outcome["items_used"]:
         if ev.get("log"):
             hunt_lines.append(ev["log"])
+    trail = journey.play([player_id], location, mode="solo")
+    outcome["journey"] = trail
+    hunt_lines.extend(trail.get("lines") or [])
     data_store.append_history(player_id, {
         "ts": int(time.time() * 1000),
         "kind": "hunt",
@@ -687,7 +967,16 @@ def encounter_and_fight(player_id: str) -> dict:
             "location_name": pending.get("location_name"),
         }
 
+    note = bump_daily(player_id, "hunt")
+    if note:
+        outcome["daily_note"] = note
+
     after = get_character(player_id)
+    outcome["belt"] = [dict(x) if x else None for x in (after.get("consumables") or [])]
+    outcome["pocket"] = [
+        dict(it) for it in (after.get("bag") or [])
+        if it.get("type") in ("consumable", "food")
+    ]
     outcome["player_level"] = after["level"]
     outcome["player_exp"] = round(after["exp"])
     outcome["player_exp_needed"] = data_store.exp_needed_for(after["level"])

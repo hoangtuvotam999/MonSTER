@@ -1,0 +1,26 @@
+[
+  {
+    "id": "mat_r8",
+    "type": "material",
+    "name": "Nguyên liệu bậc VIII",
+    "tier": "8",
+    "price": 0,
+    "desc": "Nguyên liệu bậc VIII.",
+    "lore": "Nguyên liệu bậc VIII.",
+    "rarity": "epic"
+  },
+  {
+    "type": "material",
+    "id": "enhance_stone_8",
+    "name": "Đá cường hóa VIII",
+    "tier": "8",
+    "price": 0,
+    "desc": "Đá cường hóa bậc VIII.",
+    "lore": "Đá cường hóa bậc VIII.",
+    "rarity": "epic",
+    "tags": [
+      "enhance_stone"
+    ],
+    "enhance_tier": "8"
+  }
+]

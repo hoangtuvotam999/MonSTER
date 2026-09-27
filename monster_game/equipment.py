@@ -233,20 +233,36 @@ def set_belt_slot(player_id: str, belt_index_0: int, bag_index_0: Optional[int])
             if item.get("type") not in ("consumable", "food"):
                 return data_store.FORBIDDEN
         old = belt[belt_index_0]
-        # take 1 qty into belt (stack stays in bag if qty>1)
         entry = dict(item)
-        entry["qty"] = 1
-        qty = item.get("qty", 1)
-        if qty > 1:
-            item["qty"] = qty - 1
-        else:
-            bag.pop(bag_index_0)
+        entry["qty"] = max(1, int(item.get("qty", 1)))
+        bag.pop(bag_index_0)
+        same = old and old.get("id") == entry.get("id")
+        if same:
+            entry["qty"] = int(old.get("qty", 1)) + entry["qty"]
+            old = None
         belt[belt_index_0] = entry
         if old:
             data_store._stack_into_bag(user, old)
         return {"ok": True, "item": entry, "replaced": old}
 
     return data_store._mutate_user(player_id, do)
+
+
+def stow_stack_on_belt(user: dict, item: dict) -> bool:
+    """Merge a heal stack onto the belt. Returns False when every slot is full."""
+    ensure_loadout(user)
+    belt = user["consumables"]
+    for slot in belt:
+        if slot and slot.get("id") == item.get("id"):
+            slot["qty"] = int(slot.get("qty", 1)) + int(item.get("qty", 1))
+            return True
+    for i, slot in enumerate(belt):
+        if slot is None:
+            entry = dict(item)
+            entry["qty"] = max(1, int(item.get("qty", 1)))
+            belt[i] = entry
+            return True
+    return False
 
 
 def consume_belt_charge(character: dict, belt_index: int) -> Optional[dict]:

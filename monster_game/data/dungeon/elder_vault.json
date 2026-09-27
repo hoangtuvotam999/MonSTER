@@ -1,0 +1,27 @@
+{
+  "id": "elder_vault",
+  "name": "Kho Elder",
+  "description": "Một hầm ngắn. Rương trong đó giữ mũ bậc XV.",
+  "min_level": 15,
+  "map_ref": 3,
+  "stamina_cost": 80,
+  "rooms": [
+    {
+      "id": "vault_chest",
+      "type": "treasure",
+      "title": "Rương bậc XV",
+      "drops": [
+        {
+          "item_id": "helm_r15",
+          "chance": 1.0,
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "gold": [
+        0,
+        0
+      ]
+    }
+  ]
+}

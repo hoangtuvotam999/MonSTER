@@ -1,0 +1,136 @@
+{
+  "by_category": {
+    "*": {
+      "*": [
+        {"id": "swing", "name": "Vung", "weight": 1, "mult": 1.0, "flavor": "vung vũ khí"}
+      ]
+    },
+    "Sword": {
+      "A": [
+        {"id": "slash", "name": "Chém", "weight": 50, "mult": 1.0, "flavor": "chém liên tiếp"},
+        {"id": "thrust", "name": "Đâm", "weight": 30, "mult": 1.05, "flavor": "đâm thẳng một nhát"},
+        {"id": "riposte", "name": "Phản đòn", "weight": 20, "mult": 1.12, "flavor": "xoay lưỡi phản đòn"}
+      ],
+      "B": [
+        {"id": "slash", "name": "Chém", "weight": 40, "mult": 1.0, "flavor": "chém xé lớp da"},
+        {"id": "arc", "name": "Cầu kiếm", "weight": 35, "mult": 1.08, "flavor": "vẽ một vòng kiếm sáng"},
+        {"id": "sting", "name": "Chích độc", "weight": 25, "mult": 1.15, "flavor": "lưỡi kiếm để lại vệt độc", "effect": "bleed"}
+      ],
+      "C": [
+        {"id": "edge", "name": "Sắc lưỡi", "weight": 35, "mult": 1.05, "flavor": "chém một nhát đỏ rực"},
+        {"id": "flurry", "name": "Liên trảm", "weight": 35, "mult": 1.12, "flavor": "chém liên hoàn như mưa"},
+        {"id": "king", "name": "Vương kích", "weight": 30, "mult": 1.22, "flavor": "nhát kiếm kéo theo lửa"}
+      ],
+      "D": [
+        {"id": "sting", "name": "Chích độc", "weight": 30, "mult": 1.2, "flavor": "lưỡi để lại vết cắt không liền", "effect": "bleed"},
+        {"id": "flurry", "name": "Liên trảm", "weight": 35, "mult": 1.14, "flavor": "chém liên hoàn như mưa"},
+        {"id": "king", "name": "Vương kích", "weight": 35, "mult": 1.26, "flavor": "nhát kiếm kéo theo lửa dày"}
+      ]
+    },
+    "Great Sword": {
+      "A": [
+        {"id": "overhead", "name": "Bổ", "weight": 55, "mult": 1.08, "flavor": "bổ đại kiếm từ trên xuống"},
+        {"id": "wide", "name": "Quét", "weight": 45, "mult": 0.95, "flavor": "quét ngang một vòng nặng"}
+      ],
+      "B": [
+        {"id": "overhead", "name": "Bổ", "weight": 40, "mult": 1.1, "flavor": "bổ mạnh, lưỡi rung lên"},
+        {"id": "charge", "name": "Tích lực", "weight": 30, "mult": 1.25, "flavor": "nén lực rồi bổ xuống", "effect": "stagger"},
+        {"id": "wide", "name": "Quét", "weight": 30, "mult": 1.0, "flavor": "quét đất kéo theo bụi"}
+      ],
+      "C": [
+        {"id": "charge", "name": "Tích lực", "weight": 40, "mult": 1.28, "flavor": "true lực nổ khi lưỡi chạm đất", "effect": "stagger"},
+        {"id": "cleave", "name": "Chẻ", "weight": 35, "mult": 1.15, "flavor": "chẻ gió thành một vệt lửa"},
+        {"id": "wide", "name": "Quét", "weight": 25, "mult": 1.05, "flavor": "quét một vòng lửa"}
+      ],
+      "D": [
+        {"id": "charge", "name": "Tích lực", "weight": 40, "mult": 1.34, "flavor": "bổ một nhát đủ làm đối thủ mất nhịp", "effect": "stagger"},
+        {"id": "cleave", "name": "Chẻ", "weight": 35, "mult": 1.18, "flavor": "chẻ gió thành vệt lửa dày"},
+        {"id": "wide", "name": "Quét", "weight": 25, "mult": 1.08, "flavor": "quét một vòng lửa rộng"}
+      ]
+    },
+    "Lance": {
+      "A": [
+        {"id": "poke", "name": "Đâm", "weight": 60, "mult": 1.0, "flavor": "đâm liên tiếp giữ khoảng"},
+        {"id": "guard", "name": "Đỡ đâm", "weight": 40, "mult": 0.92, "flavor": "đỡ rồi đâm trả", "effect": "brace"}
+      ],
+      "B": [
+        {"id": "poke", "name": "Đâm", "weight": 45, "mult": 1.05, "flavor": "đâm xuyên lớp vảy"},
+        {"id": "charge", "name": "Xung kích", "weight": 30, "mult": 1.18, "flavor": "lao tới cắm thương"},
+        {"id": "shell", "name": "Nổ thương", "weight": 25, "mult": 1.12, "flavor": "một tiếng nổ ở đầu thương"}
+      ],
+      "C": [
+        {"id": "charge", "name": "Xung kích", "weight": 40, "mult": 1.2, "flavor": "xung kích kèm tiếng nổ"},
+        {"id": "wall", "name": "Tường thương", "weight": 30, "mult": 1.0, "flavor": "giữ thế rồi đâm ba nhịp", "effect": "brace"},
+        {"id": "pierce", "name": "Xuyên", "weight": 30, "mult": 1.18, "flavor": "mũi thương xuyên thẳng"}
+      ],
+      "D": [
+        {"id": "wall", "name": "Tường thương", "weight": 35, "mult": 1.08, "flavor": "chống thương, lớp đỡ dày thêm", "effect": "brace"},
+        {"id": "pierce", "name": "Xuyên", "weight": 35, "mult": 1.22, "flavor": "mũi thương xuyên khe giáp"},
+        {"id": "charge", "name": "Xung kích", "weight": 30, "mult": 1.24, "flavor": "lao tới cắm thương sâu"}
+      ]
+    },
+    "Dual Blades": {
+      "A": [
+        {"id": "flurry", "name": "Liên chém", "weight": 60, "mult": 1.0, "flavor": "chém liên tiếp hai lưỡi"},
+        {"id": "spin", "name": "Xoay", "weight": 40, "mult": 1.06, "flavor": "xoay người cắt ngang"}
+      ],
+      "B": [
+        {"id": "flurry", "name": "Liên chém", "weight": 45, "mult": 1.05, "flavor": "hai lưỡi xẹt điện"},
+        {"id": "dash", "name": "Lướt", "weight": 35, "mult": 1.1, "flavor": "lướt sát rồi cắt gân"},
+        {"id": "spin", "name": "Xoay", "weight": 20, "mult": 1.08, "flavor": "xoay thành một vòng sáng"}
+      ],
+      "C": [
+        {"id": "demon", "name": "Cuồng vũ", "weight": 40, "mult": 1.16, "flavor": "hai lưỡi múa như bão", "effect": "tempo"},
+        {"id": "dash", "name": "Lướt", "weight": 35, "mult": 1.1, "flavor": "biến mất rồi hiện ra sau lưng"},
+        {"id": "flurry", "name": "Liên chém", "weight": 25, "mult": 1.05, "flavor": "chém dày đặc"}
+      ],
+      "D": [
+        {"id": "demon", "name": "Cuồng vũ", "weight": 40, "mult": 1.2, "flavor": "hai lưỡi càng chém càng nặng", "effect": "tempo"},
+        {"id": "dash", "name": "Lướt", "weight": 35, "mult": 1.12, "flavor": "biến mất rồi hiện ra sau lưng", "effect": "tempo"},
+        {"id": "flurry", "name": "Liên chém", "weight": 25, "mult": 1.08, "flavor": "chém dày đặc", "effect": "tempo"}
+      ]
+    },
+    "Heavy Bowgun": {
+      "A": [
+        {"id": "shot", "name": "Bắn", "weight": 60, "mult": 1.0, "flavor": "nhả một loạt đạn sắt"},
+        {"id": "spread", "name": "Tỏa", "weight": 40, "mult": 0.95, "flavor": "bắn tỏa gần"}
+      ],
+      "B": [
+        {"id": "shot", "name": "Bắn", "weight": 45, "mult": 1.05, "flavor": "đạn xuyên lớp vảy"},
+        {"id": "sticky", "name": "Dính", "weight": 30, "mult": 1.15, "flavor": "đạn dính nổ chậm"},
+        {"id": "spread", "name": "Tỏa", "weight": 25, "mult": 1.0, "flavor": "bắn tỏa sát mặt"}
+      ],
+      "C": [
+        {"id": "wyvern", "name": "Đạn rồng", "weight": 35, "mult": 1.25, "flavor": "một phát nổ lớn", "effect": "blast"},
+        {"id": "pierce", "name": "Xuyên", "weight": 35, "mult": 1.12, "flavor": "đạn xuyên suốt thân"},
+        {"id": "shot", "name": "Bắn", "weight": 30, "mult": 1.05, "flavor": "xả đạn liên thanh"}
+      ],
+      "D": [
+        {"id": "wyvern", "name": "Đạn rồng", "weight": 40, "mult": 1.3, "flavor": "một phát nổ thêm phần máu địch", "effect": "blast"},
+        {"id": "pierce", "name": "Xuyên", "weight": 30, "mult": 1.16, "flavor": "đạn xuyên suốt thân"},
+        {"id": "shot", "name": "Bắn", "weight": 30, "mult": 1.08, "flavor": "xả đạn liên thanh"}
+      ]
+    },
+    "Light Bowgun": {
+      "A": [
+        {"id": "burst", "name": "Loạt", "weight": 60, "mult": 1.0, "flavor": "xả một loạt đạn nhanh"},
+        {"id": "step", "name": "Bắn lùi", "weight": 40, "mult": 0.95, "flavor": "vừa lùi vừa bắn"}
+      ],
+      "B": [
+        {"id": "burst", "name": "Loạt", "weight": 45, "mult": 1.05, "flavor": "đạn điện xẹt liên tục"},
+        {"id": "mine", "name": "Mìn", "weight": 25, "mult": 1.12, "flavor": "thả mìn rồi kích nổ"},
+        {"id": "step", "name": "Bắn lùi", "weight": 30, "mult": 1.0, "flavor": "lướt ngang bắn"}
+      ],
+      "C": [
+        {"id": "burst", "name": "Loạt", "weight": 40, "mult": 1.08, "flavor": "mưa đạn không ngớt"},
+        {"id": "snipe", "name": "Ngắm", "weight": 30, "mult": 1.2, "flavor": "một phát ngắm trúng yếu điểm", "effect": "snipe"},
+        {"id": "mine", "name": "Mìn", "weight": 30, "mult": 1.12, "flavor": "mìn nổ dưới chân quái"}
+      ],
+      "D": [
+        {"id": "snipe", "name": "Ngắm", "weight": 35, "mult": 1.26, "flavor": "phát ngắm xuyên bảy phần lớp đỡ", "effect": "snipe"},
+        {"id": "burst", "name": "Loạt", "weight": 35, "mult": 1.1, "flavor": "mưa đạn không ngớt"},
+        {"id": "mine", "name": "Mìn", "weight": 30, "mult": 1.16, "flavor": "mìn nổ dưới chân quái"}
+      ]
+    }
+  }
+}

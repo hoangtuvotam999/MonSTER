@@ -1,0 +1,26 @@
+[
+  {
+    "id": "mat_r13",
+    "type": "material",
+    "name": "Nguyên liệu bậc XIII",
+    "tier": "13",
+    "price": 0,
+    "desc": "Nguyên liệu bậc XIII.",
+    "lore": "Nguyên liệu bậc XIII.",
+    "rarity": "epic"
+  },
+  {
+    "type": "material",
+    "id": "enhance_stone_13",
+    "name": "Đá cường hóa XIII",
+    "tier": "13",
+    "price": 0,
+    "desc": "Đá cường hóa bậc XIII.",
+    "lore": "Đá cường hóa bậc XIII.",
+    "rarity": "epic",
+    "tags": [
+      "enhance_stone"
+    ],
+    "enhance_tier": "13"
+  }
+]

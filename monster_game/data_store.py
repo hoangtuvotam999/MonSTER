@@ -104,6 +104,11 @@ def reload_catalogs() -> None:
         bs._cfg_cache = None
     except Exception:
         pass
+    try:
+        from . import tiers as tier_mod
+        tier_mod.reload()
+    except Exception:
+        pass
 
 
 # Points granted on level-up (balance: was 500*level — far too high)
@@ -165,7 +170,7 @@ def get_location_level(location_id) -> Optional[int]:
 def get_weapons() -> list[dict]:
     global _weapons_cache
     if _weapons_cache is None:
-        weapons = _load_json_dir(WEAPON_DIR)
+        weapons = [w for w in _load_json_dir(WEAPON_DIR) if w.get("type") == "weapon"]
         if not weapons and LEGACY_ITEMS_FILE.exists():
             weapons = [i for i in _load(LEGACY_ITEMS_FILE) if i.get("type") == "weapon"]
         _weapons_cache = weapons
@@ -406,8 +411,49 @@ def add_to_bag(player_id: str, item: dict, stack: bool = True):
     return _mutate_user(player_id, do)
 
 
+def _take_one(bag: list, index: int, data: dict) -> int:
+    qty = int(data.get("qty", 1))
+    if qty > 1:
+        data["qty"] = qty - 1
+        return qty - 1
+    bag.pop(index)
+    return 0
+
+
+def _drink(user: dict, data: dict, bag: list, index: int) -> dict:
+    """Consume one food or stamina item and apply its out-of-combat effects."""
+    before = int(user.get("the_luc", 0))
+    stamina = int(data.get("heal_stamina") or data.get("heal") or 0)
+    notes = []
+    if stamina:
+        user["the_luc"] = before + stamina
+        notes.append(f"⚡ Thể lực {before} → {user['the_luc']} (+{stamina})")
+    for key, label in (
+        ("boostHP", "HP"), ("boostATK", "ATK"), ("boostDEF", "DEF"), ("boostSPD", "SPD"),
+        ("boostEXP", "EXP"), ("boostPoints", "điểm"),
+    ):
+        amount = int(data.get(key) or 0)
+        if not amount:
+            continue
+        field = {"boostHP": "hp", "boostATK": "atk", "boostDEF": "def", "boostSPD": "spd",
+                 "boostEXP": "exp", "boostPoints": "points"}[key]
+        user[field] = user.get(field, 0) + amount
+        notes.append(f"+{amount} {label}")
+    if data.get("boostKarma"):
+        user["karma"] = max(0, user.get("karma", 0) + int(data["boostKarma"]))
+        notes.append(f"karma {int(data['boostKarma']):+d}")
+    left = _take_one(bag, index, data)
+    if not notes:
+        notes.append("Không có hiệu ứng thể lực.")
+    return {
+        "ok": True, "action": "consume", "name": data.get("name", "vật phẩm"),
+        "stamina": stamina, "before": before, "the_luc": user.get("the_luc", 0),
+        "left": left, "notes": notes,
+    }
+
+
 def set_item(player_id: str, bag_index: int):
-    """Equip a weapon, or consume food / apply upgrade at 0-based bag index."""
+    """Equip a weapon, drink food/stamina, or stow a combat consumable."""
 
     def do(user):
         bag = user["bag"]
@@ -423,33 +469,24 @@ def set_item(player_id: str, bag_index: int):
             bag.pop(bag_index)
             if old_weapon is not None:
                 bag.append(old_weapon)
-            return OK
-        elif kind == "buff":
-            user["buffs"] = data
-        elif kind == "food":
-            qty = data.get("qty", 1)
-            user["the_luc"] = user.get("the_luc", 0) + data.get("heal", 0)
-            user["hp"] += data.get("boostHP", 0)
-            user["atk"] += data.get("boostATK", 0)
-            user["def"] += data.get("boostDEF", 0)
-            user["spd"] += data.get("boostSPD", 0)
-            user["exp"] += data.get("boostEXP", 0)
-            user["karma"] = max(0, user["karma"] + data.get("boostKarma", 0))
-            user["points"] += data.get("boostPoints", 0)
-            if qty > 1:
-                data["qty"] = qty - 1
-                return OK
-        elif kind == "consumable":
-            # Out-of-combat use: stamina potions & flat heals only
-            if data.get("subtype") == "stamina":
-                user["the_luc"] = user.get("the_luc", 0) + int(data.get("heal_stamina", 0))
-            qty = data.get("qty", 1)
-            if qty > 1:
-                data["qty"] = qty - 1
-                return OK
-        elif kind == "equipment":
-            return FORBIDDEN  # use equipment.equip_from_bag
-        elif kind == "upgrade":
+            return {"ok": True, "action": "equip_weapon", "name": data.get("name")}
+        if kind == "food" or (kind == "consumable" and data.get("subtype") == "stamina"):
+            return _drink(user, data, bag, bag_index)
+        if kind == "consumable":
+            from . import equipment as eq
+            eq.ensure_loadout(user)
+            # Heal, buffs and charms wait on the belt. Stamina was handled above.
+            if data.get("subtype") == "heal" or data.get("belt") is True:
+                if not eq.stow_stack_on_belt(user, data):
+                    return FORBIDDEN
+                qty = int(data.get("qty", 1))
+                bag.pop(bag_index)
+                return {"ok": True, "action": "belt", "name": data.get("name"), "qty": qty,
+                        "subtype": data.get("subtype")}
+            return _drink(user, data, bag, bag_index)
+        if kind == "equipment":
+            return FORBIDDEN
+        if kind == "upgrade":
             w = user.get("weapon")
             if w is None:
                 return FORBIDDEN
@@ -459,17 +496,11 @@ def set_item(player_id: str, bag_index: int):
             w["DEF"] += data.get("boostDEFweapon", 0)
             w["SPD"] += data.get("boostSPDweapon", 0)
             w["usage"] = w.get("usage", 0) + data.get("usage", 0)
-            qty = data.get("qty", 1)
-            if qty > 1:
-                data["qty"] = qty - 1
-                return OK
-        elif kind == "material":
-            return FORBIDDEN  # materials are sold / crafted, not "used"
-        else:
+            left = _take_one(bag, bag_index, data)
+            return {"ok": True, "action": "upgrade", "name": data.get("name"), "left": left}
+        if kind == "material":
             return FORBIDDEN
-
-        bag.pop(bag_index)
-        return OK
+        return FORBIDDEN
 
     return _mutate_user(player_id, do)
 
@@ -530,8 +561,12 @@ def spend_points(player_id: str, stat: str, points: int, per_point: int):
         if user["points"] < points:
             return FORBIDDEN
         user["points"] -= int(points)
-        user[stat] += int(points) * per_point
-        return user[stat]
+        spent = dict(user.get("spent") or {})
+        spent[stat] = int(spent.get(stat) or 0) + int(points)
+        user["spent"] = spent
+        if stat == "spd":
+            user["spd"] = int(user.get("spd") or 0) + int(points) * int(per_point)
+        return spent[stat]
 
     return _mutate_user(player_id, do)
 

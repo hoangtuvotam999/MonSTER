@@ -130,7 +130,7 @@ class _Side:
         self.label = label
         self.name = name
         self.icon = icon
-        self.max_hp = max(stats["HP"], 1)
+        self.max_hp = max(stats.get("maxHP", stats["HP"]), 1)
         self.spd = stats["SPD"]
         self.verbs = verbs
         self.hurt_lines = hurt_lines
@@ -176,12 +176,11 @@ def _render_round(rnd: list[dict], attacker: _Side, defender: _Side, rng: random
     total = sum(e["damage"] for e in combat_hits)
     hits = ", ".join(_hit_text(e) for e in combat_hits)
     first = combat_hits[0]
-    if first.get("flavor") and first.get("attacker") not in player_labels:
-        verb = first["flavor"]
-    else:
-        verb = rng.choice(attacker.verbs)
+    verb = first.get("flavor") or rng.choice(attacker.verbs)
     action_name = first.get("action_name")
-    suffix = f" · {action_name}" if action_name and first.get("attacker") not in player_labels else ""
+    suffix = ""
+    if action_name and action_name not in verb and first.get("attacker") not in player_labels:
+        suffix = f" · {action_name}"
 
     if len(combat_hits) == 1:
         lines.append(f"▶ {attacker.name} {verb}{suffix}: {hits}")
@@ -328,7 +327,46 @@ def render_hunt(outcome: dict, max_rounds: int = 12, rng: Optional[random.Random
     if adv:
         lines.append("")
         lines.append(render_adventure_prompt(adv))
+    for beat in (outcome.get("journey") or {}).get("beats") or []:
+        lines.append("")
+        lines.extend(beat.get("lines") or [])
+    if outcome.get("daily_note"):
+        lines.append(outcome["daily_note"])
     return "\n".join(lines)
+
+
+def hunt_combat_lines(outcome: dict, max_rounds: int = 16, rng: Optional[random.Random] = None) -> list[str]:
+    """Combat narration only, one beat per line, for embeds."""
+    if not outcome.get("ok") or not outcome.get("log"):
+        return []
+    rng = rng or random.Random()
+    player = _Side("player", outcome["player_name"], PLAYER_ICON, outcome["player_stats"],
+                   WEAPON_VERBS.get(outcome.get("weapon_category"), DEFAULT_WEAPON_VERBS),
+                   PLAYER_HURT_LINES)
+    monster = _Side("monster", outcome["monster_name"], MONSTER_ICON, outcome["monster_stats"],
+                    MONSTER_VERBS, HURT_LINES)
+    return [ln for ln in _render_battle(outcome["log"], player, monster, max_rounds, rng) if ln.strip()]
+
+
+def party_combat_lines(result: dict, max_rounds: int = 10, rng: Optional[random.Random] = None) -> list[str]:
+    if not result.get("ok"):
+        return []
+    rng = rng or random.Random()
+    lines: list[str] = []
+    for seg in result.get("segments") or []:
+        lines.append(f"— {seg['player_name']} ({seg.get('weapon_name', '')}) —")
+        fake = {
+            "ok": True,
+            "log": seg.get("log") or [],
+            "player_name": seg["player_name"],
+            "player_stats": seg.get("player_stats") or {"HP": 1, "SPD": 1},
+            "monster_name": result.get("monster_name", "Quái"),
+            "monster_stats": {"HP": result.get("monster_max_hp") or 1, "SPD": 1},
+            "weapon_category": "",
+        }
+        if fake["log"]:
+            lines.extend(hunt_combat_lines(fake, max_rounds=max_rounds, rng=rng))
+    return lines
 
 
 # --------------------------------------------------------------------------
@@ -423,6 +461,12 @@ def render_character(summary: Optional[dict]) -> str:
             lines.append(f"   💰 Sửa chữa: {fmt(s['repair_cost'])} vàng")
     else:
         lines.append("🗡️ Chưa trang bị vũ khí!")
+
+    belt_bits = []
+    for it in s.get("consumables") or []:
+        if it:
+            belt_bits.append(f"{it.get('name', 'vật phẩm')} x{int(it.get('qty', 1))}")
+    lines.append("🧪 " + (", ".join(belt_bits) if belt_bits else "Đai trống"))
 
     if s.get("dungeon_run"):
         run = s["dungeon_run"]
@@ -522,6 +566,7 @@ def describe_item(item: dict) -> str:
         extra = f" [{tag}]" if tag else ""
         return f"{icon} {name} ({item.get('slot', '?')}) — " + (", ".join(bits) or "—") + extra
     if kind == "consumable":
+        qty_s = f" x{int(qty or 1)}"
         return f"{icon} {name}{qty_s} — {item.get('desc') or item.get('subtype', '')}"
     return f"{icon} {name}{qty_s}"
 
@@ -1108,8 +1153,13 @@ def render_party_hunt(result: dict) -> str:
             lines.append(f"  · {rw['player_name']}: +{fmt(rw['exp'])} EXP")
             for d in rw.get("drops") or []:
                 lines.append(f"    🎁 {d['name']} ×{d.get('qty', 1)}")
-    else:
-        lines.append(f"💀 Thất bại — quái còn {fmt(result.get('monster_hp_left', 0))} HP.")
+        else:
+            lines.append(f"💀 Thất bại — quái còn {fmt(result.get('monster_hp_left', 0))} HP.")
+    for beat in (result.get("journey") or {}).get("beats") or []:
+        lines.append("")
+        lines.extend(beat.get("lines") or [])
+    for note in result.get("daily_notes") or []:
+        lines.append(note)
     return "\n".join(lines)
 
 

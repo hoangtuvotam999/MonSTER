@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from typing import Optional
 
-from . import data_store
+from . import data_store, tiers
 
 WEAPON_CATEGORIES = {
     "1": "Great Sword",
@@ -21,7 +21,17 @@ WEAPON_CATEGORIES = {
     "6": "Light Bowgun",
 }
 
-WEAPON_TIER_LABELS = {"A": "I", "B": "II", "C": "III"}
+def weapon_tier_labels() -> dict:
+    """Roman label for each tier id and its aliases (A is I)."""
+    labels = {}
+    for row in tiers.all_tiers():
+        labels[str(row["id"])] = row["label"]
+        for alias in row.get("aliases") or []:
+            labels[str(alias)] = row["label"]
+    return labels
+
+
+WEAPON_TIER_LABELS = weapon_tier_labels()
 
 MAX_WEAPON_LEVEL = 256
 
@@ -35,14 +45,20 @@ def __getattr__(name: str):
     raise AttributeError(name)
 
 
+def for_sale(items: list[dict]) -> list[dict]:
+    """Shop counters only list tiers marked shop in tiers.json (ranks 1–7)."""
+    return [item for item in items if tiers.is_shop(item)]
+
+
 def weapons_by_category(category: str) -> list[dict]:
     """`category` may be a display name ("Great Sword") or its shop key ("1")."""
     category = WEAPON_CATEGORIES.get(str(category), category)
-    return [i for i in data_store.get_weapons() if i.get("category") == category]
+    found = [i for i in data_store.get_weapons() if i.get("category") == category]
+    return for_sale(found)
 
 
 def weapons_by_tier(tier: str) -> list[dict]:
-    """tier is A/B/C (or tier_A filename suffix)."""
+    """tier is A/B/C/D (or tier_A filename suffix)."""
     tier = str(tier).upper().removeprefix("TIER_")
     return [i for i in data_store.get_weapons() if i.get("tier") == tier]
 
@@ -86,13 +102,28 @@ def purchase_upgrade_material(player_id: str, index_1based: int, balance: int) -
         return PurchaseResult(False, "Bạn chưa có nhân vật")
     if user.get("weapon") and user["weapon"].get("usage", 0) >= MAX_WEAPON_LEVEL:
         return PurchaseResult(False, "Vũ khí đã đạt cấp tối đa")
-    return _purchase(player_id, data_store.get_upgrade_materials(), index_1based, balance)
+    return _purchase(player_id, stone_catalog(), index_1based, balance)
 
 
 def purchase_equipment(player_id: str, index_1based: int, balance: int,
                        slot: Optional[str] = None) -> PurchaseResult:
-    catalog = data_store.get_equipment(slot)
+    catalog = for_sale(data_store.get_equipment(slot))
     return _purchase(player_id, catalog, index_1based, balance)
+
+
+def stone_catalog() -> list[dict]:
+    """Upgrade materials, plus enhance stones of shop ranks 5–7."""
+    items = list(data_store.get_upgrade_materials())
+    for drop in data_store.get_drops():
+        if "enhance_stone" not in (drop.get("tags") or []):
+            continue
+        row = tiers.resolve(drop.get("tier"))
+        if not row or not row.get("shop") or int(row["rank"]) < 5:
+            continue
+        if int(drop.get("price") or 0) <= 0:
+            continue
+        items.append(drop)
+    return items
 
 
 def purchase_consumable(player_id: str, index_1based: int, balance: int) -> PurchaseResult:

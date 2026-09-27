@@ -1,0 +1,26 @@
+[
+  {
+    "id": "mat_r18",
+    "type": "material",
+    "name": "Nguyên liệu bậc XVIII",
+    "tier": "18",
+    "price": 0,
+    "desc": "Nguyên liệu bậc XVIII.",
+    "lore": "Nguyên liệu bậc XVIII.",
+    "rarity": "legendary"
+  },
+  {
+    "type": "material",
+    "id": "enhance_stone_18",
+    "name": "Đá cường hóa XVIII",
+    "tier": "18",
+    "price": 0,
+    "desc": "Đá cường hóa bậc XVIII.",
+    "lore": "Đá cường hóa bậc XVIII.",
+    "rarity": "legendary",
+    "tags": [
+      "enhance_stone"
+    ],
+    "enhance_tier": "18"
+  }
+]

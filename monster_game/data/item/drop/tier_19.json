@@ -1,0 +1,26 @@
+[
+  {
+    "id": "mat_r19",
+    "type": "material",
+    "name": "Nguyên liệu bậc XIX",
+    "tier": "19",
+    "price": 0,
+    "desc": "Nguyên liệu bậc XIX.",
+    "lore": "Nguyên liệu bậc XIX.",
+    "rarity": "legendary"
+  },
+  {
+    "type": "material",
+    "id": "enhance_stone_19",
+    "name": "Đá cường hóa XIX",
+    "tier": "19",
+    "price": 0,
+    "desc": "Đá cường hóa bậc XIX.",
+    "lore": "Đá cường hóa bậc XIX.",
+    "rarity": "legendary",
+    "tags": [
+      "enhance_stone"
+    ],
+    "enhance_tier": "19"
+  }
+]

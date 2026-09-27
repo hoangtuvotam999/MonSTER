@@ -1,0 +1,26 @@
+[
+  {
+    "id": "mat_r12",
+    "type": "material",
+    "name": "Nguyên liệu bậc XII",
+    "tier": "12",
+    "price": 0,
+    "desc": "Nguyên liệu bậc XII.",
+    "lore": "Nguyên liệu bậc XII.",
+    "rarity": "epic"
+  },
+  {
+    "type": "material",
+    "id": "enhance_stone_12",
+    "name": "Đá cường hóa XII",
+    "tier": "12",
+    "price": 0,
+    "desc": "Đá cường hóa bậc XII.",
+    "lore": "Đá cường hóa bậc XII.",
+    "rarity": "epic",
+    "tags": [
+      "enhance_stone"
+    ],
+    "enhance_tier": "12"
+  }
+]

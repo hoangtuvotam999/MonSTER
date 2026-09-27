@@ -53,10 +53,93 @@ def grant_drops(player_id: str, drop_specs: list[dict], rng: Optional[random.Ran
     return granted
 
 
+def _owns_gear(user: dict, item: dict) -> bool:
+    iid = item.get("id")
+    name = item.get("name")
+
+    def same(other: Optional[dict]) -> bool:
+        if not other:
+            return False
+        if iid is not None and other.get("id") == iid:
+            return True
+        return bool(name) and other.get("name") == name
+
+    if same(user.get("weapon")):
+        return True
+    if any(same(it) for it in user.get("bag") or []):
+        return True
+    from . import equipment as eq
+    eq.ensure_loadout(user)
+    return any(same(it) for _slot, it in eq.iter_equipped(user))
+
+
+def _roll_ranked_drop(player_id: str, monster_template: dict, kind: str,
+                      rng: random.Random) -> list[dict]:
+    """One weapon or one armor piece. Higher ranks are rarer, and never above the monster."""
+    from . import tiers as tier_mod
+
+    cap = tier_mod.monster_item_cap(monster_template.get("Tier"))
+    if cap is None:
+        return []
+    eligible = [row for row in tier_mod.drop_tiers() if int(row["rank"]) <= cap]
+    if not eligible:
+        return []
+    chosen = rng.choices(eligible, weights=[float(row["drop_chance"]) for row in eligible], k=1)[0]
+    if rng.random() > float(chosen["drop_chance"]):
+        return []
+    user = data_store.get_user(player_id) or {}
+    if kind == "weapon":
+        pool = [
+            weapon for weapon in data_store.get_weapons()
+            if tier_mod.same_tier(weapon, chosen)
+            and int(weapon.get("id") or 0) != 90
+            and not _owns_gear(user, weapon)
+        ]
+    else:
+        pool = [
+            piece for piece in data_store.get_equipment()
+            if tier_mod.same_tier(piece, chosen) and not _owns_gear(user, piece)
+        ]
+    if not pool:
+        return []
+    template = rng.choice(pool)
+    item = dict(template)
+    item["qty"] = 1
+    item["enhance_level"] = 0
+    if kind == "weapon":
+        item["type"] = "weapon"
+        item["durability"] = 100
+        item["usage"] = 0
+        item["exp"] = 0
+    else:
+        item.setdefault("type", "equipment")
+    if data_store.add_to_bag(player_id, item, stack=False) in (data_store.NOT_FOUND, data_store.FORBIDDEN):
+        return []
+    return [item]
+
+
+def roll_weapon_drop(player_id: str, monster_template: dict,
+                     rng: Optional[random.Random] = None) -> list[dict]:
+    """Rare weapon on a winning fight. Skips Taleblade and any copy already owned."""
+    rng = rng or random.Random()
+    return _roll_ranked_drop(player_id, monster_template, "weapon", rng)
+
+
+def roll_armor_drop(player_id: str, monster_template: dict,
+                    rng: Optional[random.Random] = None) -> list[dict]:
+    """Rare armor on a winning fight. Skips a piece the player already has."""
+    rng = rng or random.Random()
+    return _roll_ranked_drop(player_id, monster_template, "armor", rng)
+
+
 def roll_monster_drops(player_id: str, monster_template: dict,
                        rng: Optional[random.Random] = None) -> list[dict]:
-    """Grant drops listed on the monster's `drops` table (chance per entry)."""
-    return grant_drops(player_id, monster_template.get("drops") or [], rng=rng)
+    """Grant the monster's own materials, then one weapon roll and one armor roll."""
+    rng = rng or random.Random()
+    granted = grant_drops(player_id, monster_template.get("drops") or [], rng=rng)
+    granted.extend(roll_weapon_drop(player_id, monster_template, rng))
+    granted.extend(roll_armor_drop(player_id, monster_template, rng))
+    return granted
 
 
 def maybe_start_event(player_id: str, location: dict,

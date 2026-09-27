@@ -1,0 +1,26 @@
+[
+  {
+    "id": "mat_r11",
+    "type": "material",
+    "name": "Nguyên liệu bậc XI",
+    "tier": "11",
+    "price": 0,
+    "desc": "Nguyên liệu bậc XI.",
+    "lore": "Nguyên liệu bậc XI.",
+    "rarity": "epic"
+  },
+  {
+    "type": "material",
+    "id": "enhance_stone_11",
+    "name": "Đá cường hóa XI",
+    "tier": "11",
+    "price": 0,
+    "desc": "Đá cường hóa bậc XI.",
+    "lore": "Đá cường hóa bậc XI.",
+    "rarity": "epic",
+    "tags": [
+      "enhance_stone"
+    ],
+    "enhance_tier": "11"
+  }
+]

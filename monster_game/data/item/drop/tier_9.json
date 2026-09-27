@@ -1,0 +1,26 @@
+[
+  {
+    "id": "mat_r9",
+    "type": "material",
+    "name": "Nguyên liệu bậc IX",
+    "tier": "9",
+    "price": 0,
+    "desc": "Nguyên liệu bậc IX.",
+    "lore": "Nguyên liệu bậc IX.",
+    "rarity": "epic"
+  },
+  {
+    "type": "material",
+    "id": "enhance_stone_9",
+    "name": "Đá cường hóa IX",
+    "tier": "9",
+    "price": 0,
+    "desc": "Đá cường hóa bậc IX.",
+    "lore": "Đá cường hóa bậc IX.",
+    "rarity": "epic",
+    "tags": [
+      "enhance_stone"
+    ],
+    "enhance_tier": "9"
+  }
+]

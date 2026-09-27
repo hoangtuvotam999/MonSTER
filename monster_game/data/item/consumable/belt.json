@@ -178,5 +178,15 @@
     },
     "desc": "Né đòn chết người — giảm sát thương nhận vào.",
     "belt": true
+  },
+  {
+    "type": "consumable",
+    "id": "candy",
+    "name": "Kẹo",
+    "subtype": "stamina",
+    "price": 40,
+    "heal_stamina": 25,
+    "desc": "Kẹo ngọt. Dùng ngoài trận để hồi nhẹ thể lực.",
+    "belt": false
   }
 ]

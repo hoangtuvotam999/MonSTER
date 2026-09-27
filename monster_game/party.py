@@ -12,7 +12,7 @@ import random
 import time
 from typing import Optional
 
-from . import adventure, combat, data_store, dungeon as dungeon_mod, equipment as equip_mod
+from . import adventure, combat, data_store, dungeon as dungeon_mod, equipment as equip_mod, journey
 from . import game as game_mod
 
 MAX_PARTY_SIZE = 4
@@ -203,6 +203,7 @@ def party_hunt(channel_id: str, starter_id: str, rng: Optional[random.Random] = 
 
     members = []
     for mid in party["members"]:
+        game_mod.ensure_potion_kit(mid)
         c = game_mod.get_character(mid)
         if c is None or not c.get("weapon") or c["weapon"].get("durability", 0) <= 0:
             continue
@@ -260,6 +261,7 @@ def party_hunt(channel_id: str, starter_id: str, rng: Optional[random.Random] = 
             monster_actions=template.get("actions") or [],
             player_belt=belt,
             weapon_category=c["weapon"].get("category") or "",
+            weapon=c["weapon"],
             rng=rng,
         )
         # carry remaining monster HP/stats to next member
@@ -322,6 +324,37 @@ def party_hunt(channel_id: str, starter_id: str, rng: Optional[random.Random] = 
                 "drops": drops,
             })
 
+    daily_notes = []
+    for mid in contributors:
+        note = game_mod.bump_daily(mid, "hunt")
+        if note:
+            who = (game_mod.get_character(mid) or {}).get("name") or mid
+            daily_notes.append(f"{who}: {note}" if len(contributors) > 1 else note)
+
+    trail = journey.play(members, loc, mode="party", rng=rng)
+    word = "thắng" if won else "thua"
+    for mid in members:
+        mine = next((r for r in rewards if r["player_id"] == mid), None)
+        lines = [
+            f"👥 {party['title']}",
+            f"📍 {loc.get('name', '')}",
+            f"{template['Name']} Tier {tier} Lv.{mlevel} — {word}",
+        ]
+        if mine:
+            lines.append(f"✨ +{mine['exp']} EXP")
+            for drop in mine.get("drops") or []:
+                lines.append(f"🎁 {drop['name']} ×{drop.get('qty', 1)}")
+        lines.extend(trail.get("lines") or [])
+        data_store.append_history(mid, {
+            "ts": int(time.time() * 1000),
+            "kind": "party_hunt",
+            "location": loc.get("name"),
+            "won": won,
+            "monster": template["Name"],
+            "tier": tier,
+            "lines": lines,
+        })
+
     return {
         "ok": True,
         "won": won,
@@ -336,7 +369,9 @@ def party_hunt(channel_id: str, starter_id: str, rng: Optional[random.Random] = 
         "members": members,
         "segments": segments,
         "rewards": rewards,
+        "journey": trail,
         "size_factor": size_factor,
+        "daily_notes": daily_notes,
     }
 
 
@@ -441,6 +476,7 @@ def _party_room_combat(party: dict, player_id: str, dungeon: dict, room: dict, r
             monster_actions=template.get("actions") or [],
             player_belt=belt,
             weapon_category=c["weapon"].get("category") or "",
+            weapon=c["weapon"],
             rng=rng,
         )
         if result.get("monsterPow"):

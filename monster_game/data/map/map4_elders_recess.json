@@ -6,7 +6,7 @@
   "level": 25,
   "minLevel": 20,
   "maxLevel": 40,
-  "event_chance": 0.45,
+  "event_chance": 0.16,
   "creature": [
     {
       "Name": "Gastodon",

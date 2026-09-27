@@ -196,5 +196,24 @@
     ],
     "gold": 1200,
     "lore": "Mai Kestodon làm khuôn, quặng đổ vào."
+  },
+  {
+    "id": "craft_helm_r11",
+    "name": "Rèn Mũ bậc XI",
+    "tier": "11",
+    "result_id": "helm_r11",
+    "result_type": "equipment",
+    "ingredients": [
+      {
+        "item_id": "elder_dragon_bone",
+        "qty": 3
+      },
+      {
+        "item_id": "nova_crystal",
+        "qty": 1
+      }
+    ],
+    "gold": 80000,
+    "lore": "Xương elder và tinh thể nova, rèn thành mũ bậc XI."
   }
 ]

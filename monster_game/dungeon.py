@@ -65,7 +65,13 @@ def start_dungeon(player_id: str, dungeon_id: str) -> dict:
         return {"ok": True, "dungeon": dungeon["name"], "stamina_cost": cost,
                 "room": dungeon["rooms"][0]}
 
-    return data_store._mutate_user(player_id, do)
+    result = data_store._mutate_user(player_id, do)
+    if isinstance(result, dict) and result.get("ok"):
+        from . import game as game_mod
+        note = game_mod.complete_task(player_id, "dungeon")
+        if note:
+            result["task_note"] = note
+    return result
 
 
 def abandon_dungeon(player_id: str) -> dict:
@@ -104,6 +110,7 @@ def _fight_room(player_id: str, dungeon: dict, room: dict, rng: random.Random) -
         pstats, monster_stats,
         monster_actions=template.get("actions") or [],
         player_belt=belt,
+        weapon=user.get("weapon"),
         rng=rng,
     )
 

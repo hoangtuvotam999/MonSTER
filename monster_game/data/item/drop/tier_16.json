@@ -1,0 +1,26 @@
+[
+  {
+    "id": "mat_r16",
+    "type": "material",
+    "name": "Nguyên liệu bậc XVI",
+    "tier": "16",
+    "price": 0,
+    "desc": "Nguyên liệu bậc XVI.",
+    "lore": "Nguyên liệu bậc XVI.",
+    "rarity": "legendary"
+  },
+  {
+    "type": "material",
+    "id": "enhance_stone_16",
+    "name": "Đá cường hóa XVI",
+    "tier": "16",
+    "price": 0,
+    "desc": "Đá cường hóa bậc XVI.",
+    "lore": "Đá cường hóa bậc XVI.",
+    "rarity": "legendary",
+    "tags": [
+      "enhance_stone"
+    ],
+    "enhance_tier": "16"
+  }
+]

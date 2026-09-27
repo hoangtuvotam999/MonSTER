@@ -1,0 +1,22 @@
+[
+  {"id": "1", "label": "I", "rank": 1, "shop": true, "drop": true, "drop_chance": 0.08, "obtain": "shop", "aliases": ["A"]},
+  {"id": "2", "label": "II", "rank": 2, "shop": true, "drop": true, "drop_chance": 0.06, "obtain": "shop", "aliases": ["B"]},
+  {"id": "3", "label": "III", "rank": 3, "shop": true, "drop": true, "drop_chance": 0.045, "obtain": "shop", "aliases": ["C"]},
+  {"id": "4", "label": "IV", "rank": 4, "shop": true, "drop": true, "drop_chance": 0.03, "obtain": "shop", "aliases": ["D"]},
+  {"id": "5", "label": "V", "rank": 5, "shop": true, "drop": true, "drop_chance": 0.02, "obtain": "shop", "aliases": []},
+  {"id": "6", "label": "VI", "rank": 6, "shop": true, "drop": true, "drop_chance": 0.015, "obtain": "shop", "aliases": []},
+  {"id": "7", "label": "VII", "rank": 7, "shop": true, "drop": true, "drop_chance": 0.01, "obtain": "shop", "aliases": []},
+  {"id": "8", "label": "VIII", "rank": 8, "shop": false, "drop": true, "drop_chance": 0.006, "obtain": "drop", "aliases": []},
+  {"id": "9", "label": "IX", "rank": 9, "shop": false, "drop": true, "drop_chance": 0.0035, "obtain": "drop", "aliases": []},
+  {"id": "10", "label": "X", "rank": 10, "shop": false, "drop": true, "drop_chance": 0.0015, "obtain": "drop", "aliases": []},
+  {"id": "11", "label": "XI", "rank": 11, "shop": false, "drop": false, "drop_chance": 0, "obtain": "craft", "aliases": []},
+  {"id": "12", "label": "XII", "rank": 12, "shop": false, "drop": false, "drop_chance": 0, "obtain": "craft", "aliases": []},
+  {"id": "13", "label": "XIII", "rank": 13, "shop": false, "drop": false, "drop_chance": 0, "obtain": "craft", "aliases": []},
+  {"id": "14", "label": "XIV", "rank": 14, "shop": false, "drop": false, "drop_chance": 0, "obtain": "craft", "aliases": []},
+  {"id": "15", "label": "XV", "rank": 15, "shop": false, "drop": false, "drop_chance": 0, "obtain": "dungeon", "aliases": []},
+  {"id": "16", "label": "XVI", "rank": 16, "shop": false, "drop": false, "drop_chance": 0, "obtain": "dungeon", "aliases": []},
+  {"id": "17", "label": "XVII", "rank": 17, "shop": false, "drop": false, "drop_chance": 0, "obtain": "dungeon", "aliases": []},
+  {"id": "18", "label": "XVIII", "rank": 18, "shop": false, "drop": false, "drop_chance": 0, "obtain": "unique", "aliases": []},
+  {"id": "19", "label": "XIX", "rank": 19, "shop": false, "drop": false, "drop_chance": 0, "obtain": "unique", "aliases": []},
+  {"id": "20", "label": "XX", "rank": 20, "shop": false, "drop": false, "drop_chance": 0, "obtain": "unique", "aliases": []}
+]

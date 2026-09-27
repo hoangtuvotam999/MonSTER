@@ -1,0 +1,26 @@
+[
+  {
+    "id": "mat_r17",
+    "type": "material",
+    "name": "Nguyên liệu bậc XVII",
+    "tier": "17",
+    "price": 0,
+    "desc": "Nguyên liệu bậc XVII.",
+    "lore": "Nguyên liệu bậc XVII.",
+    "rarity": "legendary"
+  },
+  {
+    "type": "material",
+    "id": "enhance_stone_17",
+    "name": "Đá cường hóa XVII",
+    "tier": "17",
+    "price": 0,
+    "desc": "Đá cường hóa bậc XVII.",
+    "lore": "Đá cường hóa bậc XVII.",
+    "rarity": "legendary",
+    "tags": [
+      "enhance_stone"
+    ],
+    "enhance_tier": "17"
+  }
+]

@@ -6,7 +6,7 @@
   "level": 5,
   "minLevel": 4,
   "maxLevel": 10,
-  "event_chance": 0.5,
+  "event_chance": 0.20,
   "creature": [
     {
       "Name": "Noios",

@@ -1,0 +1,26 @@
+[
+  {
+    "id": "mat_r15",
+    "type": "material",
+    "name": "Nguyên liệu bậc XV",
+    "tier": "15",
+    "price": 0,
+    "desc": "Nguyên liệu bậc XV.",
+    "lore": "Nguyên liệu bậc XV.",
+    "rarity": "legendary"
+  },
+  {
+    "type": "material",
+    "id": "enhance_stone_15",
+    "name": "Đá cường hóa XV",
+    "tier": "15",
+    "price": 0,
+    "desc": "Đá cường hóa bậc XV.",
+    "lore": "Đá cường hóa bậc XV.",
+    "rarity": "legendary",
+    "tags": [
+      "enhance_stone"
+    ],
+    "enhance_tier": "15"
+  }
+]

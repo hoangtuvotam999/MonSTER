@@ -1,0 +1,26 @@
+[
+  {
+    "id": "mat_r20",
+    "type": "material",
+    "name": "Nguyên liệu bậc XX",
+    "tier": "20",
+    "price": 0,
+    "desc": "Nguyên liệu bậc XX.",
+    "lore": "Nguyên liệu bậc XX.",
+    "rarity": "legendary"
+  },
+  {
+    "type": "material",
+    "id": "enhance_stone_20",
+    "name": "Đá cường hóa XX",
+    "tier": "20",
+    "price": 0,
+    "desc": "Đá cường hóa bậc XX.",
+    "lore": "Đá cường hóa bậc XX.",
+    "rarity": "legendary",
+    "tags": [
+      "enhance_stone"
+    ],
+    "enhance_tier": "20"
+  }
+]

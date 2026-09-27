@@ -1,0 +1,26 @@
+[
+  {
+    "id": "mat_r10",
+    "type": "material",
+    "name": "Nguyên liệu bậc X",
+    "tier": "10",
+    "price": 0,
+    "desc": "Nguyên liệu bậc X.",
+    "lore": "Nguyên liệu bậc X.",
+    "rarity": "epic"
+  },
+  {
+    "type": "material",
+    "id": "enhance_stone_10",
+    "name": "Đá cường hóa X",
+    "tier": "10",
+    "price": 0,
+    "desc": "Đá cường hóa bậc X.",
+    "lore": "Đá cường hóa bậc X.",
+    "rarity": "epic",
+    "tags": [
+      "enhance_stone"
+    ],
+    "enhance_tier": "10"
+  }
+]

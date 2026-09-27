@@ -6,7 +6,7 @@
   "level": 1,
   "minLevel": 1,
   "maxLevel": 5,
-  "event_chance": 0.55,
+  "event_chance": 0.22,
   "creature": [
     {
       "Name": "Jagras",

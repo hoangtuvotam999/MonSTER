@@ -6,7 +6,7 @@
   "level": 12,
   "minLevel": 10,
   "maxLevel": 20,
-  "event_chance": 0.48,
+  "event_chance": 0.18,
   "creature": [
     {
       "Name": "Raphinos",

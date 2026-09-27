@@ -1,0 +1,26 @@
+[
+  {
+    "id": "mat_r7",
+    "type": "material",
+    "name": "Nguyên liệu bậc VII",
+    "tier": "7",
+    "price": 4540,
+    "desc": "Nguyên liệu bậc VII.",
+    "lore": "Nguyên liệu bậc VII.",
+    "rarity": "epic"
+  },
+  {
+    "type": "material",
+    "id": "enhance_stone_7",
+    "name": "Đá cường hóa VII",
+    "tier": "7",
+    "price": 14527,
+    "desc": "Đá cường hóa bậc VII.",
+    "lore": "Đá cường hóa bậc VII.",
+    "rarity": "epic",
+    "tags": [
+      "enhance_stone"
+    ],
+    "enhance_tier": "7"
+  }
+]

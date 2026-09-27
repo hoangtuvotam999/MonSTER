@@ -1,0 +1,26 @@
+[
+  {
+    "id": "mat_r5",
+    "type": "material",
+    "name": "Nguyên liệu bậc V",
+    "tier": "5",
+    "price": 3050,
+    "desc": "Nguyên liệu bậc V.",
+    "lore": "Nguyên liệu bậc V.",
+    "rarity": "epic"
+  },
+  {
+    "type": "material",
+    "id": "enhance_stone_5",
+    "name": "Đá cường hóa V",
+    "tier": "5",
+    "price": 9760,
+    "desc": "Đá cường hóa bậc V.",
+    "lore": "Đá cường hóa bậc V.",
+    "rarity": "epic",
+    "tags": [
+      "enhance_stone"
+    ],
+    "enhance_tier": "5"
+  }
+]

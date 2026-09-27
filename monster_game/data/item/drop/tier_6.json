@@ -1,0 +1,26 @@
+[
+  {
+    "id": "mat_r6",
+    "type": "material",
+    "name": "Nguyên liệu bậc VI",
+    "tier": "6",
+    "price": 3721,
+    "desc": "Nguyên liệu bậc VI.",
+    "lore": "Nguyên liệu bậc VI.",
+    "rarity": "epic"
+  },
+  {
+    "type": "material",
+    "id": "enhance_stone_6",
+    "name": "Đá cường hóa VI",
+    "tier": "6",
+    "price": 11907,
+    "desc": "Đá cường hóa bậc VI.",
+    "lore": "Đá cường hóa bậc VI.",
+    "rarity": "epic",
+    "tags": [
+      "enhance_stone"
+    ],
+    "enhance_tier": "6"
+  }
+]

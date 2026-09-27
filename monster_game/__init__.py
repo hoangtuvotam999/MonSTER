@@ -6,7 +6,10 @@ Pure game-logic port of a "Monster Hunter" style chat-bot plugin.
 This package intentionally contains NO messaging/bot-framework code.
 It only implements the game rules: characters, weapons, combat math,
 leveling, the shop, drops, map adventure events, blacksmith enhance,
-dungeon rooms, and PvP rooms.
+dungeon rooms, party, and PvP rooms.
+
+Chat commands live in the separate `monster_commands` library.
+The Discord process lives in `discord_bot` and only calls that library.
 
 Layout:
     game.py        high-level API (characters, hunting, PvP, adventure)
@@ -24,7 +27,7 @@ Layout:
 Data (author new content here):
     data/map/mapN_*.json
     data/dungeon/*.json
-    data/item/weapon/tier_{A,B,C}.json
+    data/item/weapon/tier_{A,B,C,D}.json
     data/item/drop/tier_{A,B,C,D}.json
     data/item/food.json
     data/item/upgrade.json

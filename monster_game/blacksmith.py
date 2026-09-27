@@ -12,7 +12,7 @@ from __future__ import annotations
 import random
 from typing import Optional
 
-from . import data_store
+from . import data_store, tiers
 
 _cfg_cache = None
 
@@ -71,6 +71,18 @@ def effective_rate(base: float, luck_bonus: float = 0.0, cap: Optional[float] = 
     return max(0.0, min(1.0, float(base) + luck))
 
 
+def _formula_amounts(rank: int, cur: int, nxt: int) -> tuple[int, int, list[dict], float]:
+    """Forge cost for a rank that is not listed in blacksmith.json.
+    Rank 4 matches the written D costs; each rank after that grows."""
+    steps = max(0, int(rank) - 4)
+    growth = 1.35 ** steps
+    gold = round(4000 * growth) + round(1500 * growth) * nxt
+    stones = (4 + steps // 2) + 2 * cur
+    mats = [{"item_id": "elder_dragon_bone", "qty": max(1, 1 + cur)}]
+    pct = 0.07 + 0.005 * steps
+    return gold, max(1, stones), mats, pct
+
+
 def cost_for(item: dict) -> dict:
     """Cost rises with enhance level; base amounts follow item tier."""
     cfg = get_config()
@@ -78,15 +90,21 @@ def cost_for(item: dict) -> dict:
     cur = enhance_level(item)
     nxt = cur + 1
     stone_id = f"enhance_stone_{tier.lower()}"
-    stones = int((cfg.get("stone_cost") or {}).get(tier, 1))
-    stones += int((cfg.get("stone_per_level") or {}).get(tier, 0)) * cur
-    gold = int((cfg.get("gold_cost") or cfg.get("gold_base") or {}).get(tier, 200))
-    gold += int((cfg.get("gold_per_level") or {}).get(tier, 100)) * nxt
-    mats = []
-    for req in (cfg.get("mat_extra") or {}).get(tier) or []:
-        qty = int(req.get("qty", 1))
-        qty += int((cfg.get("mat_per_level") or {}).get(tier, 0)) * cur
-        mats.append({"item_id": req["item_id"], "qty": max(1, qty)})
+    configured = tier in (cfg.get("stone_cost") or {})
+    if configured:
+        stones = int((cfg.get("stone_cost") or {}).get(tier, 1))
+        stones += int((cfg.get("stone_per_level") or {}).get(tier, 0)) * cur
+        gold = int((cfg.get("gold_cost") or cfg.get("gold_base") or {}).get(tier, 200))
+        gold += int((cfg.get("gold_per_level") or {}).get(tier, 100)) * nxt
+        mats = []
+        for req in (cfg.get("mat_extra") or {}).get(tier) or []:
+            qty = int(req.get("qty", 1))
+            qty += int((cfg.get("mat_per_level") or {}).get(tier, 0)) * cur
+            mats.append({"item_id": req["item_id"], "qty": max(1, qty)})
+    else:
+        row = tiers.resolve(tier)
+        rank = int(row["rank"]) if row else 1
+        gold, stones, mats, _pct = _formula_amounts(rank, cur, nxt)
     base = success_rate(nxt)
     cap = max_luck_for_level(cur)
     return {
@@ -103,7 +121,14 @@ def cost_for(item: dict) -> dict:
 
 def _pct_for(item: dict) -> float:
     cfg = get_config()
-    return float((cfg.get("stat_bonus_per_level") or {}).get(item_tier(item), 0.04))
+    tier = item_tier(item)
+    table = cfg.get("stat_bonus_per_level") or {}
+    if tier in table:
+        return float(table[tier])
+    row = tiers.resolve(tier)
+    rank = int(row["rank"]) if row else 1
+    _gold, _stones, _mats, pct = _formula_amounts(rank, 0, 1)
+    return pct
 
 
 def _stat_keys(item: dict) -> list[str]:
